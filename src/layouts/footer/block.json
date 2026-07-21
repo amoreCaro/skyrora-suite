@@ -1,0 +1,77 @@
+{
+  "apiVersion": 3,
+  "name": "app/footer",
+  "title": "Footer",
+  "category": "advanced",
+  "icon": "table-row-after",
+  "description": "Footer block with customizable columns and copyright.",
+  "supports": {
+    "html": false
+  },
+  "attributes": {
+    "paddingLeft": {
+      "type": "number",
+      "default": 0
+    },
+    "paddingRight": {
+      "type": "number",
+      "default": 0
+    },
+    "tabSelected": {
+      "type": "string",
+      "default": "content"
+    },
+    "imageItems": {
+      "type": "array",
+      "default": []
+  },
+    "imgUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "imgLink": {
+      "type": "string",
+      "default": "#"
+    },
+    "socialImg": {
+      "type": "string",
+      "default": ""
+    },
+    "socialLink": {
+      "type": "string",
+      "default": "#"
+    },
+    "footerLinks": {
+      "type": "array",
+      "default": []
+    },
+    "copyright": {
+      "type": "string",
+      "default": "© 2025 SKYRORA LIMITED"
+    },
+    "copyrightUrl": {
+      "type": "string",
+      "default": "#"
+    },
+    "fontSize": {
+      "type": "number",
+      "default": 16
+    },
+    "lineHeight": {
+      "type": "number",
+      "default": 100
+    },
+    "fontWeight": {
+      "type": "string",
+      "default": "400"
+    },
+    "textTransform": {
+      "type": "string",
+      "default": "uppercase"
+    }
+  },
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./editor.css",
+  "style": "file:./style.css",
+  "example": null
+}

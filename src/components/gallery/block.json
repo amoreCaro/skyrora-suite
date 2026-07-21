@@ -1,0 +1,48 @@
+{
+  "apiVersion": 3,
+  "name": "app/gallery",
+  "title": "Gallery",
+  "category": "media",
+  "icon": "images-alt",
+  "description": "A custom gallery block with drag-and-drop image reordering and individual image linking.",
+  "keywords": ["gallery", "media", "images", "carousel", "slider"],
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./editor.css",
+  "style": "file:./style-index.css",
+  "attributes": {
+    "galleryImages": {
+      "type": "array",
+      "default": []
+    },
+    "paddingTop": {
+      "type": "number",
+      "default": 0
+    },
+    "paddingBottom": {
+      "type": "number",
+      "default": 0
+    },
+    "paddingLeft": {
+      "type": "number",
+      "default": 0
+    },
+    "paddingRight": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "supports": {
+    "html": false,
+    "align": ["left", "center", "right", "wide", "full"],
+    "customClassName": true,
+    "color": {
+        "background": true,
+        "text": true
+    },
+    "spacing": {
+        "padding": true,
+        "margin": true
+    }
+  },
+  "textdomain": "app-gallery"
+}

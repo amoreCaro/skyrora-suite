@@ -1,0 +1,82 @@
+{
+  "apiVersion": 3,
+  "name": "app/button",
+  "title": "Button",
+  "category": "design",
+  "icon": "button",
+  "description": "A customizable button block with flexible styles.",
+  "supports": {
+    "html": false
+  },
+  "attributes": {
+    "content": {
+      "type": "string",
+      "source": "html",
+      "selector": "a span",
+      "default": "Click me"
+    },
+    "textAlign": {
+      "type": "string",
+      "default": "center"
+    },
+    "color": {
+      "type": "string",
+      "default": "#FFFFFF"
+    },
+    "backgroundColor": {
+      "type": "string",
+      "default": "#164BDC"
+    },
+    "fontWeight": {
+      "type": "string",
+      "default": "600"
+    },
+    "fontSize": {
+      "type": "string",
+      "default": "14px"
+    },
+    "lineHeight": {
+      "type": "string",
+      "default": "1.4"
+    },
+    "fontFamily": {
+      "type": "string",
+      "default": "Bai Jamjuree, sans-serif"
+    },
+    "textTransform": {
+      "type": "string",
+      "default": "uppercase"
+    },
+    "paddingLeft": {
+      "type": "number",
+      "default": "48"
+    },
+    "paddingRight": {
+      "type": "number",
+      "default": "48"
+    },
+    "paddingTop": {
+      "type": "number",
+      "default": "20"
+    },
+    "paddingBottom": {
+      "type": "number",
+      "default": "20"
+    },
+    "url": {
+      "type": "string",
+      "default": "#"
+    }
+  },
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./editor.css",
+  "style": "file:./style.css",
+  "example": {
+    "attributes": {
+      "content": "Learn More",
+      "backgroundColor": "#1E40AF",
+      "color": "#FFFFFF",
+      "url": "https://example.com"
+    }
+  }
+}

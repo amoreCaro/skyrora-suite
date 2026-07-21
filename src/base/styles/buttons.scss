@@ -1,0 +1,69 @@
+.btn {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 40px;
+  color: $white;
+  text-transform: uppercase;
+  width: fit-content;
+  white-space: nowrap;
+  font-size: toRem(16);
+  font-weight: 500;
+  border: 1px solid transparent;
+  border-radius: 50px;
+  transition: $transition;
+
+  &[disabled],
+  &.disabled {
+    cursor: not-allowed;
+    background-color: #EEE9DA;
+    color: #C2C2C2;
+  }
+
+  &--primary {
+    border: 1px solid $green-light;
+    background: $green-gradient-btn;
+
+    &:hover,
+    &:focus {
+      background: $green-emerald;
+    }
+  }
+
+  &--green {
+    background-color: $green-light;
+
+    &:hover,
+    &:focus {
+      background-color: $green-dark;
+    }
+  }
+
+  &--orenge {
+    background-color: $orange-light;
+
+    &:hover,
+    &:focus {
+      background-color: $orange-dark;
+    }
+  }
+
+  &--gold {
+    background-color: $gold-light;
+
+    &:hover,
+    &:focus {
+      background-color: $gold-dark;
+    }
+  }
+
+  &--violet {
+    background-color: $violet-light;
+
+    &:hover,
+    &:focus {
+      background-color: $violet-dark;
+    }
+  }
+}

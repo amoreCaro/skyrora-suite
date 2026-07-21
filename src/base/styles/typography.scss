@@ -1,0 +1,90 @@
+.title {
+  &--01 {
+    font: 900 toRem(42)/1.8 $roboto;
+    text-transform: uppercase;
+
+    @include max-tablet {
+      font-size: toRem(36);
+    }
+
+    @include max-mobile {
+      font-size: toRem(28);
+    }
+  }
+
+  &--02 {
+    font: 400 toRem(45)/1.8 $roboto;
+    text-transform: uppercase;
+
+    @include max-tablet {
+      font-size: toRem(37);
+    }
+
+    @include max-mobile {
+      font-size: toRem(29);
+    }
+  }
+
+  &--03 {
+    font: 400 toRem(40)/1.8 $roboto;
+    text-transform: uppercase;
+
+    @include max-tablet {
+      font-size: toRem(32);
+    }
+
+    @include max-mobile {
+      font-size: toRem(24);
+    }
+  }
+
+  &--04 {
+    font: 600 toRem(32)/1.8 $roboto;
+    text-transform: uppercase;
+
+    @include max-tablet {
+      font-size: toRem(28);
+    }
+
+    @include max-mobile {
+      font-size: toRem(20);
+    }
+  }
+
+  &--05 {
+    font: 600 toRem(28)/1.8 $roboto;
+
+    @include max-tablet {
+      font-size: toRem(24);
+    }
+
+    @include max-mobile {
+      font-size: toRem(18);
+    }
+  }
+
+  &--06 {
+    font: 600 toRem(24)/1.8 $roboto;
+
+    @include max-tablet {
+      font-size: toRem(20);
+    }
+
+    @include max-mobile {
+      font-size: toRem(16);
+    }
+  }
+
+  // &--06 {
+  //   font: 600 toRem(20)/1.8 $roboto;
+  //   text-transform: uppercase;
+
+  //   @include max-tablet {
+  //     font-size: toRem(18);
+  //   }
+
+  //   @include max-mobile {
+  //     font-size: toRem(16);
+  //   }
+  // }
+}

@@ -1,0 +1,137 @@
+import { __ } from '@wordpress/i18n';
+import {
+	useBlockProps,
+	MediaUpload,
+	MediaUploadCheck,
+	InspectorControls,
+	BlockControls
+} from '@wordpress/block-editor';
+import {
+	Button,
+	PanelBody,
+	TextControl
+} from '@wordpress/components';
+
+const BannerEdit = ({ attributes, setAttributes }) => {
+	const {
+		bannerUrl,
+		bannerId,
+		paddingLeft,
+		paddingRight,
+		paddingTop,
+		paddingBottom
+	} = attributes;
+
+	const bannerWrapper = {
+		paddingTop: `${paddingTop}px`,
+		paddingBottom: `${paddingBottom}px`,
+		paddingLeft: `${paddingLeft}px`,
+		paddingRight: `${paddingRight}px`,
+		width: "100%",
+		height: "244px",
+		margin: "0",
+		background: '#fff'
+	};
+
+	const banner = {
+		display: "block",
+		height: "244px",
+		width: "100%",
+		objectFit: "cover",
+	};
+
+	const onSelectBanner = (media) => {
+		setAttributes({ bannerUrl: media.url, bannerId: media.id });
+	};
+
+	const onRemoveBanner = () => {
+		setAttributes({ bannerUrl: '', bannerId: 0 });
+	};
+
+	return (
+		<>
+			<BlockControls>
+				{ bannerUrl && (
+					<Button
+						variant="link"
+						onClick={ onRemoveBanner }
+						label={ __( 'Remove Banner' ) }
+						className="remove-banner-button"
+						aria-label={ __( 'Remove Banner' ) }
+					>
+						<svg
+							width="20"
+							height="20"
+							viewBox="0 0 24 24"
+							fill="none"
+							xmlns="http://www.w3.org/2000/svg"
+						>
+							<path
+								d="M18 6L6 18M6 6l12 12"
+								stroke="black"
+								strokeWidth="2"
+								strokeLinecap="round"
+							/>
+						</svg>
+					</Button>
+				) }
+			</BlockControls>
+
+			<InspectorControls>
+				<PanelBody title={ __( 'Banner Settings', 'custom-banner' ) }>
+					<TextControl
+						label={ __( 'Padding Top (px)', 'custom-banner' ) }
+						type="number"
+						value={ paddingTop }
+						onChange={ (val) => setAttributes({ paddingTop: parseInt(val) }) }
+					/>
+					<TextControl
+						label={ __( 'Padding Bottom (px)', 'custom-banner' ) }
+						type="number"
+						value={ paddingBottom }
+						onChange={ (val) => setAttributes({ paddingBottom: parseInt(val) }) }
+					/>
+					<TextControl
+						label={ __( 'Padding Left (px)', 'custom-banner' ) }
+						type="number"
+						value={ paddingLeft }
+						onChange={ (val) => setAttributes({ paddingLeft: parseFloat(val) }) }
+					/>
+					<TextControl
+						label={ __( 'Padding Right (px)', 'custom-banner' ) }
+						type="number"
+						value={ paddingRight }
+						onChange={ (val) => setAttributes({ paddingRight: parseFloat(val) }) }
+					/>
+				</PanelBody>
+			</InspectorControls>
+
+			<div { ...useBlockProps() }>
+				<MediaUploadCheck>
+					<div style={ bannerWrapper } className="wp-block wp-banner">
+						{ bannerUrl ? (
+							<img
+								src={ bannerUrl }
+								style={ banner }
+								className="selected-banner"
+								alt={ __( 'Selected Banner', 'custom-banner' ) }
+							/>
+						) : (
+							<MediaUpload
+								onSelect={ onSelectBanner }
+								allowedTypes={ [ 'image' ] }
+								render={ ( { open } ) => (
+									<Button onClick={ open } className="select-banner-button" variant="primary">
+										{ __( 'Select Banner', 'custom-banner' ) }
+									</Button>
+								) }
+							/>
+						) }
+					</div>
+				</MediaUploadCheck>
+			</div>
+		</>
+	);
+};
+
+export default BannerEdit;

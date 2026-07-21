@@ -1,0 +1,32 @@
+* {
+
+  // FireFox
+  @supports not selector(::-webkit-scrollbar-thumb) {
+    scrollbar-color: $scrollbar-color $scrollbar-bg;
+    scrollbar-width: thin;
+  }
+
+  &::-webkit-scrollbar {
+    width: $scrollbar-width;
+    height: $scrollbar-height;
+
+    @include max-tablet {
+      width: $scrollbar-width-tablet;
+      height: $scrollbar-height-tablet;
+    }
+
+    @include max-mobile {
+      width: $scrollbar-width-mobile;
+      height: $scrollbar-height-mobile;
+    }
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: $scrollbar-bg;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $scrollbar-color;
+    border-radius: $scrollbar-radius;
+  }
+}

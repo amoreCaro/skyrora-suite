@@ -1,0 +1,44 @@
+//fonts
+$roboto: 'Roboto';
+
+// colors
+$white: #fff;
+$black-background: #000201;
+$black-text: #222;
+$grey: #757575;
+
+$green-light: #007012;
+$green-dark: #00440B;
+
+$green-gradient-btn: linear-gradient(139deg, #09594A 0%, #29B992 50%, #08624E 100%);
+$green-emerald: #09594A;
+
+$violet-light: #6A46F3;
+$violet-dark: #36247C;
+
+$gold-light: #B48D23;
+$gold-dark: #99781D;
+
+$orange-light: #FE9F00;
+$orange-dark: #C27900;
+
+//shadows
+$inner-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.10) inset;
+
+//transition
+$transition: all ease-in-out 350ms;
+
+// scrollbar
+$scrollbar-width: 4px;
+$scrollbar-height: 4px;
+$scrollbar-width-tablet: 2px;
+$scrollbar-height-tablet: 2px;
+$scrollbar-width-mobile: 2px;
+$scrollbar-height-mobile: 2px;
+$scrollbar-color: $green-light;
+$scrollbar-bg: $grey;
+$scrollbar-radius: 12px;
+
+//header height
+$header-height: 135px;
+// $header-height-mobile: 168px;
