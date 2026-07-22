@@ -1,0 +1,19 @@
+@import './components/subscriber-admin.css';
+@import './components/list-admin.css';
+@import './components/mailing-send.css';
+@import './components/settings-admin.css';
+
+body.sk-plugin-page {
+    opacity: 0;
+    transition: opacity 300ms ease;
+}
+
+body.sk-plugin-page.sk-plugin-page--ready {
+    opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.sk-plugin-page {
+        transition: none;
+    }
+}

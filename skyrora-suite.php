@@ -23,10 +23,18 @@ define( 'SK_PLUGIN_DIR', untrailingslashit( dirname( SK_PLUGIN ) ) );
 define( 'SK_PLUGIN_DIR_URL', plugin_dir_url(__FILE__) );
 
 include_once SK_PLUGIN_DIR .'/inc/init.php';
+include_once SK_PLUGIN_DIR .'/inc/settings.php';
+include_once SK_PLUGIN_DIR .'/inc/subscribers.php';
+include_once SK_PLUGIN_DIR .'/inc/lists.php';
 include_once SK_PLUGIN_DIR .'/inc/page-html.php';
+include_once SK_PLUGIN_DIR .'/inc/send.php';
 include_once SK_PLUGIN_DIR .'/inc/test-sending.php';
-include_once SK_PLUGIN_DIR .'/inc/list-subcribes.php';
 include_once SK_PLUGIN_DIR .'/inc/spacebox-builder.php';
+
+if ( is_admin() ) {
+	include_once SK_PLUGIN_DIR . '/inc/enqueue.php';
+	include_once SK_PLUGIN_DIR . '/inc/admin-header.php';
+}
 
 
 add_filter( 'the_content', function ( $content ) {

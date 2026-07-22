@@ -3,8 +3,6 @@ import { useBlockProps, RichText } from '@wordpress/block-editor';
 export default function Save({ attributes }) {
     const {
         id,
-        imgUrl,
-        imgLink,
         text1,
         text2,
         paddingLeft,
@@ -40,33 +38,9 @@ export default function Save({ attributes }) {
         >
             {/* Logo/Image Section */}
             <div style={{ maxWidth: '114px', height: '60px', width: '100%' }}>
-                {imgUrl ? (
-                    imgLink ? (
-                        <a href={imgLink} target="_blank" rel="noopener noreferrer">
-                            <img
-                                src={imgUrl}
-                                alt="Uploaded"
-                                style={{
-                                    height: '100%',
-                                    width: '100%',
-                                    objectFit: 'contain',
-                                }}
-                                className="uploaded-img"
-                            />
-                        </a>
-                    ) : (
-                        <img
-                            src={imgUrl}
-                            alt="Uploaded"
-                            style={{
-                                height: '100%',
-                                width: '100%',
-                                objectFit: 'contain',
-                            }}
-                            className="uploaded-img"
-                        />
-                    )
-                ) : null}
+                <svg width="1em" height="1em" className="icon icon-logo">
+                    <use xlinkHref="/wp-content/themes/skyrora-theme/dist/s/images/useful/svg/theme/symbol-defs.svg#icon-logo" />
+                </svg>
             </div>
 
             {/* Text Section */}
