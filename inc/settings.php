@@ -67,12 +67,16 @@ function sk_sanitize_mailing_settings( $input ) {
 	$allowed  = [ 1, 5, 10, 15, 30, 60 ];
 	$interval = isset( $input['cron_interval'] ) ? absint( $input['cron_interval'] ) : (int) $current['cron_interval'];
 	$port     = isset( $input['smtp_port'] ) ? absint( $input['smtp_port'] ) : 587;
+	$host     = sanitize_text_field( $input['smtp_host'] ?? '' );
 	$password = isset( $input['smtp_password'] ) ? (string) $input['smtp_password'] : '';
 
 	if ( '' === $password ) {
 		$password = (string) $current['smtp_password'];
 	} else {
 		$password = preg_replace( '/[\x00-\x1F\x7F]/', '', $password );
+		$password = 'smtp.gmail.com' === strtolower( trim( $host ) )
+			? preg_replace( '/\s+/', '', $password )
+			: trim( $password );
 	}
 
 	$encryption = isset( $input['smtp_encryption'] ) ? sanitize_key( $input['smtp_encryption'] ) : 'tls';
@@ -82,7 +86,7 @@ function sk_sanitize_mailing_settings( $input ) {
 
 	return [
 		'smtp_enabled'    => empty( $input['smtp_enabled'] ) ? 0 : 1,
-		'smtp_host'       => sanitize_text_field( $input['smtp_host'] ?? '' ),
+		'smtp_host'       => $host,
 		'smtp_port'       => $port >= 1 && $port <= 65535 ? $port : 587,
 		'smtp_encryption' => $encryption,
 		'smtp_auth'       => empty( $input['smtp_auth'] ) ? 0 : 1,
@@ -107,19 +111,103 @@ function sk_configure_smtp( $phpmailer ) {
 	}
 
 	$phpmailer->isSMTP();
-	$phpmailer->Host       = $settings['smtp_host'];
+	$phpmailer->Host       = trim( (string) $settings['smtp_host'] );
 	$phpmailer->Port       = (int) $settings['smtp_port'];
 	$phpmailer->SMTPAuth   = ! empty( $settings['smtp_auth'] );
-	$phpmailer->Username   = $settings['smtp_username'];
-	$phpmailer->Password   = $settings['smtp_password'];
 	$phpmailer->SMTPSecure = 'none' === $settings['smtp_encryption'] ? '' : $settings['smtp_encryption'];
-	$phpmailer->SMTPAutoTLS = 'none' !== $settings['smtp_encryption'];
+	$phpmailer->SMTPAutoTLS = 'tls' === $settings['smtp_encryption'];
+	$phpmailer->Timeout    = 15;
+
+	if ( $phpmailer->SMTPAuth ) {
+		$phpmailer->Username = trim( (string) $settings['smtp_username'] );
+		$phpmailer->Password = (string) $settings['smtp_password'];
+	}
 
 	if ( is_email( $settings['from_email'] ) ) {
 		$phpmailer->setFrom( $settings['from_email'], $settings['from_name'], false );
 	}
 }
 add_action( 'phpmailer_init', 'sk_configure_smtp' );
+
+/**
+ * Send an email and capture the PHPMailer error reported by WordPress.
+ *
+ * @param string|string[] $to      Recipient address or addresses.
+ * @param string          $subject Email subject.
+ * @param string          $message Email body.
+ * @param string|string[] $headers Optional headers.
+ * @return array{sent: bool, error: string}
+ */
+function sk_send_mail_with_error( $to, $subject, $message, $headers = [] ) {
+	$mail_error = null;
+	$listener   = static function ( $error ) use ( &$mail_error ) {
+		if ( is_wp_error( $error ) ) {
+			$mail_error = $error;
+		}
+	};
+
+	add_action( 'wp_mail_failed', $listener );
+	$sent = wp_mail( $to, $subject, $message, $headers );
+	remove_action( 'wp_mail_failed', $listener );
+
+	$error_message = $mail_error instanceof WP_Error
+		? $mail_error->get_error_message()
+		: '';
+
+	if ( ! $sent && '' === $error_message ) {
+		$error_message = __( 'WordPress could not send the email, but the mailer returned no details.', 'skyrora-mailing' );
+	}
+
+	return [
+		'sent'  => (bool) $sent,
+		'error' => $error_message,
+	];
+}
+
+/**
+ * Send a diagnostic email using the currently saved SMTP settings.
+ */
+function sk_handle_smtp_test() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( esc_html__( 'You do not have permission to perform this action.', 'skyrora-mailing' ) );
+	}
+
+	check_admin_referer( 'sk_test_smtp' );
+
+	$settings = sk_get_mailing_settings();
+	$user     = wp_get_current_user();
+	$result   = [
+		'success' => false,
+		'message' => '',
+	];
+
+	if ( empty( $settings['smtp_enabled'] ) ) {
+		$result['message'] = __( 'SMTP is disabled. Enable it and save the settings first.', 'skyrora-mailing' );
+	} elseif ( '' === trim( (string) $settings['smtp_host'] ) ) {
+		$result['message'] = __( 'SMTP host is empty. Save a valid host first.', 'skyrora-mailing' );
+	} elseif ( ! is_email( $user->user_email ) ) {
+		$result['message'] = __( 'The current administrator account has no valid email address.', 'skyrora-mailing' );
+	} else {
+		$mail_result       = sk_send_mail_with_error(
+			$user->user_email,
+			__( 'Skyrora Mailing SMTP test', 'skyrora-mailing' ),
+			__( 'The SMTP connection is working and WordPress accepted this test email for delivery.', 'skyrora-mailing' )
+		);
+		$result['success'] = $mail_result['sent'];
+		$result['message'] = $mail_result['sent']
+			? sprintf(
+				/* translators: %s: destination email address */
+				__( 'SMTP test sent to %s. Check the inbox and spam folder.', 'skyrora-mailing' ),
+				$user->user_email
+			)
+			: $mail_result['error'];
+	}
+
+	set_transient( 'sk_smtp_test_' . get_current_user_id(), $result, MINUTE_IN_SECONDS );
+	wp_safe_redirect( admin_url( 'admin.php?page=skyrora-mailing-settings&sk_smtp_test=1' ) );
+	exit;
+}
+add_action( 'admin_post_sk_test_smtp', 'sk_handle_smtp_test' );
 
 /**
  * Add selectable mailing worker intervals to WP-Cron.
@@ -196,6 +284,11 @@ function sk_render_settings_page() {
 	}
 
 	$settings  = sk_get_mailing_settings();
+	$smtp_test = null;
+	if ( isset( $_GET['sk_smtp_test'] ) ) {
+		$smtp_test = get_transient( 'sk_smtp_test_' . get_current_user_id() );
+		delete_transient( 'sk_smtp_test_' . get_current_user_id() );
+	}
 	$cron_page = isset( $_GET['cron_page'] ) ? max( 1, absint( $_GET['cron_page'] ) ) : 1;
 	$cron_jobs = new WP_Query(
 		[
@@ -212,6 +305,11 @@ function sk_render_settings_page() {
 	<div class="wrap sk-settings-page">
 		<h1><?php esc_html_e( 'Settings', 'skyrora-mailing' ); ?></h1>
 		<?php settings_errors(); ?>
+		<?php if ( is_array( $smtp_test ) && isset( $smtp_test['message'] ) ) : ?>
+			<div class="notice <?php echo ! empty( $smtp_test['success'] ) ? 'notice-success' : 'notice-error'; ?> is-dismissible">
+				<p><?php echo esc_html( $smtp_test['message'] ); ?></p>
+			</div>
+		<?php endif; ?>
 
 		<form method="post" action="options.php">
 			<?php settings_fields( 'sk_mailing_settings_group' ); ?>
@@ -254,9 +352,9 @@ function sk_render_settings_page() {
 					<tr>
 						<th scope="row"><label for="sk_smtp_password"><?php esc_html_e( 'Password', 'skyrora-mailing' ); ?></label></th>
 						<td>
-							<input class="regular-text" type="password" autocomplete="new-password" id="sk_smtp_password" name="<?php echo esc_attr( SK_MAILING_SETTINGS_OPTION ); ?>[smtp_password]" value="">
+							<input class="regular-text" type="password" autocomplete="new-password" id="sk_smtp_password" name="<?php echo esc_attr( SK_MAILING_SETTINGS_OPTION ); ?>[smtp_password]" value="" placeholder="<?php echo '' !== $settings['smtp_password'] ? esc_attr__( 'Saved — enter a new password to replace it', 'skyrora-mailing' ) : ''; ?>">
 							<?php if ( '' !== $settings['smtp_password'] ) : ?>
-								<p class="description"><?php esc_html_e( 'A password is saved. Leave this field empty to keep it.', 'skyrora-mailing' ); ?></p>
+								<p class="description"><?php esc_html_e( 'A password is saved. Leave this field empty to keep it. Spaces in Gmail App Passwords are removed automatically.', 'skyrora-mailing' ); ?></p>
 							<?php endif; ?>
 						</td>
 					</tr>
@@ -269,6 +367,12 @@ function sk_render_settings_page() {
 						<td><input class="regular-text" type="text" id="sk_from_name" name="<?php echo esc_attr( SK_MAILING_SETTINGS_OPTION ); ?>[from_name]" value="<?php echo esc_attr( $settings['from_name'] ); ?>"></td>
 					</tr>
 				</table>
+				<p>
+					<a class="button" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=sk_test_smtp' ), 'sk_test_smtp' ) ); ?>">
+						<?php esc_html_e( 'Send SMTP test', 'skyrora-mailing' ); ?>
+					</a>
+					<span class="description"><?php esc_html_e( 'Save settings before running the test.', 'skyrora-mailing' ); ?></span>
+				</p>
 			</section>
 
 			<section class="sk-settings-card">
@@ -304,12 +408,15 @@ function sk_render_settings_page() {
 								$status       = $status ?: 'queued';
 								$sent         = (int) get_post_meta( $job_id, '_sk_sent_count', true );
 								$failed       = (int) get_post_meta( $job_id, '_sk_failed_count', true );
+								$send_errors  = get_post_meta( $job_id, '_sk_send_errors', true );
+								$send_errors  = is_array( $send_errors ) ? $send_errors : [];
 								$completed_at = (int) get_post_meta( $job_id, '_sk_completed_at', true );
 								$status_labels = [
-									'queued'     => __( 'Queued', 'skyrora-mailing' ),
-									'processing' => __( 'Processing', 'skyrora-mailing' ),
-									'completed'  => __( 'Completed', 'skyrora-mailing' ),
-									'failed'     => __( 'Failed', 'skyrora-mailing' ),
+									'queued'           => __( 'Queued', 'skyrora-mailing' ),
+									'processing'       => __( 'Processing', 'skyrora-mailing' ),
+									'completed'        => __( 'Completed', 'skyrora-mailing' ),
+									'partially_failed' => __( 'Partially failed', 'skyrora-mailing' ),
+									'failed'           => __( 'Failed', 'skyrora-mailing' ),
 								];
 								$status_label = $status_labels[ $status ] ?? ucfirst( $status );
 								?>
@@ -335,7 +442,7 @@ function sk_render_settings_page() {
 										<span class="sk-settings-status is-<?php echo esc_attr( $status ); ?>"><?php echo esc_html( $status_label ); ?></span>
 									</td>
 									<td>
-										<?php if ( in_array( $status, [ 'completed', 'failed' ], true ) ) : ?>
+										<?php if ( in_array( $status, [ 'completed', 'partially_failed', 'failed' ], true ) ) : ?>
 											<?php
 											echo esc_html(
 												sprintf(
@@ -354,6 +461,22 @@ function sk_render_settings_page() {
 															/* translators: %s: completion date and time */
 															__( 'Completed: %s', 'skyrora-mailing' ),
 															wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $completed_at )
+														)
+													);
+													?>
+												</div>
+											<?php endif; ?>
+											<?php if ( $send_errors ) : ?>
+												<div class="description">
+													<?php
+													$first_error = reset( $send_errors );
+													echo esc_html(
+														sprintf(
+															/* translators: %s: first mailer error */
+															__( 'Mailer error: %s', 'skyrora-mailing' ),
+															is_array( $first_error ) && isset( $first_error['error'] )
+																? (string) $first_error['error']
+																: __( 'Unknown error', 'skyrora-mailing' )
 														)
 													);
 													?>
