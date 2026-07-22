@@ -36,6 +36,10 @@ add_action( 'wp_ajax_sk_send_test_email', 'sk_send_test_email_ajax' );
 function sk_send_test_email_ajax() {
 	check_ajax_referer( 'sk_send_test_email_nonce', 'nonce' );
 
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( 'Permission denied.', 403 );
+	}
+
 	$email   = sanitize_email( wp_unslash( $_POST['email'] ?? '' ) );
 	$subject = sanitize_text_field( wp_unslash( $_POST['subject'] ?? '' ) );
 	$post_id = absint( $_POST['post_id'] ?? 0 );
@@ -56,11 +60,11 @@ function sk_send_test_email_ajax() {
 	}
 
 	$headers = [ 'Content-Type: text/html; charset=UTF-8' ];
-	$sent    = wp_mail( $email, $subject, $message, $headers );
+	$result  = sk_send_mail_with_error( $email, $subject, $message, $headers );
 
-	if ( $sent ) {
+	if ( $result['sent'] ) {
 		wp_send_json_success();
 	} else {
-		wp_send_json_error( 'Failed to send email. Please check your mail settings.' );
+		wp_send_json_error( $result['error'] ?: 'Failed to send email. Please check your mail settings.' );
 	}
 }

@@ -445,19 +445,30 @@ function sk_process_scheduled_mailing( $job_id ) {
 	$headers = [ 'Content-Type: text/html; charset=UTF-8' ];
 	$sent    = 0;
 	$failed  = 0;
+	$errors  = [];
 
 	foreach ( $emails as $email ) {
-		if ( wp_mail( $email, $job->post_title, $job->post_content, $headers ) ) {
+		$result = sk_send_mail_with_error( $email, $job->post_title, $job->post_content, $headers );
+		if ( $result['sent'] ) {
 			$sent++;
 		} else {
 			$failed++;
+			$errors[] = [
+				'email' => $email,
+				'error' => $result['error'],
+			];
 		}
 	}
 
 	update_post_meta( $job_id, '_sk_sent_count', $sent );
 	update_post_meta( $job_id, '_sk_failed_count', $failed );
+	update_post_meta( $job_id, '_sk_send_errors', $errors );
 	update_post_meta( $job_id, '_sk_completed_at', time() );
-	update_post_meta( $job_id, '_sk_job_status', $failed > 0 && 0 === $sent ? 'failed' : 'completed' );
+	update_post_meta(
+		$job_id,
+		'_sk_job_status',
+		$failed > 0 ? ( $sent > 0 ? 'partially_failed' : 'failed' ) : 'completed'
+	);
 }
 add_action( 'sk_send_scheduled_mailing', 'sk_process_scheduled_mailing' );
 
@@ -597,19 +608,26 @@ function sk_ajax_send_mailing() {
 		);
 	}
 
-	$sent   = 0;
-	$failed = 0;
+	$sent       = 0;
+	$failed     = 0;
+	$last_error = '';
 
 	foreach ( $emails as $email ) {
-		if ( wp_mail( $email, $subject, $html, $headers ) ) {
+		$result = sk_send_mail_with_error( $email, $subject, $html, $headers );
+		if ( $result['sent'] ) {
 			$sent++;
 		} else {
 			$failed++;
+			$last_error = $result['error'];
 		}
 	}
 
 	if ( $sent < 1 ) {
-		wp_send_json_error( [ 'message' => __( 'Failed to send email. Check mail settings.', 'skyrora-mailing' ) ] );
+		wp_send_json_error(
+			[
+				'message' => $last_error ?: __( 'Failed to send email. Check mail settings.', 'skyrora-mailing' ),
+			]
+		);
 	}
 
 	wp_send_json_success(
