@@ -1,0 +1,16 @@
+{
+  "name": "skyrora-suite-assets2",
+  "private": true,
+  "scripts": {
+    "build": "webpack",
+    "start": "webpack --watch"
+  },
+  "devDependencies": {
+    "css-loader": "^6",
+    "mini-css-extract-plugin": "^2.9.4",
+    "style-loader": "^3",
+    "webpack": "^5",
+    "webpack-cli": "^5",
+    "webpack-remove-empty-scripts": "^1.1.1"
+  }
+}

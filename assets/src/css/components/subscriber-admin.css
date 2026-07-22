@@ -1,0 +1,261 @@
+/* -------------------------------------------------------------------------
+ * Subscriber edit screen
+ * post_title (#titlediv) — без кастомних стилів, стандартний WP
+ * ---------------------------------------------------------------------- */
+
+body.post-type-subscriber {
+	--sk-ink: #0f1115;
+	--sk-muted: #6b7280;
+	--sk-line: #e6e8ec;
+	--sk-line-strong: #cfd3da;
+	--sk-surface: #ffffff;
+	--sk-canvas: #f3f4f7;
+	--sk-danger: #c0392b;
+	--sk-danger-bg: #fdf2f1;
+	--sk-focus: rgba(15, 17, 21, 0.14);
+	--sk-radius: 12px;
+	--sk-radius-sm: 8px;
+	--sk-shadow: 0 1px 2px rgba(15, 17, 21, 0.04), 0 10px 28px rgba(15, 17, 21, 0.06);
+}
+
+body.post-type-subscriber #wpcontent {
+	background: var(--sk-canvas);
+}
+
+body.post-type-subscriber #wpbody-content {
+	padding-bottom: 40px;
+}
+
+body.post-type-subscriber .wrap {
+	margin-top: 16px;
+}
+
+body.post-type-subscriber .wrap > h1 {
+	font-size: 24px;
+	font-weight: 650;
+	letter-spacing: -0.02em;
+	color: var(--sk-ink);
+	margin: 0 0 28px;
+	padding: 0;
+}
+
+body.post-type-subscriber #poststuff {
+	padding-top: 0;
+}
+
+/* Email label над стандартним #titlediv (DOM після title → order піднімає вище) */
+body.post-type-subscriber #post-body-content {
+	display: flex;
+	flex-direction: column;
+}
+
+body.post-type-subscriber .sk-subscriber__email-label {
+	order: 1;
+	display: block;
+	margin: 0 0 10px;
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--sk-ink);
+}
+
+body.post-type-subscriber #titlediv {
+	order: 2;
+	margin: 0 0 8px;
+}
+
+body.post-type-subscriber #titlediv #titlewrap {
+	margin: 0;
+}
+
+body.post-type-subscriber .sk-subscriber__error {
+	order: 3;
+}
+
+body.post-type-subscriber .sk-subscriber {
+	order: 4;
+}
+
+/* Лише стан помилки для стандартного #title — без зміни вигляду поля */
+body.post-type-subscriber #title.sk-subscriber__title--invalid {
+	border-color: var(--sk-danger);
+	box-shadow: 0 0 0 1px var(--sk-danger);
+}
+
+.sk-subscriber__error {
+	display: none;
+	max-width: 100%;
+	margin: 12px 0 20px;
+	padding: 12px 14px;
+	border-radius: var(--sk-radius-sm);
+	background: var(--sk-danger-bg);
+	border: 1px solid rgba(192, 57, 43, 0.22);
+	color: #7a2219;
+	font-size: 13px;
+	line-height: 1.45;
+}
+
+.sk-subscriber__error--visible {
+	display: block;
+}
+
+/* Name card */
+.sk-subscriber {
+	max-width: 100%;
+	margin: 24px 0 28px;
+}
+
+.sk-subscriber__card {
+	background: var(--sk-surface);
+	border: 1px solid var(--sk-line);
+	border-radius: var(--sk-radius);
+	box-shadow: var(--sk-shadow);
+	overflow: hidden;
+}
+
+.sk-subscriber__section {
+	padding: 32px 32px 36px;
+}
+
+.sk-subscriber__section-head {
+	margin-bottom: 20px;
+}
+
+.sk-subscriber__label {
+	display: block;
+	margin: 0 0 4px;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--sk-ink);
+}
+
+.sk-subscriber__hint {
+	margin: 0;
+	font-size: 13px;
+	line-height: 1.4;
+	color: var(--sk-muted);
+}
+
+.sk-subscriber__grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 20px 24px;
+}
+
+.sk-subscriber__field {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	gap: 10px;
+}
+
+.sk-subscriber__field-label {
+	font-size: 13px;
+	font-weight: 550;
+	color: #374151;
+}
+
+.sk-subscriber__input {
+	box-sizing: border-box;
+	width: 100%;
+	height: 46px;
+	padding: 0 14px;
+	margin: 0;
+	font-size: 14px;
+	line-height: 46px;
+	color: var(--sk-ink);
+	background: #fff;
+	border: 1px solid var(--sk-line-strong);
+	border-radius: var(--sk-radius-sm);
+	box-shadow: none;
+	outline: none;
+	transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.sk-subscriber__input::placeholder {
+	color: #9aa1ac;
+}
+
+.sk-subscriber__input:hover {
+	border-color: #9aa1ac;
+}
+
+.sk-subscriber__input:focus {
+	border-color: var(--sk-ink);
+	box-shadow: 0 0 0 4px var(--sk-focus);
+}
+
+/* Sidebar metaboxes */
+body.post-type-subscriber #postbox-container-1 .postbox {
+	border: 1px solid var(--sk-line);
+	border-radius: var(--sk-radius);
+	box-shadow: var(--sk-shadow);
+	background: var(--sk-surface);
+	overflow: hidden;
+}
+
+body.post-type-subscriber #postbox-container-1 .postbox .postbox-header,
+body.post-type-subscriber #postbox-container-1 .postbox .hndle {
+	border-bottom: 1px solid var(--sk-line);
+	background: #fafbfc;
+}
+
+body.post-type-subscriber #postbox-container-1 .postbox .hndle {
+	font-size: 13px;
+	font-weight: 650;
+	letter-spacing: 0.01em;
+	color: var(--sk-ink);
+}
+
+body.post-type-subscriber #listdiv .categorydiv,
+body.post-type-subscriber #listdiv .tabs-panel {
+	border-color: var(--sk-line);
+	border-radius: 6px;
+	background: #fff;
+}
+
+body.post-type-subscriber #minor-publishing-actions #preview-action {
+	display: none;
+}
+
+body.post-type-subscriber #major-publishing-actions {
+	border-top: 1px solid var(--sk-line);
+	background: #fafbfc;
+}
+
+body.post-type-subscriber #publish {
+	border: 0;
+	border-radius: 8px;
+	background: var(--sk-ink);
+	color: #fff;
+	text-shadow: none;
+	box-shadow: none;
+	height: 36px;
+	line-height: 34px;
+	padding: 0 16px;
+	font-weight: 600;
+}
+
+body.post-type-subscriber #publish:hover,
+body.post-type-subscriber #publish:focus {
+	background: #000;
+	color: #fff;
+}
+
+body.post-type-subscriber #save-post {
+	border-radius: 8px;
+	border-color: var(--sk-line-strong);
+	color: var(--sk-ink);
+	box-shadow: none;
+}
+
+@media (max-width: 850px) {
+	.sk-subscriber__section {
+		padding: 22px 18px 24px;
+	}
+
+	.sk-subscriber__grid {
+		grid-template-columns: 1fr;
+	}
+}

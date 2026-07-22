@@ -42,6 +42,7 @@ const BannerEdit = ({
     paddingLeft: `${paddingLeft}px`,
     paddingRight: `${paddingRight}px`,
     width: "100%",
+    boxSizing: "border-box",
     height: "244px",
     margin: "0",
     background: '#fff'
@@ -51,6 +52,29 @@ const BannerEdit = ({
     height: "244px",
     width: "100%",
     objectFit: "cover"
+  };
+  const mediaButton = {
+    display: 'block',
+    width: '100%',
+    height: '244px',
+    padding: 0,
+    border: 0,
+    background: 'transparent',
+    cursor: 'pointer'
+  };
+  const imagePlaceholder = {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '12px',
+    width: '100%',
+    height: '244px',
+    border: '2px dashed #a7aaad',
+    borderRadius: '4px',
+    background: '#f6f7f7',
+    color: '#50575e',
+    boxSizing: 'border-box'
   };
   const onSelectBanner = media => {
     setAttributes({
@@ -124,13 +148,43 @@ const BannerEdit = ({
   }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.MediaUpload, {
     onSelect: onSelectBanner,
     allowedTypes: ['image'],
+    value: bannerId,
     render: ({
       open
-    }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+    }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+      type: "button",
       onClick: open,
       className: "select-banner-button",
-      variant: "primary"
-    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Select Banner', 'custom-banner'))
+      style: mediaButton,
+      "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Select banner image', 'custom-banner')
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      style: imagePlaceholder
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+      width: "40",
+      height: "40",
+      viewBox: "0 0 24 24",
+      fill: "none",
+      "aria-hidden": "true"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("rect", {
+      x: "3",
+      y: "4",
+      width: "18",
+      height: "16",
+      rx: "2",
+      stroke: "currentColor",
+      strokeWidth: "1.5"
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("circle", {
+      cx: "8.5",
+      cy: "9",
+      r: "1.5",
+      fill: "currentColor"
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+      d: "M4 17l4.5-4.5 3 3 2-2L20 20",
+      stroke: "currentColor",
+      strokeWidth: "1.5",
+      strokeLinecap: "round",
+      strokeLinejoin: "round"
+    })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Select banner image', 'custom-banner'))))
   })))));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (BannerEdit);

@@ -1,0 +1,177 @@
+/*
+ * ATTENTION: The "eval" devtool has been used (maybe by default in mode: "development").
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./src/css/main.css"
+/*!**************************!*\
+  !*** ./src/css/main.css ***!
+  \**************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+eval("{__webpack_require__.r(__webpack_exports__);\n// extracted by mini-css-extract-plugin\n\n\n//# sourceURL=webpack://skyrora-suite-assets2/./src/css/main.css?\n}");
+
+/***/ },
+
+/***/ "./src/js/components/list-admin/index.js"
+/*!***********************************************!*\
+  !*** ./src/js/components/list-admin/index.js ***!
+  \***********************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+eval("{__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   listAdmin: () => (/* binding */ listAdmin)\n/* harmony export */ });\n/**\n * Вибір підписників на екрані редагування list.\n */\nfunction listAdmin() {\n\tconst root = document.querySelector('#sk-list-subscribers');\n\tif (!root) return;\n\n\tconst searchInput = root.querySelector('#sk_list_subscriber_search');\n\tconst resultsEl = root.querySelector('#sk_list_subscriber_results');\n\tconst selectedEl = root.querySelector('#sk_list_subscriber_selected');\n\tconst inputsEl = root.querySelector('#sk_list_subscriber_inputs');\n\tconst countEl = root.querySelector('#sk_list_subscriber_count');\n\tconst data = window.skListData || {};\n\n\tlet selected = [];\n\ttry {\n\t\tselected = JSON.parse(root.dataset.selected || '[]') || [];\n\t} catch (e) {\n\t\tselected = [];\n\t}\n\n\tlet debounceTimer = null;\n\tlet activeIndex = -1;\n\tlet lastResults = [];\n\tlet abortController = null;\n\n\tconst selectedIds = () => selected.map((item) => item.id);\n\n\tconst escapeHtml = (str) => {\n\t\tconst div = document.createElement('div');\n\t\tdiv.textContent = str == null ? '' : String(str);\n\t\treturn div.innerHTML;\n\t};\n\n\tconst updateCount = () => {\n\t\tif (!countEl) return;\n\t\tconst n = selected.length;\n\t\tcountEl.textContent =\n\t\t\tn === 1 ? '1 subscriber' : `${n} subscribers`;\n\t};\n\n\tconst syncHiddenInputs = () => {\n\t\tif (!inputsEl) return;\n\t\tinputsEl.innerHTML = '';\n\t\tselected.forEach((item) => {\n\t\t\tconst input = document.createElement('input');\n\t\t\tinput.type = 'hidden';\n\t\t\tinput.name = 'sk_list_subscribers[]';\n\t\t\tinput.value = String(item.id);\n\t\t\tinputsEl.appendChild(input);\n\t\t});\n\t};\n\n\tconst renderSelected = () => {\n\t\tif (!selectedEl) return;\n\t\tselectedEl.innerHTML = '';\n\n\t\tif (!selected.length) {\n\t\t\tconst empty = document.createElement('li');\n\t\t\tempty.className = 'sk-list-subscribers__empty';\n\t\t\tempty.textContent = 'No subscribers selected yet.';\n\t\t\tselectedEl.appendChild(empty);\n\t\t\tupdateCount();\n\t\t\tsyncHiddenInputs();\n\t\t\treturn;\n\t\t}\n\n\t\tselected.forEach((item) => {\n\t\t\tconst li = document.createElement('li');\n\t\t\tli.className = 'sk-list-subscribers__item';\n\t\t\tli.dataset.id = String(item.id);\n\n\t\t\tconst meta = document.createElement('div');\n\t\t\tmeta.className = 'sk-list-subscribers__item-meta';\n\n\t\t\tconst email = document.createElement('span');\n\t\t\temail.className = 'sk-list-subscribers__item-email';\n\t\t\temail.textContent = item.email || `#${item.id}`;\n\n\t\t\tmeta.appendChild(email);\n\n\t\t\tif (item.name) {\n\t\t\t\tconst name = document.createElement('span');\n\t\t\t\tname.className = 'sk-list-subscribers__item-name';\n\t\t\t\tname.textContent = item.name;\n\t\t\t\tmeta.appendChild(name);\n\t\t\t}\n\n\t\t\tconst removeBtn = document.createElement('button');\n\t\t\tremoveBtn.type = 'button';\n\t\t\tremoveBtn.className = 'sk-list-subscribers__remove';\n\t\t\tremoveBtn.setAttribute('aria-label', `Remove ${item.email || item.id}`);\n\t\t\tremoveBtn.textContent = '×';\n\t\t\tremoveBtn.addEventListener('click', () => {\n\t\t\t\tselected = selected.filter((s) => s.id !== item.id);\n\t\t\t\trenderSelected();\n\t\t\t});\n\n\t\t\tli.appendChild(meta);\n\t\t\tli.appendChild(removeBtn);\n\t\t\tselectedEl.appendChild(li);\n\t\t});\n\n\t\tupdateCount();\n\t\tsyncHiddenInputs();\n\t};\n\n\tconst hideResults = () => {\n\t\tif (!resultsEl) return;\n\t\tresultsEl.hidden = true;\n\t\tresultsEl.innerHTML = '';\n\t\tactiveIndex = -1;\n\t\tlastResults = [];\n\t};\n\n\tconst addSubscriber = (item) => {\n\t\tif (!item || selectedIds().includes(item.id)) return;\n\t\tselected = [...selected, item];\n\t\trenderSelected();\n\t\tif (searchInput) {\n\t\t\tsearchInput.value = '';\n\t\t\tsearchInput.focus();\n\t\t}\n\t\thideResults();\n\t};\n\n\tconst renderResults = (items) => {\n\t\tif (!resultsEl) return;\n\t\tlastResults = items || [];\n\t\tactiveIndex = -1;\n\t\tresultsEl.innerHTML = '';\n\n\t\tif (!lastResults.length) {\n\t\t\tconst li = document.createElement('li');\n\t\t\tli.className = 'sk-list-subscribers__result sk-list-subscribers__result--empty';\n\t\t\tli.textContent = 'No subscribers found.';\n\t\t\tresultsEl.appendChild(li);\n\t\t\tresultsEl.hidden = false;\n\t\t\treturn;\n\t\t}\n\n\t\tlastResults.forEach((item, index) => {\n\t\t\tconst li = document.createElement('li');\n\t\t\tli.className = 'sk-list-subscribers__result';\n\t\t\tli.setAttribute('role', 'option');\n\t\t\tli.dataset.index = String(index);\n\t\t\tli.innerHTML = `\n\t\t\t\t<span class=\"sk-list-subscribers__result-email\">${escapeHtml(item.email)}</span>\n\t\t\t\t${item.name ? `<span class=\"sk-list-subscribers__result-name\">${escapeHtml(item.name)}</span>` : ''}\n\t\t\t`;\n\t\t\tli.addEventListener('mousedown', (e) => {\n\t\t\t\te.preventDefault();\n\t\t\t\taddSubscriber(item);\n\t\t\t});\n\t\t\tresultsEl.appendChild(li);\n\t\t});\n\n\t\tresultsEl.hidden = false;\n\t};\n\n\tconst highlightActive = () => {\n\t\tif (!resultsEl) return;\n\t\tconst nodes = resultsEl.querySelectorAll('.sk-list-subscribers__result:not(.sk-list-subscribers__result--empty)');\n\t\tnodes.forEach((node, i) => {\n\t\t\tnode.classList.toggle('is-active', i === activeIndex);\n\t\t});\n\t};\n\n\tconst search = (query) => {\n\t\tif (abortController) {\n\t\t\tabortController.abort();\n\t\t}\n\n\t\tconst q = (query || '').trim();\n\n\t\tabortController = new AbortController();\n\n\t\tconst params = new URLSearchParams({\n\t\t\taction: 'sk_search_subscribers',\n\t\t\tnonce: data.nonce || '',\n\t\t\tq,\n\t\t\tterm_id: String(data.termId || 0),\n\t\t});\n\n\t\tselectedIds().forEach((id) => {\n\t\t\tparams.append('exclude[]', String(id));\n\t\t});\n\n\t\tfetch(`${data.ajaxUrl || '/wp-admin/admin-ajax.php'}?${params.toString()}`, {\n\t\t\tmethod: 'GET',\n\t\t\tcredentials: 'same-origin',\n\t\t\tsignal: abortController.signal,\n\t\t})\n\t\t\t.then((res) => res.json())\n\t\t\t.then((result) => {\n\t\t\t\tif (!result.success) {\n\t\t\t\t\trenderResults([]);\n\t\t\t\t\treturn;\n\t\t\t\t}\n\t\t\t\tconst items = (result.data && result.data.items) || [];\n\t\t\t\trenderResults(items);\n\t\t\t})\n\t\t\t.catch((err) => {\n\t\t\t\tif (err && err.name === 'AbortError') return;\n\t\t\t\tconsole.error(err);\n\t\t\t});\n\t};\n\n\tif (searchInput) {\n\t\tsearchInput.addEventListener('input', () => {\n\t\t\tclearTimeout(debounceTimer);\n\t\t\tdebounceTimer = setTimeout(() => {\n\t\t\t\tsearch(searchInput.value);\n\t\t\t}, 220);\n\t\t});\n\n\t\tsearchInput.addEventListener('focus', () => {\n\t\t\tsearch(searchInput.value);\n\t\t});\n\n\t\tsearchInput.addEventListener('keydown', (e) => {\n\t\t\tif (e.key === 'Enter') {\n\t\t\t\te.preventDefault();\n\t\t\t\tif (resultsEl && !resultsEl.hidden && lastResults.length) {\n\t\t\t\t\tconst index = activeIndex >= 0 ? activeIndex : 0;\n\t\t\t\t\taddSubscriber(lastResults[index]);\n\t\t\t\t}\n\t\t\t\treturn;\n\t\t\t}\n\n\t\t\tif (resultsEl && !resultsEl.hidden && lastResults.length) {\n\t\t\t\tif (e.key === 'ArrowDown') {\n\t\t\t\t\te.preventDefault();\n\t\t\t\t\tactiveIndex = Math.min(activeIndex + 1, lastResults.length - 1);\n\t\t\t\t\thighlightActive();\n\t\t\t\t\treturn;\n\t\t\t\t}\n\t\t\t\tif (e.key === 'ArrowUp') {\n\t\t\t\t\te.preventDefault();\n\t\t\t\t\tactiveIndex = Math.max(activeIndex - 1, 0);\n\t\t\t\t\thighlightActive();\n\t\t\t\t\treturn;\n\t\t\t\t}\n\t\t\t}\n\n\t\t\tif (e.key === 'Escape') {\n\t\t\t\thideResults();\n\t\t\t}\n\t\t});\n\n\t\tsearchInput.addEventListener('blur', () => {\n\t\t\tsetTimeout(hideResults, 150);\n\t\t});\n\t}\n\n\tdocument.addEventListener('click', (e) => {\n\t\tif (!root.contains(e.target)) {\n\t\t\thideResults();\n\t\t}\n\t});\n\n\trenderSelected();\n}\n\n\n//# sourceURL=webpack://skyrora-suite-assets2/./src/js/components/list-admin/index.js?\n}");
+
+/***/ },
+
+/***/ "./src/js/components/mailing-send/index.js"
+/*!*************************************************!*\
+  !*** ./src/js/components/mailing-send/index.js ***!
+  \*************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+eval("{__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   mailingNextButton: () => (/* reexport safe */ _next_button_js__WEBPACK_IMPORTED_MODULE_1__.mailingNextButton),\n/* harmony export */   sendPage: () => (/* reexport safe */ _send_page_js__WEBPACK_IMPORTED_MODULE_0__.sendPage)\n/* harmony export */ });\n/* harmony import */ var _send_page_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./send-page.js */ \"./src/js/components/mailing-send/send-page.js\");\n/* harmony import */ var _next_button_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./next-button.js */ \"./src/js/components/mailing-send/next-button.js\");\n\n\n\n\n//# sourceURL=webpack://skyrora-suite-assets2/./src/js/components/mailing-send/index.js?\n}");
+
+/***/ },
+
+/***/ "./src/js/components/mailing-send/next-button.js"
+/*!*******************************************************!*\
+  !*** ./src/js/components/mailing-send/next-button.js ***!
+  \*******************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+eval("{__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   mailingNextButton: () => (/* binding */ mailingNextButton)\n/* harmony export */ });\n/**\n * Кнопка Next + stepper у Gutenberg header для CPT mailing.\n */\nfunction mailingNextButton() {\n\tif (typeof skMailingNext === 'undefined') {\n\t\treturn;\n\t}\n\n\tconst goToSend = async (btn) => {\n\t\tconst label = btn?.textContent;\n\t\tif (btn) {\n\t\t\tbtn.disabled = true;\n\t\t\tbtn.textContent = skMailingNext.i18n.saving || 'Saving…';\n\t\t}\n\n\t\ttry {\n\t\t\tif (window.wp?.data?.dispatch) {\n\t\t\t\tawait window.wp.data.dispatch('core/editor').savePost();\n\t\t\t\tconst isSaving = () => window.wp.data.select('core/editor').isSavingPost();\n\t\t\t\tconst isDirty = () => window.wp.data.select('core/editor').isEditedPostDirty();\n\t\t\t\tawait new Promise((resolve) => {\n\t\t\t\t\tconst start = Date.now();\n\t\t\t\t\tconst tick = () => {\n\t\t\t\t\t\tif ((!isSaving() && !isDirty()) || Date.now() - start > 15000) {\n\t\t\t\t\t\t\tresolve();\n\t\t\t\t\t\t\treturn;\n\t\t\t\t\t\t}\n\t\t\t\t\t\trequestAnimationFrame(tick);\n\t\t\t\t\t};\n\t\t\t\t\ttick();\n\t\t\t\t});\n\t\t\t}\n\t\t} catch (e) {\n\t\t\t// continue\n\t\t}\n\n\t\tconst postId =\n\t\t\twindow.wp?.data?.select?.('core/editor')?.getCurrentPostId?.() ||\n\t\t\tskMailingNext.postId;\n\n\t\tif (!postId) {\n\t\t\tif (btn) {\n\t\t\t\tbtn.disabled = false;\n\t\t\t\tbtn.textContent = label;\n\t\t\t}\n\t\t\twindow.alert(skMailingNext.i18n.needSave || 'Please save the template first.');\n\t\t\treturn;\n\t\t}\n\n\t\tconst url = new URL(skMailingNext.sendUrl, window.location.origin);\n\t\turl.searchParams.set('post_id', String(postId));\n\t\twindow.location.href = url.toString();\n\t};\n\n\tconst injectNextButton = () => {\n\t\tconst settings = document.querySelector('.edit-post-header__settings, .editor-header__settings');\n\t\tif (!settings || settings.querySelector('.sk-mailing-next-header-btn')) {\n\t\t\treturn Boolean(settings?.querySelector('.sk-mailing-next-header-btn'));\n\t\t}\n\n\t\tconst btn = document.createElement('button');\n\t\tbtn.type = 'button';\n\t\tbtn.className = 'components-button is-primary sk-mailing-next-header-btn';\n\t\tbtn.textContent = skMailingNext.i18n.next || 'Next';\n\t\tbtn.addEventListener('click', () => goToSend(btn));\n\n\t\tconst moreMenu =\n\t\t\tsettings.querySelector('.edit-post-more-menu, .editor-header__dropdown') ||\n\t\t\t[...settings.querySelectorAll('[aria-haspopup=\"menu\"]')].at(-1);\n\t\tlet insertBefore = moreMenu;\n\n\t\twhile (insertBefore?.parentElement && insertBefore.parentElement !== settings) {\n\t\t\tinsertBefore = insertBefore.parentElement;\n\t\t}\n\n\t\tif (insertBefore?.parentElement === settings) {\n\t\t\tsettings.insertBefore(btn, insertBefore);\n\t\t} else {\n\t\t\tsettings.appendChild(btn);\n\t\t}\n\t\treturn true;\n\t};\n\n\tconst injectSteps = () => {\n\t\tif (document.querySelector('.sk-mailing-editor-steps')) {\n\t\t\treturn true;\n\t\t}\n\n\t\tconst source = document.getElementById('sk-mailing-steps-source');\n\t\tconst header = document.querySelector(\n\t\t\t'.edit-post-header, .editor-header, .interface-interface-skeleton__header'\n\t\t);\n\t\tif (!source || !header) {\n\t\t\treturn false;\n\t\t}\n\n\t\tconst bar = document.createElement('div');\n\t\tbar.className = 'sk-mailing-editor-steps';\n\t\tbar.innerHTML = source.innerHTML;\n\t\theader.insertAdjacentElement('afterend', bar);\n\t\treturn true;\n\t};\n\n\tconst tryInject = () => {\n\t\tconst nextOk = injectNextButton();\n\t\tconst stepsOk = injectSteps();\n\t\treturn nextOk && stepsOk;\n\t};\n\n\tif (!tryInject()) {\n\t\tconst observer = new MutationObserver(() => {\n\t\t\tif (tryInject()) {\n\t\t\t\tobserver.disconnect();\n\t\t\t}\n\t\t});\n\t\tobserver.observe(document.body, { childList: true, subtree: true });\n\t\tsetTimeout(() => observer.disconnect(), 20000);\n\t}\n\n\tdocument.addEventListener('click', async (event) => {\n\t\tconst link = event.target.closest?.('#sk_mailing_next_btn, .sk-mailing-next-btn');\n\t\tif (!link) {\n\t\t\treturn;\n\t\t}\n\t\tevent.preventDefault();\n\t\tawait goToSend(null);\n\t});\n}\n\n\n//# sourceURL=webpack://skyrora-suite-assets2/./src/js/components/mailing-send/next-button.js?\n}");
+
+/***/ },
+
+/***/ "./src/js/components/mailing-send/send-page.js"
+/*!*****************************************************!*\
+  !*** ./src/js/components/mailing-send/send-page.js ***!
+  \*****************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+eval("{__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   sendPage: () => (/* binding */ sendPage)\n/* harmony export */ });\n/**\n * Сторінка Send: таби режиму + multiselect списків + schedule + відправка.\n */\nfunction sendPage() {\n\tconst root = document.getElementById('sk-send-page');\n\tif (!root || typeof skSendData === 'undefined') {\n\t\treturn;\n\t}\n\n\tconst tabs = root.querySelectorAll('.sk-send-tabs__tab');\n\tconst panels = root.querySelectorAll('[data-mode-panel]');\n\tconst submitBtn = document.getElementById('sk_send_submit');\n\tconst responseBox = document.getElementById('sk_send_response');\n\tconst subjectInput = document.getElementById('sk_send_subject');\n\tconst scheduleEnabled = document.getElementById('sk_schedule_enabled');\n\tconst scheduleFields = document.getElementById('sk_schedule_fields');\n\tconst scheduleBlock = document.getElementById('sk_send_schedule');\n\n\tconst listsMs = initListMultiselect(document.getElementById('sk_send_lists'));\n\n\tconst getMode = () => root.getAttribute('data-mode') || 'test';\n\n\tconst updateSubmitLabel = () => {\n\t\tif (!submitBtn) {\n\t\t\treturn;\n\t\t}\n\t\tconst mode = getMode();\n\t\tif (mode === 'test') {\n\t\t\tsubmitBtn.textContent = skSendData.i18n.sendTest;\n\t\t\treturn;\n\t\t}\n\t\tif (scheduleEnabled?.checked) {\n\t\t\tsubmitBtn.textContent = skSendData.i18n.schedule;\n\t\t\treturn;\n\t\t}\n\t\tsubmitBtn.textContent = skSendData.i18n.send;\n\t};\n\n\tconst setMode = (mode) => {\n\t\troot.setAttribute('data-mode', mode);\n\n\t\ttabs.forEach((tab) => {\n\t\t\tconst active = tab.getAttribute('data-mode') === mode;\n\t\t\ttab.classList.toggle('is-active', active);\n\t\t\ttab.setAttribute('aria-selected', active ? 'true' : 'false');\n\t\t});\n\n\t\tpanels.forEach((panel) => {\n\t\t\tpanel.hidden = panel.getAttribute('data-mode-panel') !== mode;\n\t\t});\n\n\t\tif (scheduleBlock) {\n\t\t\tscheduleBlock.hidden = mode === 'test';\n\t\t}\n\n\t\tupdateSubmitLabel();\n\t};\n\n\ttabs.forEach((tab) => {\n\t\ttab.addEventListener('click', () => {\n\t\t\tsetMode(tab.getAttribute('data-mode') || 'test');\n\t\t});\n\t});\n\tsetMode(getMode());\n\n\tif (scheduleEnabled && scheduleFields) {\n\t\tconst syncSchedule = () => {\n\t\t\tscheduleFields.hidden = !scheduleEnabled.checked;\n\t\t\tupdateSubmitLabel();\n\t\t};\n\t\tscheduleEnabled.addEventListener('change', syncSchedule);\n\t\tsyncSchedule();\n\t}\n\n\tsubjectInput?.addEventListener('input', () => {\n\t\tsubjectInput.classList.remove('is-invalid');\n\t});\n\n\tif (!submitBtn || !responseBox) {\n\t\treturn;\n\t}\n\n\tsubmitBtn.addEventListener('click', async () => {\n\t\tconst mode = getMode();\n\t\tconst subject = subjectInput?.value?.trim() || '';\n\n\t\tif (!subject) {\n\t\t\tsubjectInput?.classList.add('is-invalid');\n\t\t\tsubjectInput?.focus();\n\t\t\tresponseBox.innerHTML = `<div class=\"notice notice-error inline\"><p>${skSendData.i18n.needSubject}</p></div>`;\n\t\t\treturn;\n\t\t}\n\t\tsubjectInput?.classList.remove('is-invalid');\n\n\t\tconst body = new URLSearchParams({\n\t\t\taction: 'sk_send_mailing',\n\t\t\tnonce: skSendData.nonce,\n\t\t\tpost_id: String(skSendData.postId),\n\t\t\tsubject,\n\t\t\tmode,\n\t\t});\n\n\t\tif (mode === 'list') {\n\t\t\tconst listIds = listsMs?.getSelectedIds() || [];\n\t\t\tif (!listIds.length) {\n\t\t\t\tresponseBox.innerHTML = `<div class=\"notice notice-error inline\"><p>${skSendData.i18n.needList}</p></div>`;\n\t\t\t\treturn;\n\t\t\t}\n\t\t\tlistIds.forEach((id) => body.append('list_ids[]', id));\n\t\t} else if (mode === 'single') {\n\t\t\tconst email = document.getElementById('sk_send_email')?.value?.trim() || '';\n\t\t\tbody.set('email', email);\n\t\t} else {\n\t\t\tconst email = document.getElementById('sk_send_test_email')?.value?.trim() || '';\n\t\t\tbody.set('test_email', email);\n\t\t}\n\n\t\tif (mode !== 'test' && scheduleEnabled?.checked) {\n\t\t\tbody.set('schedule', '1');\n\t\t\tbody.set('schedule_date', document.getElementById('sk_schedule_date')?.value || '');\n\t\t\tbody.set('schedule_time', document.getElementById('sk_schedule_time')?.value || '');\n\t\t}\n\n\t\tsubmitBtn.disabled = true;\n\t\tresponseBox.innerHTML = `<p>${skSendData.i18n.sending}</p>`;\n\n\t\ttry {\n\t\t\tconst res = await fetch(skSendData.ajaxUrl, {\n\t\t\t\tmethod: 'POST',\n\t\t\t\theaders: { 'Content-Type': 'application/x-www-form-urlencoded' },\n\t\t\t\tbody,\n\t\t\t});\n\t\t\tconst data = await res.json();\n\t\t\tif (data.success) {\n\t\t\t\tresponseBox.innerHTML = `<div class=\"notice notice-success inline\"><p>${data.data.message}</p></div>`;\n\t\t\t} else {\n\t\t\t\tconst message = data?.data?.message || skSendData.i18n.failed;\n\t\t\t\tresponseBox.innerHTML = `<div class=\"notice notice-error inline\"><p>${message}</p></div>`;\n\t\t\t}\n\t\t} catch (e) {\n\t\t\tresponseBox.innerHTML = `<div class=\"notice notice-error inline\"><p>${skSendData.i18n.failed}</p></div>`;\n\t\t} finally {\n\t\t\tsubmitBtn.disabled = false;\n\t\t}\n\t});\n}\n\n/**\n * Multiselect списків (chips + dropdown).\n *\n * @param {HTMLElement|null} root\n */\nfunction initListMultiselect(root) {\n\tif (!root) {\n\t\treturn null;\n\t}\n\n\tconst control = root.querySelector('.sk-multiselect__control');\n\tconst chipsEl = root.querySelector('.sk-multiselect__chips');\n\tconst search = root.querySelector('.sk-multiselect__search');\n\tconst dropdown = root.querySelector('.sk-multiselect__dropdown');\n\tconst valuesEl = root.querySelector('.sk-multiselect__values');\n\tconst options = Array.from(root.querySelectorAll('.sk-multiselect__option'));\n\n\tconst selected = new Set();\n\n\tconst getSelectedIds = () => Array.from(selected);\n\n\tconst syncValues = () => {\n\t\tif (!valuesEl) {\n\t\t\treturn;\n\t\t}\n\t\tvaluesEl.innerHTML = '';\n\t\tgetSelectedIds().forEach((id) => {\n\t\t\tconst input = document.createElement('input');\n\t\t\tinput.type = 'hidden';\n\t\t\tinput.name = 'list_ids[]';\n\t\t\tinput.value = id;\n\t\t\tvaluesEl.appendChild(input);\n\t\t});\n\t};\n\n\tconst renderChips = () => {\n\t\tif (!chipsEl) {\n\t\t\treturn;\n\t\t}\n\t\tchipsEl.innerHTML = '';\n\t\toptions.forEach((opt) => {\n\t\t\tconst id = opt.getAttribute('data-id');\n\t\t\tif (!id || !selected.has(id)) {\n\t\t\t\treturn;\n\t\t\t}\n\t\t\tconst chip = document.createElement('span');\n\t\t\tchip.className = 'sk-multiselect__chip';\n\t\t\tchip.innerHTML = `\n\t\t\t\t<button type=\"button\" class=\"sk-multiselect__chip-remove\" aria-label=\"Remove\" data-id=\"${id}\">×</button>\n\t\t\t\t<span class=\"sk-multiselect__chip-label\">${opt.getAttribute('data-name') || ''}</span>\n\t\t\t\t<span class=\"sk-multiselect__count\">${opt.getAttribute('data-count') || '0'}</span>\n\t\t\t`;\n\t\t\tchipsEl.appendChild(chip);\n\t\t});\n\t\tsyncValues();\n\t};\n\n\tconst setOpen = (open) => {\n\t\troot.classList.toggle('is-open', open);\n\t\tif (dropdown) {\n\t\t\tdropdown.hidden = !open;\n\t\t}\n\t\tsearch?.setAttribute('aria-expanded', open ? 'true' : 'false');\n\t};\n\n\tconst filterOptions = () => {\n\t\tconst q = (search?.value || '').trim().toLowerCase();\n\t\toptions.forEach((opt) => {\n\t\t\tconst name = (opt.getAttribute('data-name') || '').toLowerCase();\n\t\t\topt.hidden = Boolean(q) && !name.includes(q);\n\t\t});\n\t};\n\n\tconst toggleId = (id) => {\n\t\tif (!id) {\n\t\t\treturn;\n\t\t}\n\t\tif (selected.has(id)) {\n\t\t\tselected.delete(id);\n\t\t} else {\n\t\t\tselected.add(id);\n\t\t}\n\t\toptions.forEach((opt) => {\n\t\t\tconst active = selected.has(opt.getAttribute('data-id'));\n\t\t\topt.classList.toggle('is-selected', active);\n\t\t\topt.setAttribute('aria-selected', active ? 'true' : 'false');\n\t\t});\n\t\trenderChips();\n\t};\n\n\toptions.forEach((opt) => {\n\t\topt.addEventListener('click', (e) => {\n\t\t\te.preventDefault();\n\t\t\ttoggleId(opt.getAttribute('data-id'));\n\t\t\tsearch?.focus();\n\t\t});\n\t\topt.addEventListener('mouseenter', () => {\n\t\t\toptions.forEach((o) => o.classList.remove('is-active'));\n\t\t\topt.classList.add('is-active');\n\t\t});\n\t});\n\n\tchipsEl?.addEventListener('click', (e) => {\n\t\tconst btn = e.target.closest('.sk-multiselect__chip-remove');\n\t\tif (!btn) {\n\t\t\treturn;\n\t\t}\n\t\te.preventDefault();\n\t\te.stopPropagation();\n\t\ttoggleId(btn.getAttribute('data-id'));\n\t});\n\n\tcontrol?.addEventListener('click', () => {\n\t\tsetOpen(true);\n\t\tsearch?.focus();\n\t});\n\n\tsearch?.addEventListener('focus', () => setOpen(true));\n\tsearch?.addEventListener('input', () => {\n\t\tsetOpen(true);\n\t\tfilterOptions();\n\t});\n\n\tdocument.addEventListener('click', (e) => {\n\t\tif (!root.contains(e.target)) {\n\t\t\tsetOpen(false);\n\t\t}\n\t});\n\n\trenderChips();\n\n\treturn { getSelectedIds };\n}\n\n\n//# sourceURL=webpack://skyrora-suite-assets2/./src/js/components/mailing-send/send-page.js?\n}");
+
+/***/ },
+
+/***/ "./src/js/components/subscriber-admin/index.js"
+/*!*****************************************************!*\
+  !*** ./src/js/components/subscriber-admin/index.js ***!
+  \*****************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+eval("{__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   subscriberAdmin: () => (/* binding */ subscriberAdmin)\n/* harmony export */ });\n/* harmony import */ var _submit_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./submit.js */ \"./src/js/components/subscriber-admin/submit.js\");\n\n\nfunction subscriberAdmin() {\n    (0,_submit_js__WEBPACK_IMPORTED_MODULE_0__.submit)();\n}\n\n\n//# sourceURL=webpack://skyrora-suite-assets2/./src/js/components/subscriber-admin/index.js?\n}");
+
+/***/ },
+
+/***/ "./src/js/components/subscriber-admin/submit.js"
+/*!******************************************************!*\
+  !*** ./src/js/components/subscriber-admin/submit.js ***!
+  \******************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+eval("{__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   submit: () => (/* binding */ submit)\n/* harmony export */ });\n/**\n * Валідація email (post_title) + перевірка унікальності при submit форми підписника.\n */\nconst EMAIL_RE = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\nfunction submit() {\n    const emailInput = document.querySelector('#title');\n    const errorBox = document.querySelector('#sk_email_error');\n\n    if (!emailInput || !errorBox) return;\n\n    const form = emailInput.closest('form');\n    if (!form) return;\n\n    const submitBtn = form.querySelector('button[type=\"submit\"], input[type=\"submit\"], #publish');\n    const data = window.skSubscriberData || {};\n\n    const showError = (message) => {\n        errorBox.textContent = message;\n        errorBox.classList.add('sk-subscriber__error--visible');\n        emailInput.classList.add('sk-subscriber__title--invalid');\n    };\n\n    const clearError = () => {\n        errorBox.classList.remove('sk-subscriber__error--visible');\n        emailInput.classList.remove('sk-subscriber__title--invalid');\n    };\n\n    emailInput.addEventListener('input', () => {\n        if (emailInput.classList.contains('sk-subscriber__title--invalid')) {\n            clearError();\n        }\n    });\n\n    form.addEventListener('submit', function (e) {\n        if (form.dataset.skValidated === '1') return;\n\n        e.preventDefault();\n        e.stopImmediatePropagation();\n\n        const value = emailInput.value.trim();\n        let valid = true;\n\n        if (!value) {\n            showError('Please enter your email address');\n            valid = false;\n        } else if (!EMAIL_RE.test(value)) {\n            showError('Please enter a valid email address');\n            valid = false;\n        } else {\n            clearError();\n        }\n\n        if (!valid) {\n            emailInput.focus();\n            return;\n        }\n\n        if (submitBtn) submitBtn.disabled = true;\n\n        const postIdInput = document.querySelector('#post_ID');\n        const postId = postIdInput\n            ? postIdInput.value\n            : String(data.postId || 0);\n\n        fetch(data.ajaxUrl || '/wp-admin/admin-ajax.php', {\n            method: 'POST',\n            headers: {\n                'Content-Type': 'application/x-www-form-urlencoded',\n            },\n            body: new URLSearchParams({\n                action: 'sk_check_subscriber_email',\n                nonce: data.nonce || '',\n                email: value,\n                post_id: postId,\n            }),\n            credentials: 'same-origin',\n        })\n            .then((res) => res.json())\n            .then((result) => {\n                if (result.success) {\n                    clearError();\n                    form.dataset.skValidated = '1';\n\n                    if (e.submitter) {\n                        e.submitter.click();\n                    } else {\n                        HTMLFormElement.prototype.submit.call(form);\n                    }\n                } else {\n                    showError(\n                        (result.data && result.data.message) ||\n                            'This email already exists'\n                    );\n                    emailInput.focus();\n                    if (submitBtn) submitBtn.disabled = false;\n                }\n            })\n            .catch((err) => {\n                console.error(err);\n                showError('Could not verify email. Please try again.');\n                emailInput.focus();\n                if (submitBtn) submitBtn.disabled = false;\n            });\n    });\n}\n\n\n//# sourceURL=webpack://skyrora-suite-assets2/./src/js/components/subscriber-admin/submit.js?\n}");
+
+/***/ },
+
+/***/ "./src/js/main.js"
+/*!************************!*\
+  !*** ./src/js/main.js ***!
+  \************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+eval("{__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _css_main_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../css/main.css */ \"./src/css/main.css\");\n/* harmony import */ var _components_subscriber_admin_index_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/subscriber-admin/index.js */ \"./src/js/components/subscriber-admin/index.js\");\n/* harmony import */ var _components_list_admin_index_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/list-admin/index.js */ \"./src/js/components/list-admin/index.js\");\n/* harmony import */ var _components_mailing_send_index_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/mailing-send/index.js */ \"./src/js/components/mailing-send/index.js\");\n\n\n\n\n\nconst init = () => {\n    (0,_components_subscriber_admin_index_js__WEBPACK_IMPORTED_MODULE_1__.subscriberAdmin)();\n    (0,_components_list_admin_index_js__WEBPACK_IMPORTED_MODULE_2__.listAdmin)();\n    (0,_components_mailing_send_index_js__WEBPACK_IMPORTED_MODULE_3__.sendPage)();\n    (0,_components_mailing_send_index_js__WEBPACK_IMPORTED_MODULE_3__.mailingNextButton)();\n\n    window.requestAnimationFrame(() => {\n        document.body.classList.add('sk-plugin-page--ready');\n    });\n};\n\nif (document.readyState === 'loading') {\n    document.addEventListener('DOMContentLoaded', init);\n} else {\n    init();\n}\n\n\n//# sourceURL=webpack://skyrora-suite-assets2/./src/js/main.js?\n}");
+
+/***/ }
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	const __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		const cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		const module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		if (!(moduleId in __webpack_modules__)) {
+/******/ 			delete __webpack_module_cache__[moduleId];
+/******/ 			const e = new Error("Cannot find module '" + moduleId + "'");
+/******/ 			e.code = 'MODULE_NOT_FOUND';
+/******/ 			throw e;
+/******/ 		}
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter/value functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			if(Array.isArray(definition)) {
+/******/ 				var i = 0;
+/******/ 				while(i < definition.length) {
+/******/ 					var key = definition[i++];
+/******/ 					var binding = definition[i++];
+/******/ 					if(!__webpack_require__.o(exports, key)) {
+/******/ 						if(binding === 0) {
+/******/ 							Object.defineProperty(exports, key, { enumerable: true, value: definition[i++] });
+/******/ 						} else {
+/******/ 							Object.defineProperty(exports, key, { enumerable: true, get: binding });
+/******/ 						}
+/******/ 					} else if(binding === 0) { i++; }
+/******/ 				}
+/******/ 			} else {
+/******/ 				for(var key in definition) {
+/******/ 					if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 						Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 					}
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module can't be inlined because the eval devtool is used.
+/******/ 	let __webpack_exports__ = __webpack_require__("./src/js/main.js");
+/******/ 	
+/******/ })()
+;

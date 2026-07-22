@@ -148,6 +148,8 @@ function Edit({
   const blockStyle = {
     backgroundColor: '#fff',
     display: 'flex',
+    width: '100%',
+    boxSizing: 'border-box',
     justifyContent: textAlign === 'center' ? 'center' : textAlign === 'right' ? 'flex-end' : 'flex-start',
     textAlign,
     paddingTop: `${paddingTop}px`,

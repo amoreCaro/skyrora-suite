@@ -36,6 +36,8 @@ html :where(.editor-styles-wrapper) {
   font-size: 18px;
 }
 .wp-block-paragraph {
+  box-sizing: border-box;
+  width: 100%;
   padding: 10px;
   background: #425079 !important;
   color: white !important;
