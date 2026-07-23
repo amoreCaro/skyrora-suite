@@ -39,6 +39,31 @@ const ImageEdit = ({ attributes, setAttributes }) => {
 		width: "100%",
 	};
 
+	const mediaButton = {
+		display: 'block',
+		width: '100%',
+		height: '244px',
+		padding: 0,
+		border: 0,
+		background: 'transparent',
+		cursor: 'pointer'
+	};
+
+	const imagePlaceholder = {
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
+		justifyContent: 'center',
+		gap: '12px',
+		width: '100%',
+		height: '244px',
+		border: '2px dashed #a7aaad',
+		borderRadius: '4px',
+		background: '#f6f7f7',
+		color: '#50575e',
+		boxSizing: 'border-box'
+	};
+
 	const onSelectImage = (media) => {
 		setAttributes({ imageUrl: media.url, imageId: media.id });
 	};
@@ -134,10 +159,49 @@ const ImageEdit = ({ attributes, setAttributes }) => {
 							<MediaUpload
 								onSelect={ onSelectImage }
 								allowedTypes={ [ 'image' ] }
+								value={ imageId }
 								render={ ( { open } ) => (
-									<Button onClick={ open } className="select-image-button" variant="primary">
-										{ __( 'Select Image', 'custom-image' ) }
-									</Button>
+									<button
+										type="button"
+										onClick={ open }
+										style={ mediaButton }
+										className="select-image-button"
+										aria-label={ __( 'Select image', 'custom-image' ) }
+									>
+										<span style={ imagePlaceholder }>
+											<svg
+												width="40"
+												height="40"
+												viewBox="0 0 24 24"
+												fill="none"
+												aria-hidden="true"
+											>
+												<rect
+													x="3"
+													y="4"
+													width="18"
+													height="16"
+													rx="2"
+													stroke="currentColor"
+													strokeWidth="1.5"
+												/>
+												<circle
+													cx="8.5"
+													cy="9"
+													r="1.5"
+													fill="currentColor"
+												/>
+												<path
+													d="M4 17l4.5-4.5 3 3 2-2L20 20"
+													stroke="currentColor"
+													strokeWidth="1.5"
+													strokeLinecap="round"
+													strokeLinejoin="round"
+												/>
+											</svg>
+											<span>{ __( 'Select image', 'custom-image' ) }</span>
+										</span>
+									</button>
 								) }
 							/>
 						) }

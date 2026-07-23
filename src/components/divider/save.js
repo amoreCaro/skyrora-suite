@@ -22,6 +22,9 @@ const Save = ({ attributes }) => {
                     marginBottom: '16px',
                     paddingLeft: `${paddingLeft}px`,
                     paddingRight: `${paddingRight}px`,
+                    boxSizing: 'border-box',
+                    width: '100%',
+                    maxWidth: '100%',
                 }}
             >
                 <hr
