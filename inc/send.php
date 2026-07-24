@@ -557,6 +557,9 @@ function sk_ajax_send_mailing() {
 				wp_send_json_error( [ 'message' => __( 'Please select a valid list.', 'skyrora-mailing' ) ] );
 			}
 			foreach ( sk_get_list_subscriber_ids( $list_id ) as $subscriber_id ) {
+				if ( function_exists( 'sk_get_subscriber_status' ) && 'subscribed' !== sk_get_subscriber_status( $subscriber_id ) ) {
+					continue;
+				}
 				$email = sk_get_subscriber_email( $subscriber_id );
 				if ( $email && is_email( $email ) ) {
 					$emails[] = $email;

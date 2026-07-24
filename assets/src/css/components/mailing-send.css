@@ -78,15 +78,15 @@ body.skyrora-mailing_page_skyrora-mailing-send #wpbody-content {
 
 .sk-mailing-topbar--global {
 	margin: 0 -20px 20px;
-	position: sticky;
-	top: 32px;
+	position: sticky;	
+	top: -32px !important;
 }
 
 @media screen and (max-width: 782px) {
 	.sk-mailing-topbar--global {
 		margin-right: -10px;
 		margin-left: -10px;
-		top: 46px;
+		top: 46px !important;
 	}
 }
 

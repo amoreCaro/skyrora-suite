@@ -1,1 +1,0 @@
-{"version":3,"file":"components/divider/index.css","mappings":";;;AAAA;IACI,UAAU;IACV,SAAS;AACb","sources":["webpack://skyrora-suite/./src/components/divider/editor.css"],"sourcesContent":["hr {\r\n    padding: 0;\r\n    margin: 0; \r\n}\r\n"],"names":[],"sourceRoot":""}

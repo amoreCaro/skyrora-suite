@@ -3,6 +3,7 @@ import { useBlockProps, RichText } from '@wordpress/block-editor';
 export default function Save({ attributes }) {
     const {
         id,
+        imgUrl,
         text1,
         text2,
         paddingLeft,
@@ -20,6 +21,7 @@ export default function Save({ attributes }) {
     } = attributes;
 
     const blockProps = useBlockProps.save();
+    const logoUrl = imgUrl || '/wp-content/plugins/skyrora-suite/assets/images/skyrora-logo.svg';
 
     return (
         <div
@@ -38,9 +40,13 @@ export default function Save({ attributes }) {
         >
             {/* Logo/Image Section */}
             <div style={{ maxWidth: '114px', height: '60px', width: '100%' }}>
-                <svg width="1em" height="1em" className="icon icon-logo">
-                    <use xlinkHref="/wp-content/plugins/skyrora-suite/assets/dist/images/symbol-defs.svg#icon-logo" />
-                </svg>
+                <img
+                    src={logoUrl}
+                    width="114"
+                    height="60"
+                    alt="Skyrora"
+                    style={{ display: 'block', width: '114px', height: '60px', objectFit: 'contain' }}
+                />
             </div>
 
             {/* Text Section */}

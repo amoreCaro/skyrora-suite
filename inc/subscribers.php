@@ -5,7 +5,43 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Реєстрація мета-полів підписника (email sync, first name, last name).
+ * Доступні статуси підписника.
+ *
+ * @return array<string,string>
+ */
+function sk_get_subscriber_statuses() {
+	return [
+		'subscribed'   => __( 'Subscribed', 'skyrora-mailing' ),
+		'unconfirmed'  => __( 'Unconfirmed', 'skyrora-mailing' ),
+		'unsubscribed' => __( 'Unsubscribed', 'skyrora-mailing' ),
+		'inactive'     => __( 'Inactive', 'skyrora-mailing' ),
+		'bounced'      => __( 'Bounced', 'skyrora-mailing' ),
+		'trash'        => __( 'Trash', 'skyrora-mailing' ),
+	];
+}
+
+/**
+ * Отримати статус підписника. Legacy-записи без статусу вважаються підписаними.
+ *
+ * @param int|WP_Post $post Post ID або об'єкт.
+ * @return string
+ */
+function sk_get_subscriber_status( $post ) {
+	$post = get_post( $post );
+	if ( ! $post || 'subscriber' !== $post->post_type ) {
+		return '';
+	}
+
+	if ( 'trash' === $post->post_status ) {
+		return 'trash';
+	}
+
+	$status = (string) get_post_meta( $post->ID, 'sk_status', true );
+	return 'trash' !== $status && array_key_exists( $status, sk_get_subscriber_statuses() ) ? $status : 'subscribed';
+}
+
+/**
+ * Реєстрація мета-полів підписника.
  */
 function sk_register_subscriber_meta() {
 	$fields = [ 'email', 'first_name', 'last_name' ];
@@ -20,6 +56,20 @@ function sk_register_subscriber_meta() {
 			},
 		] );
 	}
+
+	register_post_meta( 'subscriber', 'sk_status', [
+		'type'              => 'string',
+		'single'            => true,
+		'show_in_rest'      => true,
+		'default'           => 'subscribed',
+		'sanitize_callback' => function ( $value ) {
+			$value = sanitize_key( $value );
+			return 'trash' !== $value && array_key_exists( $value, sk_get_subscriber_statuses() ) ? $value : 'subscribed';
+		},
+		'auth_callback'     => function () {
+			return current_user_can( 'edit_posts' );
+		},
+	] );
 }
 add_action( 'init', 'sk_register_subscriber_meta' );
 
@@ -94,6 +144,8 @@ function sk_render_subscriber_form( $post ) {
 
 	$first_name = get_post_meta( $post->ID, 'sk_first_name', true );
 	$last_name  = get_post_meta( $post->ID, 'sk_last_name', true );
+	$status     = sk_get_subscriber_status( $post );
+	$statuses   = sk_get_subscriber_statuses();
 	?>
 	<div class="sk-subscriber__error" id="sk_email_error" role="alert"><?php esc_html_e( 'Please enter your email address', 'skyrora-mailing' ); ?></div>
 
@@ -108,6 +160,16 @@ function sk_render_subscriber_form( $post ) {
 					<div class="sk-subscriber__field">
 						<label class="sk-subscriber__field-label" for="sk_last_name"><?php esc_html_e( 'Last name', 'skyrora-mailing' ); ?></label>
 						<input class="sk-subscriber__input" type="text" id="sk_last_name" name="sk_last_name" value="<?php echo esc_attr( $last_name ); ?>" placeholder="<?php esc_attr_e( 'Last name', 'skyrora-mailing' ); ?>" autocomplete="family-name">
+					</div>
+					<div class="sk-subscriber__field">
+						<label class="sk-subscriber__field-label" for="sk_status"><?php esc_html_e( 'Status', 'skyrora-mailing' ); ?></label>
+						<select class="sk-subscriber__input sk-subscriber__select" id="sk_status" name="sk_status">
+							<?php foreach ( $statuses as $status_value => $status_label ) : ?>
+								<option value="<?php echo esc_attr( $status_value ); ?>" <?php selected( $status, $status_value ); ?>>
+									<?php echo esc_html( $status_label ); ?>
+								</option>
+							<?php endforeach; ?>
+						</select>
 					</div>
 				</div>
 			</section>
@@ -226,6 +288,8 @@ function sk_save_subscriber_meta( $post_id, $post ) {
 	$email      = sanitize_email( $email_raw );
 	$first_name = isset( $_POST['sk_first_name'] ) ? sanitize_text_field( wp_unslash( $_POST['sk_first_name'] ) ) : '';
 	$last_name  = isset( $_POST['sk_last_name'] ) ? sanitize_text_field( wp_unslash( $_POST['sk_last_name'] ) ) : '';
+	$status     = isset( $_POST['sk_status'] ) ? sanitize_key( wp_unslash( $_POST['sk_status'] ) ) : 'subscribed';
+	$status     = array_key_exists( $status, sk_get_subscriber_statuses() ) ? $status : 'subscribed';
 
 	if ( '' !== $email && sk_subscriber_email_exists( $email, $post_id ) ) {
 		set_transient( 'sk_subscriber_email_error_' . get_current_user_id(), __( 'This email already exists', 'skyrora-mailing' ), 45 );
@@ -235,6 +299,15 @@ function sk_save_subscriber_meta( $post_id, $post ) {
 	update_post_meta( $post_id, 'sk_email', $email );
 	update_post_meta( $post_id, 'sk_first_name', $first_name );
 	update_post_meta( $post_id, 'sk_last_name', $last_name );
+
+	if ( 'trash' === $status ) {
+		remove_action( 'save_post_subscriber', 'sk_save_subscriber_meta', 10 );
+		wp_trash_post( $post_id );
+		add_action( 'save_post_subscriber', 'sk_save_subscriber_meta', 10, 2 );
+		return;
+	}
+
+	update_post_meta( $post_id, 'sk_status', $status );
 
 	// Нормалізуємо post_title до sanitize_email (якщо відрізняється від сирого вводу).
 	if ( $email && $email !== $post->post_title ) {
@@ -276,6 +349,7 @@ function sk_subscriber_columns( $columns ) {
 	$new['title']         = __( 'Email', 'skyrora-mailing' );
 	$new['sk_first_name'] = __( 'First Name', 'skyrora-mailing' );
 	$new['sk_last_name']  = __( 'Last Name', 'skyrora-mailing' );
+	$new['sk_status']     = __( 'Status', 'skyrora-mailing' );
 
 	if ( isset( $columns['taxonomy-list'] ) ) {
 		$new['taxonomy-list'] = $columns['taxonomy-list'];
@@ -310,6 +384,155 @@ function sk_subscriber_column_content( $column, $post_id ) {
 		case 'sk_last_name':
 			echo esc_html( get_post_meta( $post_id, 'sk_last_name', true ) );
 			break;
+		case 'sk_status':
+			$status   = sk_get_subscriber_status( $post_id );
+			$statuses = sk_get_subscriber_statuses();
+			printf(
+				'<span class="sk-subscriber-status sk-subscriber-status--%1$s">%2$s</span>',
+				esc_attr( $status ),
+				esc_html( isset( $statuses[ $status ] ) ? $statuses[ $status ] : $status )
+			);
+			break;
 	}
 }
 add_action( 'manage_subscriber_posts_custom_column', 'sk_subscriber_column_content', 10, 2 );
+
+/**
+ * Таби статусів над таблицею підписників.
+ *
+ * @param array<string,string> $views Стандартні WordPress-таби.
+ * @return array<string,string>
+ */
+function sk_subscriber_status_views( $views ) {
+	global $wpdb;
+
+	$statuses     = sk_get_subscriber_statuses();
+	$status_slugs = array_keys( $statuses );
+	$meta_statuses = array_values( array_diff( $status_slugs, [ 'trash' ] ) );
+	$placeholders  = implode( ', ', array_fill( 0, count( $meta_statuses ), '%s' ) );
+	$query_args    = array_merge( $meta_statuses, [ 'subscriber' ] );
+
+	$sql = "
+		SELECT
+			CASE
+				WHEN p.post_status = 'trash' THEN 'trash'
+				WHEN pm.meta_value IN ({$placeholders}) THEN pm.meta_value
+				ELSE 'subscribed'
+			END AS subscriber_status,
+			COUNT(DISTINCT p.ID) AS subscriber_count
+		FROM {$wpdb->posts} p
+		LEFT JOIN {$wpdb->postmeta} pm
+			ON p.ID = pm.post_id
+			AND pm.meta_key = 'sk_status'
+		WHERE p.post_type = %s
+			AND p.post_status IN ('publish', 'future', 'draft', 'pending', 'private', 'trash')
+		GROUP BY subscriber_status
+	";
+
+	$rows   = $wpdb->get_results( $wpdb->prepare( $sql, $query_args ), OBJECT_K );
+	$counts = array_fill_keys( $status_slugs, 0 );
+
+	foreach ( $rows as $status => $row ) {
+		if ( isset( $counts[ $status ] ) ) {
+			$counts[ $status ] = (int) $row->subscriber_count;
+		}
+	}
+
+	$current_status = isset( $_GET['sk_status'] ) ? sanitize_key( wp_unslash( $_GET['sk_status'] ) ) : '';
+	$base_url       = admin_url( 'edit.php?post_type=subscriber' );
+	$all_count      = array_sum( $counts ) - $counts['trash'];
+	$custom_views   = [];
+	$all_current    = ! array_key_exists( $current_status, $statuses );
+
+	$custom_views['all'] = sprintf(
+		'<a href="%1$s"%2$s>%3$s <span class="count">%4$s</span></a>',
+		esc_url( $base_url ),
+		$all_current ? ' class="current" aria-current="page"' : '',
+		esc_html__( 'All', 'skyrora-mailing' ),
+		number_format_i18n( $all_count )
+	);
+
+	foreach ( $statuses as $status => $label ) {
+		$is_current              = $current_status === $status;
+		$custom_views[ $status ] = sprintf(
+			'<a href="%1$s"%2$s>%3$s <span class="count">%4$s</span></a>',
+			esc_url( add_query_arg( 'sk_status', $status, $base_url ) ),
+			$is_current ? ' class="current" aria-current="page"' : '',
+			esc_html( $label ),
+			number_format_i18n( $counts[ $status ] )
+		);
+	}
+
+	return $custom_views;
+}
+add_filter( 'views_edit-subscriber', 'sk_subscriber_status_views' );
+
+/**
+ * Фільтр за статусом у списку підписників.
+ */
+function sk_subscriber_status_filter() {
+	global $typenow;
+
+	if ( 'subscriber' !== $typenow ) {
+		return;
+	}
+
+	$current_status = isset( $_GET['sk_status'] ) ? sanitize_key( wp_unslash( $_GET['sk_status'] ) ) : '';
+	?>
+	<select name="sk_status">
+		<option value=""><?php esc_html_e( 'All statuses', 'skyrora-mailing' ); ?></option>
+		<?php foreach ( sk_get_subscriber_statuses() as $status => $label ) : ?>
+			<option value="<?php echo esc_attr( $status ); ?>" <?php selected( $current_status, $status ); ?>>
+				<?php echo esc_html( $label ); ?>
+			</option>
+		<?php endforeach; ?>
+	</select>
+	<?php
+}
+add_action( 'restrict_manage_posts', 'sk_subscriber_status_filter' );
+
+/**
+ * Застосувати фільтр статусу до головного admin-запиту.
+ *
+ * @param WP_Query $query Поточний запит.
+ */
+function sk_filter_subscribers_by_status( $query ) {
+	if ( ! is_admin() || ! $query->is_main_query() || 'subscriber' !== $query->get( 'post_type' ) ) {
+		return;
+	}
+
+	$status = isset( $_GET['sk_status'] ) ? sanitize_key( wp_unslash( $_GET['sk_status'] ) ) : '';
+	if ( ! array_key_exists( $status, sk_get_subscriber_statuses() ) ) {
+		return;
+	}
+
+	if ( 'trash' === $status ) {
+		$query->set( 'post_status', 'trash' );
+		return;
+	}
+
+	if ( 'subscribed' === $status ) {
+		$query->set( 'meta_query', [
+			'relation' => 'OR',
+			[
+				'key'     => 'sk_status',
+				'value'   => 'subscribed',
+				'compare' => '=',
+			],
+			[
+				'key'     => 'sk_status',
+				'compare' => 'NOT EXISTS',
+			],
+			[
+				'key'     => 'sk_status',
+				'value'   => '',
+				'compare' => '=',
+			],
+		] );
+		return;
+	}
+
+	$query->set( 'meta_key', 'sk_status' );
+	$query->set( 'meta_value', $status );
+}
+add_action( 'pre_get_posts', 'sk_filter_subscribers_by_status' );
