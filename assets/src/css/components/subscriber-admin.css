@@ -186,6 +186,11 @@ body.post-type-subscriber #title.sk-subscriber__title--invalid {
 	box-shadow: 0 0 0 4px var(--sk-focus);
 }
 
+.sk-subscriber__select {
+	line-height: normal;
+	cursor: pointer;
+}
+
 /* Sidebar metaboxes */
 body.post-type-subscriber #postbox-container-1 .postbox {
 	border: 1px solid var(--sk-line);
