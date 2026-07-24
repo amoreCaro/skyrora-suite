@@ -616,8 +616,6 @@ function Save({
 }) {
   const {
     id,
-    imgUrl,
-    imgLink,
     text1,
     text2,
     paddingLeft,
@@ -653,29 +651,13 @@ function Save({
       height: '60px',
       width: '100%'
     }
-  }, imgUrl ? imgLink ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
-    href: imgLink,
-    target: "_blank",
-    rel: "noopener noreferrer"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-    src: imgUrl,
-    alt: "Uploaded",
-    style: {
-      height: '100%',
-      width: '100%',
-      objectFit: 'contain'
-    },
-    className: "uploaded-img"
-  })) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-    src: imgUrl,
-    alt: "Uploaded",
-    style: {
-      height: '100%',
-      width: '100%',
-      objectFit: 'contain'
-    },
-    className: "uploaded-img"
-  }) : null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+    width: "1em",
+    height: "1em",
+    className: "icon icon-logo"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("use", {
+    xlinkHref: "/wp-content/plugins/skyrora-suite/assets/dist/images/symbol-defs.svg#icon-logo"
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     style: {
       display: 'flex',
       flexDirection: 'column',

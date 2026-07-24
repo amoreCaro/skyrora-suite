@@ -16,6 +16,8 @@ export default function Save({ attributes }) {
         <div
             {...blockProps}
             style={{
+                width: '100%',
+                boxSizing: 'border-box',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',

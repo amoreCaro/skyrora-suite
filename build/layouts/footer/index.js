@@ -548,6 +548,8 @@ function Edit({
         `), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...blockProps,
     style: {
+      width: '100%',
+      boxSizing: 'border-box',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
@@ -661,6 +663,8 @@ function Save({
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...blockProps,
     style: {
+      width: '100%',
+      boxSizing: 'border-box',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',

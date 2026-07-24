@@ -60,6 +60,9 @@ const save = ({ attributes }) => {
             paddingLeft: `${paddingLeft}px`,
             paddingRight: `${paddingRight}px`,
             margin: "0px",
+            boxSizing: "border-box",
+            width: "100%",
+            maxWidth: "100%",
           }}
         />
       </div>

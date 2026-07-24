@@ -36,6 +36,20 @@ const Edit = ({
     paddingLeft,
     paddingRight
   } = attributes;
+  const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)({
+    className: 'wp-divider',
+    style: {
+      paddingTop: '16px',
+      paddingBottom: '16px',
+      paddingLeft: `${paddingLeft}px`,
+      paddingRight: `${paddingRight}px`,
+      background: '#fff',
+      boxSizing: 'border-box',
+      width: '100%',
+      maxWidth: '100%',
+      margin: 0
+    }
+  });
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InspectorControls, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
     title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Divider Settings', 'custom-divider')
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.TextControl, {
@@ -76,15 +90,7 @@ const Edit = ({
 					`
     }
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)(),
-    className: "wp-block wp-divider",
-    style: {
-      paddingTop: '16px',
-      paddingBottom: '16px',
-      paddingLeft: `${paddingLeft}px`,
-      paddingRight: `${paddingRight}px`,
-      background: '#fff'
-    }
+    ...blockProps
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "divider-line",
     style: {
@@ -141,7 +147,10 @@ const Save = ({
       marginTop: '16px',
       marginBottom: '16px',
       paddingLeft: `${paddingLeft}px`,
-      paddingRight: `${paddingRight}px`
+      paddingRight: `${paddingRight}px`,
+      boxSizing: 'border-box',
+      width: '100%',
+      maxWidth: '100%'
     }
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("hr", {
     ..._wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps.save(),

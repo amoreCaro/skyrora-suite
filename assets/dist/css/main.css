@@ -936,11 +936,45 @@ a.sk-mailing-steps__link:hover .sk-mailing-steps__label {
 	box-shadow: none;
 }
 
-/* ── Gutenberg Next ── */
+/* ── Gutenberg title actions ── */
+.editor-visual-editor__post-title-wrapper,
+.edit-post-visual-editor__post-title-wrapper {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+}
+
+.editor-visual-editor__post-title-wrapper .sk-mailing-title-actions,
+.edit-post-visual-editor__post-title-wrapper .sk-mailing-title-actions {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	position: absolute;
+	right: 0;
+	flex: 0 0 auto;
+}
+
+.sk-mailing-save-title-btn,
 .sk-mailing-next-header-btn {
-	margin-left: 8px !important;
 	min-width: 112px;
 	justify-content: center;
+}
+
+.sk-mailing-save-title-btn {
+	background: #3858e9 !important;
+	border-color: #3858e9 !important;
+	color: #fff !important;
+}
+
+.sk-mailing-save-title-btn:hover,
+.sk-mailing-save-title-btn:focus {
+	background: #2b46c7 !important;
+	border-color: #2b46c7 !important;
+	color: #fff !important;
+}
+
+.sk-mailing-next-header-btn {
 	background: #252a2e !important;
 	border-color: #252a2e !important;
 	color: #fff !important;
@@ -948,9 +982,33 @@ a.sk-mailing-steps__link:hover .sk-mailing-steps__label {
 
 .sk-mailing-next-header-btn:hover,
 .sk-mailing-next-header-btn:focus {
-	background: #3c434a !important;
+	background: #2f3438 !important;
 	border-color: #3c434a !important;
 	color: #fff !important;
+}
+
+body.sk-mailing-title-actions-ready .edit-post-header__settings .editor-post-publish-button,
+body.sk-mailing-title-actions-ready .edit-post-header__settings .editor-post-publish-button__button,
+body.sk-mailing-title-actions-ready .edit-post-header__settings .editor-post-save-draft,
+body.sk-mailing-title-actions-ready .editor-header__settings .editor-post-publish-button,
+body.sk-mailing-title-actions-ready .editor-header__settings .editor-post-publish-button__button,
+body.sk-mailing-title-actions-ready .editor-header__settings .editor-post-save-draft {
+	display: none !important;
+}
+
+@media (max-width: 700px) {
+	.editor-visual-editor__post-title-wrapper,
+	.edit-post-visual-editor__post-title-wrapper {
+		flex-wrap: wrap;
+	}
+
+	.editor-visual-editor__post-title-wrapper .sk-mailing-title-actions,
+	.edit-post-visual-editor__post-title-wrapper .sk-mailing-title-actions {
+		position: static;
+		width: 100%;
+		margin-left: 0;
+		padding: 8px 0 0;
+	}
 }
 
 /* ── Design editor stepper ── */

@@ -154,8 +154,8 @@ const BannerEdit = ({
     }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
       type: "button",
       onClick: open,
-      className: "select-banner-button",
       style: mediaButton,
+      className: "select-banner-button",
       "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Select banner image', 'custom-banner')
     }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
       style: imagePlaceholder

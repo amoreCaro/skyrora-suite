@@ -65,7 +65,7 @@ function moneyline_enqueue_block_editor_assets() {
         'theme-global',
         plugin_dir_url( __FILE__ ) . '../src/base/css/global/admin.css',
         array(),
-        '1.0.0',
+        filemtime( plugin_dir_path( __FILE__ ) . '../src/base/css/global/admin.css' ),
         'all'
     );
 

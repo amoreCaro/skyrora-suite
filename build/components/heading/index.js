@@ -83,7 +83,10 @@ const HeadingEdit = ({
       paddingBottom: `${paddingBottom}px`,
       paddingLeft: `${paddingLeft}px`,
       paddingRight: `${paddingRight}px`,
-      margin: '0px'
+      margin: '0px',
+      boxSizing: 'border-box',
+      width: '100%',
+      maxWidth: '100%'
     }
   });
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.BlockControls, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InspectorControls, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -351,7 +354,10 @@ const save = ({
       paddingBottom: `${paddingBottom}px`,
       paddingLeft: `${paddingLeft}px`,
       paddingRight: `${paddingRight}px`,
-      margin: "0px"
+      margin: "0px",
+      boxSizing: "border-box",
+      width: "100%",
+      maxWidth: "100%"
     }
   })));
 };

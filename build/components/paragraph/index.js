@@ -64,6 +64,8 @@ const ParagraphEdit = ({
       paddingBottom: `${paddingBottom}px`,
       paddingLeft: `${paddingLeft}px`,
       paddingRight: `${paddingRight}px`,
+      width: '100%',
+      boxSizing: 'border-box',
       margin: '0px'
     }
   });

@@ -49,19 +49,19 @@
     },
     "paddingLeft": {
       "type": "number",
-      "default": "48"
+      "default": 48
     },
     "paddingRight": {
       "type": "number",
-      "default": "48"
+      "default": 48
     },
     "paddingTop": {
       "type": "number",
-      "default": "20"
+      "default": 20
     },
     "paddingBottom": {
       "type": "number",
-      "default": "20"
+      "default": 20
     },
     "url": {
       "type": "string",

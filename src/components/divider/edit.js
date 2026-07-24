@@ -9,6 +9,20 @@ import './editor.css';
 
 const Edit = ({ attributes, setAttributes }) => {
     const { id, color, paddingLeft, paddingRight } = attributes;
+    const blockProps = useBlockProps({
+        className: 'wp-divider',
+        style: {
+            paddingTop: '16px',
+            paddingBottom: '16px',
+            paddingLeft: `${paddingLeft}px`,
+            paddingRight: `${paddingRight}px`,
+            background: '#fff',
+            boxSizing: 'border-box',
+            width: '100%',
+            maxWidth: '100%',
+            margin: 0,
+        },
+    });
 
     return (
         <>
@@ -52,15 +66,7 @@ const Edit = ({ attributes, setAttributes }) => {
             />
 
             <div
-                {...useBlockProps()}
-                className="wp-block wp-divider"
-                style={{
-                    paddingTop: '16px',
-                    paddingBottom: '16px',
-                    paddingLeft: `${paddingLeft}px`,
-                    paddingRight: `${paddingRight}px`,
-                    background: '#fff'
-                }}
+                {...blockProps}
             >
                 <div
                     className="divider-line"

@@ -4,7 +4,7 @@ body.admin-bar {
 }
 .wp-block-post-content.wp-block-post-content {
   background: #181b24;
-  max-width: 640px;
+  max-width: 645px;
   width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
@@ -24,16 +24,19 @@ html :where(.editor-styles-wrapper) {
   padding: 0;
   background: #181b24 !important;
 }
-.editor-visual-editor__post-title-wrapper.edit-post-visual-editor__post-title-wrapper {
-  padding: 20px;
-  background: white;
-  margin: 0px !important;
-}
-.editor-visual-editor__post-title-wrapper.edit-post-visual-editor__post-title-wrapper
-  h1 {
-  border: 1px solid lightgray;
+.editor-visual-editor__post-title-wrapper {
   padding: 15px;
+  background: white;
+  margin: 0 0 10px !important;
+}
+.editor-visual-editor__post-title-wrapper h1 {
+  border: 1px solid lightgray;
+  padding: 4px 10px;
   font-size: 18px;
+  line-height: 1.2;
+  margin: 0;
+  min-height: 32px;
+  box-sizing: border-box;
 }
 .wp-block-paragraph {
   box-sizing: border-box;
@@ -42,6 +45,28 @@ html :where(.editor-styles-wrapper) {
   background: #425079 !important;
   color: white !important;
   border: 2px dashed #2963ff !important;
+}
+.editor-styles-wrapper .custom-heading {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 645px !important;
+  min-width: 0;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  clip-path: none !important;
+  transform: none !important;
+}
+.editor-styles-wrapper .custom-heading::before,
+.editor-styles-wrapper .custom-heading::after {
+  content: none !important;
+  display: none !important;
+}
+.editor-styles-wrapper .wp-divider {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 645px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 .editor-styles-wrapper :where(:not(.is-layout-flex,.is-layout-grid))>.wp-block {
   margin-left: auto;
@@ -63,13 +88,13 @@ html :where(.editor-styles-wrapper) {
   outline: none !important;
 }
 h1.wp-block.wp-block-post-title.block-editor-block-list__block.editor-post-title.editor-post-title__input.rich-text {
-  max-width: 640px;
+  max-width: 390px;
   width: 100%;
 }
 
-.editor-visual-editor__post-title-wrapper.edit-post-visual-editor__post-title-wrapper {
+.editor-visual-editor__post-title-wrapper {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 @media (max-width: 430px) {

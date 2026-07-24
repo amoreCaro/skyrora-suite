@@ -36,10 +36,10 @@ const save = ({ attributes }) => {
 				{...useBlockProps.save({ className: 'wp-button' })}
 				style={{
 					backgroundColor: '#fff',
-					paddingTop,
-					paddingBottom,
-					paddingLeft,
-					paddingRight,
+					paddingTop: `${paddingTop}px`,
+					paddingBottom: `${paddingBottom}px`,
+					paddingLeft: `${paddingLeft}px`,
+					paddingRight: `${paddingRight}px`,
 					display: 'flex',
 					justifyContent:
 						textAlign === 'center'

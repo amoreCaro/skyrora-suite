@@ -519,6 +519,8 @@ export default function Edit({ attributes, setAttributes }) {
             <div
                 {...blockProps}
                 style={{
+                    width: '100%',
+                    boxSizing: 'border-box',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'center',
