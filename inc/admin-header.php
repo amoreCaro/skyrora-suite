@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Render the shared Skyrora brand.
  */
 function sk_render_admin_brand() {
-	$logo_url = SK_PLUGIN_DIR_URL . 'assets/dist/images/skyrora-logo.svg';
+	$logo_url = SK_PLUGIN_DIR_URL . 'assets/images/skyrora-logo.svg';
 	?>
 	<div class="sk-mailing-topbar__brand">
 		<img

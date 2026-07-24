@@ -22,6 +22,10 @@ body.post-type-subscriber #wpcontent {
 	background: var(--sk-canvas);
 }
 
+body.edit-php.post-type-subscriber #wpwrap {
+	overflow-x: hidden;
+}
+
 body.post-type-subscriber #wpbody-content {
 	padding-bottom: 40px;
 }
@@ -255,9 +259,283 @@ body.post-type-subscriber #save-post {
 	box-shadow: none;
 }
 
+/* Status tabs on the subscribers list screen */
+body.edit-php.post-type-subscriber .subsubsub {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 0 20px;
+	float: none;
+	box-sizing: border-box;
+	width: 100%;
+	overflow: hidden;
+	margin: 12px 0 0;
+	padding: 16px 18px 9px;
+	border: 1px solid var(--sk-line);
+	border-bottom: 0;
+	border-radius: 10px 10px 0 0;
+	background: #fff;
+	font-size: 0;
+	box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+}
+
+body.edit-php.post-type-subscriber .subsubsub li {
+	margin: 0;
+	font-size: 0;
+}
+
+body.edit-php.post-type-subscriber .sk-subscriber-tabs > ul {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 0 28px;
+	min-width: 0;
+	margin: 0;
+	white-space: normal;
+}
+
+body.edit-php.post-type-subscriber .sk-subscriber-tabs {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+body.edit-php.post-type-subscriber .subsubsub a {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 7px 0 10px;
+	border-bottom: 2px solid transparent;
+	color: #303846;
+	font-size: 13px;
+	font-weight: 500;
+	line-height: 1.4;
+	text-decoration: none;
+	transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+body.edit-php.post-type-subscriber .subsubsub a:hover,
+body.edit-php.post-type-subscriber .subsubsub a:focus,
+body.edit-php.post-type-subscriber .subsubsub a.current {
+	color: #3857e8;
+}
+
+body.edit-php.post-type-subscriber .subsubsub a.current {
+	border-bottom-color: #3857e8;
+	font-weight: 650;
+}
+
+body.edit-php.post-type-subscriber .subsubsub .count {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 18px;
+	height: 18px;
+	padding: 0 5px;
+	border-radius: 9px;
+	background: #e8ebf2;
+	color: #454b57;
+	font-size: 10px;
+	font-weight: 500;
+	line-height: 18px;
+}
+
+body.edit-php.post-type-subscriber #posts-filter {
+	position: relative;
+	box-sizing: border-box;
+	padding: 0 18px 18px;
+	border: 1px solid var(--sk-line);
+	border-top: 0;
+	border-radius: 0 0 10px 10px;
+	background: #fff;
+	box-shadow: 0 12px 24px rgba(15, 23, 42, 0.05);
+}
+
+body.edit-php.post-type-subscriber #posts-filter .search-box {
+	position: absolute;
+	top: 13px;
+	right: 18px;
+	margin: 0;
+}
+
+body.edit-php.post-type-subscriber #posts-filter .tablenav.top {
+	clear: none;
+	min-height: 34px;
+	margin-top: 0;
+	padding: 13px 346px 12px 0;
+	border-top: 1px solid #eef0f4;
+}
+
+body.edit-php.post-type-subscriber .sk-subscriber-add-action {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+body.edit-php.post-type-subscriber .sk-subscriber-add-action .page-title-action {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	margin: 0;
+	min-height: 34px;
+	padding: 0 14px;
+	border-color: #3857e8;
+	border-radius: 6px;
+	background: #3857e8;
+	color: #fff;
+	font-weight: 600;
+	line-height: 32px;
+}
+
+body.edit-php.post-type-subscriber .sk-subscriber-add-action .page-title-action::before {
+	content: "+";
+	font-size: 20px;
+	font-weight: 400;
+	line-height: 1;
+}
+
+body.edit-php.post-type-subscriber .sk-subscriber-add-action .page-title-action:hover,
+body.edit-php.post-type-subscriber .sk-subscriber-add-action .page-title-action:focus {
+	border-color: #2946c7;
+	background: #2946c7;
+	color: #fff;
+}
+
+body.edit-php.post-type-subscriber #posts-filter .wp-list-table {
+	border-color: var(--sk-line);
+	border-radius: 7px;
+	box-shadow: none;
+	overflow: hidden;
+}
+
+body.edit-php.post-type-subscriber #posts-filter .wp-list-table thead th,
+body.edit-php.post-type-subscriber #posts-filter .wp-list-table thead td,
+body.edit-php.post-type-subscriber #posts-filter .wp-list-table tfoot th,
+body.edit-php.post-type-subscriber #posts-filter .wp-list-table tfoot td {
+	padding-top: 11px;
+	padding-bottom: 11px;
+	border-color: #e9ecf2;
+	background: #f8f9fc;
+	color: #4b5563;
+	font-weight: 600;
+}
+
+body.edit-php.post-type-subscriber #posts-filter .wp-list-table tbody tr {
+	transition: background-color 0.15s ease;
+}
+
+body.edit-php.post-type-subscriber #posts-filter .wp-list-table tbody tr:hover {
+	background: #f7f9ff;
+}
+
+body.edit-php.post-type-subscriber #posts-filter .wp-list-table tbody td,
+body.edit-php.post-type-subscriber #posts-filter .wp-list-table tbody th {
+	padding-top: 13px;
+	padding-bottom: 13px;
+	border-bottom: 1px solid #eef0f4;
+	vertical-align: middle;
+}
+
+body.edit-php.post-type-subscriber #posts-filter .column-title .row-title {
+	color: #2946c7;
+	font-weight: 600;
+}
+
+body.edit-php.post-type-subscriber #posts-filter input[type="search"],
+body.edit-php.post-type-subscriber #posts-filter select {
+	min-height: 34px;
+	border-color: #d7dce5;
+	border-radius: 6px;
+	box-shadow: none;
+}
+
+body.edit-php.post-type-subscriber #posts-filter input[type="search"]:focus,
+body.edit-php.post-type-subscriber #posts-filter select:focus {
+	border-color: #3857e8;
+	box-shadow: 0 0 0 1px #3857e8;
+}
+
+body.edit-php.post-type-subscriber #posts-filter .button {
+	min-height: 34px;
+	border-radius: 6px;
+	border-color: #aeb8e8;
+	color: #2946c7;
+	background: #fff;
+}
+
+body.edit-php.post-type-subscriber #posts-filter .button:hover,
+body.edit-php.post-type-subscriber #posts-filter .button:focus {
+	border-color: #3857e8;
+	color: #3857e8;
+}
+
+.sk-subscriber-status {
+	display: inline-flex;
+	align-items: center;
+	min-height: 22px;
+	padding: 0 9px;
+	border-radius: 11px;
+	background: #eef1f6;
+	color: #4b5563;
+	font-size: 11px;
+	font-weight: 600;
+	line-height: 22px;
+}
+
+.sk-subscriber-status--subscribed {
+	background: #e8f7ef;
+	color: #147a46;
+}
+
+.sk-subscriber-status--unconfirmed {
+	background: #fff5dc;
+	color: #946200;
+}
+
+.sk-subscriber-status--unsubscribed,
+.sk-subscriber-status--bounced {
+	background: #fdecec;
+	color: #b42318;
+}
+
+.sk-subscriber-status--inactive {
+	background: #eef1f6;
+	color: #596273;
+}
+
+.sk-subscriber-status--trash {
+	background: #e5e7eb;
+	color: #374151;
+}
+
 @media (max-width: 850px) {
 	.sk-subscriber__section {
 		padding: 22px 18px 24px;
+	}
+
+	body.edit-php.post-type-subscriber .subsubsub {
+		gap: 0 18px;
+	}
+
+	body.edit-php.post-type-subscriber .sk-subscriber-tabs > ul {
+		gap: 0 18px;
+	}
+
+	body.edit-php.post-type-subscriber #posts-filter {
+		padding-right: 12px;
+		padding-left: 12px;
+	}
+
+	body.edit-php.post-type-subscriber #posts-filter .search-box {
+		position: static;
+		float: none;
+		margin: 0;
+		padding: 12px 0 0;
+		text-align: left;
+	}
+
+	body.edit-php.post-type-subscriber #posts-filter .tablenav.top {
+		padding-right: 0;
 	}
 
 	.sk-subscriber__grid {

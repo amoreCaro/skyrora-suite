@@ -32,8 +32,12 @@ function sk_get_subscriber_status( $post ) {
 		return '';
 	}
 
+	if ( 'trash' === $post->post_status ) {
+		return 'trash';
+	}
+
 	$status = (string) get_post_meta( $post->ID, 'sk_status', true );
-	return array_key_exists( $status, sk_get_subscriber_statuses() ) ? $status : 'subscribed';
+	return 'trash' !== $status && array_key_exists( $status, sk_get_subscriber_statuses() ) ? $status : 'subscribed';
 }
 
 /**
@@ -60,7 +64,7 @@ function sk_register_subscriber_meta() {
 		'default'           => 'subscribed',
 		'sanitize_callback' => function ( $value ) {
 			$value = sanitize_key( $value );
-			return array_key_exists( $value, sk_get_subscriber_statuses() ) ? $value : 'subscribed';
+			return 'trash' !== $value && array_key_exists( $value, sk_get_subscriber_statuses() ) ? $value : 'subscribed';
 		},
 		'auth_callback'     => function () {
 			return current_user_can( 'edit_posts' );
@@ -295,6 +299,14 @@ function sk_save_subscriber_meta( $post_id, $post ) {
 	update_post_meta( $post_id, 'sk_email', $email );
 	update_post_meta( $post_id, 'sk_first_name', $first_name );
 	update_post_meta( $post_id, 'sk_last_name', $last_name );
+
+	if ( 'trash' === $status ) {
+		remove_action( 'save_post_subscriber', 'sk_save_subscriber_meta', 10 );
+		wp_trash_post( $post_id );
+		add_action( 'save_post_subscriber', 'sk_save_subscriber_meta', 10, 2 );
+		return;
+	}
+
 	update_post_meta( $post_id, 'sk_status', $status );
 
 	// Нормалізуємо post_title до sanitize_email (якщо відрізняється від сирого вводу).
@@ -375,11 +387,85 @@ function sk_subscriber_column_content( $column, $post_id ) {
 		case 'sk_status':
 			$status   = sk_get_subscriber_status( $post_id );
 			$statuses = sk_get_subscriber_statuses();
-			echo esc_html( isset( $statuses[ $status ] ) ? $statuses[ $status ] : $status );
+			printf(
+				'<span class="sk-subscriber-status sk-subscriber-status--%1$s">%2$s</span>',
+				esc_attr( $status ),
+				esc_html( isset( $statuses[ $status ] ) ? $statuses[ $status ] : $status )
+			);
 			break;
 	}
 }
 add_action( 'manage_subscriber_posts_custom_column', 'sk_subscriber_column_content', 10, 2 );
+
+/**
+ * Таби статусів над таблицею підписників.
+ *
+ * @param array<string,string> $views Стандартні WordPress-таби.
+ * @return array<string,string>
+ */
+function sk_subscriber_status_views( $views ) {
+	global $wpdb;
+
+	$statuses     = sk_get_subscriber_statuses();
+	$status_slugs = array_keys( $statuses );
+	$meta_statuses = array_values( array_diff( $status_slugs, [ 'trash' ] ) );
+	$placeholders  = implode( ', ', array_fill( 0, count( $meta_statuses ), '%s' ) );
+	$query_args    = array_merge( $meta_statuses, [ 'subscriber' ] );
+
+	$sql = "
+		SELECT
+			CASE
+				WHEN p.post_status = 'trash' THEN 'trash'
+				WHEN pm.meta_value IN ({$placeholders}) THEN pm.meta_value
+				ELSE 'subscribed'
+			END AS subscriber_status,
+			COUNT(DISTINCT p.ID) AS subscriber_count
+		FROM {$wpdb->posts} p
+		LEFT JOIN {$wpdb->postmeta} pm
+			ON p.ID = pm.post_id
+			AND pm.meta_key = 'sk_status'
+		WHERE p.post_type = %s
+			AND p.post_status IN ('publish', 'future', 'draft', 'pending', 'private', 'trash')
+		GROUP BY subscriber_status
+	";
+
+	$rows   = $wpdb->get_results( $wpdb->prepare( $sql, $query_args ), OBJECT_K );
+	$counts = array_fill_keys( $status_slugs, 0 );
+
+	foreach ( $rows as $status => $row ) {
+		if ( isset( $counts[ $status ] ) ) {
+			$counts[ $status ] = (int) $row->subscriber_count;
+		}
+	}
+
+	$current_status = isset( $_GET['sk_status'] ) ? sanitize_key( wp_unslash( $_GET['sk_status'] ) ) : '';
+	$base_url       = admin_url( 'edit.php?post_type=subscriber' );
+	$all_count      = array_sum( $counts ) - $counts['trash'];
+	$custom_views   = [];
+	$all_current    = ! array_key_exists( $current_status, $statuses );
+
+	$custom_views['all'] = sprintf(
+		'<a href="%1$s"%2$s>%3$s <span class="count">%4$s</span></a>',
+		esc_url( $base_url ),
+		$all_current ? ' class="current" aria-current="page"' : '',
+		esc_html__( 'All', 'skyrora-mailing' ),
+		number_format_i18n( $all_count )
+	);
+
+	foreach ( $statuses as $status => $label ) {
+		$is_current              = $current_status === $status;
+		$custom_views[ $status ] = sprintf(
+			'<a href="%1$s"%2$s>%3$s <span class="count">%4$s</span></a>',
+			esc_url( add_query_arg( 'sk_status', $status, $base_url ) ),
+			$is_current ? ' class="current" aria-current="page"' : '',
+			esc_html( $label ),
+			number_format_i18n( $counts[ $status ] )
+		);
+	}
+
+	return $custom_views;
+}
+add_filter( 'views_edit-subscriber', 'sk_subscriber_status_views' );
 
 /**
  * Фільтр за статусом у списку підписників.
@@ -417,6 +503,11 @@ function sk_filter_subscribers_by_status( $query ) {
 
 	$status = isset( $_GET['sk_status'] ) ? sanitize_key( wp_unslash( $_GET['sk_status'] ) ) : '';
 	if ( ! array_key_exists( $status, sk_get_subscriber_statuses() ) ) {
+		return;
+	}
+
+	if ( 'trash' === $status ) {
+		$query->set( 'post_status', 'trash' );
 		return;
 	}
 
