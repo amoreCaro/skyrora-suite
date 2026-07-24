@@ -202,7 +202,7 @@ function sk_enqueue_settings_admin_assets( $hook ) {
 }
 
 /**
- * Асети редактора Templates (кнопка Next).
+ * Асети редактора Templates (кнопки Preview/Save/Next).
  *
  * @param string $hook Current admin hook.
  */
@@ -223,9 +223,12 @@ function sk_enqueue_mailing_editor_assets( $hook ) {
 	$post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0;
 
 	wp_localize_script( 'sk-admin', 'skMailingNext', [
-		'sendUrl' => admin_url( 'admin.php?page=skyrora-mailing-send' ),
-		'postId'  => $post_id,
-		'i18n'    => [
+		'sendUrl'    => admin_url( 'admin.php?page=skyrora-mailing-send' ),
+		'previewUrl' => $post_id ? get_preview_post_link( $post_id ) : '',
+		'postId'     => $post_id,
+		'i18n'       => [
+			'preview'  => __( 'Preview', 'skyrora-mailing' ),
+			'save'     => __( 'Save', 'skyrora-mailing' ),
 			'next'     => __( 'Next', 'skyrora-mailing' ),
 			'saving'   => __( 'Saving…', 'skyrora-mailing' ),
 			'needSave' => __( 'Please save the template first.', 'skyrora-mailing' ),

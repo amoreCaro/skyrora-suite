@@ -1,0 +1,1 @@
+{"version":3,"file":"components/spacer/index.css","mappings":";;;AAAA;IACI,wBAAwB;AAC5B","sources":["webpack://skyrora-suite/./src/components/spacer/editor.css"],"sourcesContent":[".wp-block-app-spacer {\r\n    outline: 1px dashed #ccc;\r\n}\r\n"],"names":[],"sourceRoot":""}

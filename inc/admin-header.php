@@ -8,11 +8,16 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Render the shared Skyrora brand.
  */
 function sk_render_admin_brand() {
+	$logo_url = SK_PLUGIN_DIR_URL . 'assets/dist/images/skyrora-logo.svg';
 	?>
 	<div class="sk-mailing-topbar__brand">
-		<svg width="1em" height="1em" class="icon icon-logo" aria-label="<?php esc_attr_e( 'Skyrora', 'skyrora-mailing' ); ?>" role="img">
-			<use xlink:href="<?php echo esc_url( SK_PLUGIN_DIR_URL . 'assets/dist/images/symbol-defs.svg#icon-logo' ); ?>"></use>
-		</svg>
+		<img
+			class="icon icon-logo"
+			src="<?php echo esc_url( $logo_url ); ?>"
+			width="75"
+			height="41"
+			alt="<?php esc_attr_e( 'Skyrora', SK_TEXT_DOMAIN ); ?>"
+		>
 	</div>
 	<?php
 }

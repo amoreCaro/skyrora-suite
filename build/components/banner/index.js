@@ -1,1 +1,437 @@
-(()=>{"use strict";const e=window.wp.blocks,t=window.React,n=window.wp.i18n,a=window.wp.blockEditor,r=window.wp.components;(0,e.registerBlockType)("app/banner",{edit:({attributes:e,setAttributes:o})=>{const{bannerUrl:l,bannerId:i,paddingLeft:d,paddingRight:c,paddingTop:p,paddingBottom:s}=e,g={paddingTop:`${p}px`,paddingBottom:`${s}px`,paddingLeft:`${d}px`,paddingRight:`${c}px`,width:"100%",boxSizing:"border-box",height:"244px",margin:"0",background:"#fff"},m={display:"block",width:"100%",height:"244px",padding:0,border:0,background:"transparent",cursor:"pointer"},b={display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:"12px",width:"100%",height:"244px",border:"2px dashed #a7aaad",borderRadius:"4px",background:"#f6f7f7",color:"#50575e",boxSizing:"border-box"};return(0,t.createElement)(t.Fragment,null,(0,t.createElement)(a.BlockControls,null,l&&(0,t.createElement)(r.Button,{variant:"link",onClick:()=>{o({bannerUrl:"",bannerId:0})},label:(0,n.__)("Remove Banner"),className:"remove-banner-button","aria-label":(0,n.__)("Remove Banner")},(0,t.createElement)("svg",{width:"20",height:"20",viewBox:"0 0 24 24",fill:"none",xmlns:"http://www.w3.org/2000/svg"},(0,t.createElement)("path",{d:"M18 6L6 18M6 6l12 12",stroke:"black",strokeWidth:"2",strokeLinecap:"round"})))),(0,t.createElement)(a.InspectorControls,null,(0,t.createElement)(r.PanelBody,{title:(0,n.__)("Banner Settings","custom-banner")},(0,t.createElement)(r.TextControl,{label:(0,n.__)("Padding Top (px)","custom-banner"),type:"number",value:p,onChange:e=>o({paddingTop:parseInt(e)})}),(0,t.createElement)(r.TextControl,{label:(0,n.__)("Padding Bottom (px)","custom-banner"),type:"number",value:s,onChange:e=>o({paddingBottom:parseInt(e)})}),(0,t.createElement)(r.TextControl,{label:(0,n.__)("Padding Left (px)","custom-banner"),type:"number",value:d,onChange:e=>o({paddingLeft:parseFloat(e)})}),(0,t.createElement)(r.TextControl,{label:(0,n.__)("Padding Right (px)","custom-banner"),type:"number",value:c,onChange:e=>o({paddingRight:parseFloat(e)})}))),(0,t.createElement)("div",{...(0,a.useBlockProps)()},(0,t.createElement)(a.MediaUploadCheck,null,(0,t.createElement)("div",{style:g,className:"wp-block wp-banner"},l?(0,t.createElement)("img",{src:l,style:{display:"block",height:"244px",width:"100%",objectFit:"cover"},className:"selected-banner",alt:(0,n.__)("Selected Banner","custom-banner")}):(0,t.createElement)(a.MediaUpload,{onSelect:e=>{o({bannerUrl:e.url,bannerId:e.id})},allowedTypes:["image"],value:i,render:({open:e})=>(0,t.createElement)("button",{type:"button",onClick:e,style:m,className:"select-banner-button","aria-label":(0,n.__)("Select banner image","custom-banner")},(0,t.createElement)("span",{style:b},(0,t.createElement)("svg",{width:"40",height:"40",viewBox:"0 0 24 24",fill:"none","aria-hidden":"true"},(0,t.createElement)("rect",{x:"3",y:"4",width:"18",height:"16",rx:"2",stroke:"currentColor",strokeWidth:"1.5"}),(0,t.createElement)("circle",{cx:"8.5",cy:"9",r:"1.5",fill:"currentColor"}),(0,t.createElement)("path",{d:"M4 17l4.5-4.5 3 3 2-2L20 20",stroke:"currentColor",strokeWidth:"1.5",strokeLinecap:"round",strokeLinejoin:"round"})),(0,t.createElement)("span",null,(0,n.__)("Select banner image","custom-banner"))))})))))},save:function({attributes:e}){const n=a.useBlockProps.save(),{bannerUrl:r,paddingLeft:o,paddingRight:l,paddingTop:i,paddingBottom:d}=e,c={paddingTop:`${i}px`,paddingBottom:`${d}px`,paddingLeft:`${o}px`,paddingRight:`${l}px`,width:"100%",height:"244px",margin:"0",background:"#fff"};return(0,t.createElement)(t.Fragment,null,(0,t.createElement)("div",{...n,className:"wp-banner-wrapper",style:c},(0,t.createElement)("img",{src:r,alt:"",style:{display:"block",height:"244px",width:"100%",objectFit:"cover"}})))}})})();
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./src/components/banner/edit.js"
+/*!***************************************!*\
+  !*** ./src/components/banner/edit.js ***!
+  \***************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
+
+
+
+
+const BannerEdit = ({
+  attributes,
+  setAttributes
+}) => {
+  const {
+    bannerUrl,
+    bannerId,
+    paddingLeft,
+    paddingRight,
+    paddingTop,
+    paddingBottom
+  } = attributes;
+  const bannerWrapper = {
+    paddingTop: `${paddingTop}px`,
+    paddingBottom: `${paddingBottom}px`,
+    paddingLeft: `${paddingLeft}px`,
+    paddingRight: `${paddingRight}px`,
+    width: "100%",
+    boxSizing: "border-box",
+    height: "244px",
+    margin: "0",
+    background: '#fff'
+  };
+  const banner = {
+    display: "block",
+    height: "244px",
+    width: "100%",
+    objectFit: "cover"
+  };
+  const mediaButton = {
+    display: 'block',
+    width: '100%',
+    height: '244px',
+    padding: 0,
+    border: 0,
+    background: 'transparent',
+    cursor: 'pointer'
+  };
+  const imagePlaceholder = {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '12px',
+    width: '100%',
+    height: '244px',
+    border: '2px dashed #a7aaad',
+    borderRadius: '4px',
+    background: '#f6f7f7',
+    color: '#50575e',
+    boxSizing: 'border-box'
+  };
+  const onSelectBanner = media => {
+    setAttributes({
+      bannerUrl: media.url,
+      bannerId: media.id
+    });
+  };
+  const onRemoveBanner = () => {
+    setAttributes({
+      bannerUrl: '',
+      bannerId: 0
+    });
+  };
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.BlockControls, null, bannerUrl && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+    variant: "link",
+    onClick: onRemoveBanner,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Remove Banner'),
+    className: "remove-banner-button",
+    "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Remove Banner')
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+    width: "20",
+    height: "20",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+    d: "M18 6L6 18M6 6l12 12",
+    stroke: "black",
+    strokeWidth: "2",
+    strokeLinecap: "round"
+  })))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InspectorControls, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Banner Settings', 'custom-banner')
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.TextControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Padding Top (px)', 'custom-banner'),
+    type: "number",
+    value: paddingTop,
+    onChange: val => setAttributes({
+      paddingTop: parseInt(val)
+    })
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.TextControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Padding Bottom (px)', 'custom-banner'),
+    type: "number",
+    value: paddingBottom,
+    onChange: val => setAttributes({
+      paddingBottom: parseInt(val)
+    })
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.TextControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Padding Left (px)', 'custom-banner'),
+    type: "number",
+    value: paddingLeft,
+    onChange: val => setAttributes({
+      paddingLeft: parseFloat(val)
+    })
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.TextControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Padding Right (px)', 'custom-banner'),
+    type: "number",
+    value: paddingRight,
+    onChange: val => setAttributes({
+      paddingRight: parseFloat(val)
+    })
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)()
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.MediaUploadCheck, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    style: bannerWrapper,
+    className: "wp-block wp-banner"
+  }, bannerUrl ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+    src: bannerUrl,
+    style: banner,
+    className: "selected-banner",
+    alt: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Selected Banner', 'custom-banner')
+  }) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.MediaUpload, {
+    onSelect: onSelectBanner,
+    allowedTypes: ['image'],
+    value: bannerId,
+    render: ({
+      open
+    }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+      type: "button",
+      onClick: open,
+      style: mediaButton,
+      className: "select-banner-button",
+      "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Select banner image', 'custom-banner')
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      style: imagePlaceholder
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+      width: "40",
+      height: "40",
+      viewBox: "0 0 24 24",
+      fill: "none",
+      "aria-hidden": "true"
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("rect", {
+      x: "3",
+      y: "4",
+      width: "18",
+      height: "16",
+      rx: "2",
+      stroke: "currentColor",
+      strokeWidth: "1.5"
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("circle", {
+      cx: "8.5",
+      cy: "9",
+      r: "1.5",
+      fill: "currentColor"
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+      d: "M4 17l4.5-4.5 3 3 2-2L20 20",
+      stroke: "currentColor",
+      strokeWidth: "1.5",
+      strokeLinecap: "round",
+      strokeLinejoin: "round"
+    })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Select banner image', 'custom-banner'))))
+  })))));
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (BannerEdit);
+
+/***/ },
+
+/***/ "./src/components/banner/save.js"
+/*!***************************************!*\
+  !*** ./src/components/banner/save.js ***!
+  \***************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ save)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__);
+
+
+function save({
+  attributes
+}) {
+  const blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps.save();
+  const {
+    bannerUrl,
+    paddingLeft,
+    paddingRight,
+    paddingTop,
+    paddingBottom
+  } = attributes;
+  const bannerWrapper = {
+    paddingTop: `${paddingTop}px`,
+    paddingBottom: `${paddingBottom}px`,
+    paddingLeft: `${paddingLeft}px`,
+    paddingRight: `${paddingRight}px`,
+    width: "100%",
+    height: "244px",
+    margin: "0",
+    background: '#fff'
+  };
+  const banner = {
+    display: "block",
+    height: "244px",
+    width: "100%",
+    objectFit: "cover"
+  };
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    ...blockProps,
+    className: "wp-banner-wrapper",
+    style: bannerWrapper
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+    src: bannerUrl,
+    alt: "",
+    style: banner
+  })));
+}
+
+/***/ },
+
+/***/ "./src/base/styles/index.scss"
+/*!************************************!*\
+  !*** ./src/base/styles/index.scss ***!
+  \************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ },
+
+/***/ "react"
+/*!************************!*\
+  !*** external "React" ***!
+  \************************/
+(module) {
+
+module.exports = window["React"];
+
+/***/ },
+
+/***/ "@wordpress/block-editor"
+/*!*************************************!*\
+  !*** external ["wp","blockEditor"] ***!
+  \*************************************/
+(module) {
+
+module.exports = window["wp"]["blockEditor"];
+
+/***/ },
+
+/***/ "@wordpress/blocks"
+/*!********************************!*\
+  !*** external ["wp","blocks"] ***!
+  \********************************/
+(module) {
+
+module.exports = window["wp"]["blocks"];
+
+/***/ },
+
+/***/ "@wordpress/components"
+/*!************************************!*\
+  !*** external ["wp","components"] ***!
+  \************************************/
+(module) {
+
+module.exports = window["wp"]["components"];
+
+/***/ },
+
+/***/ "@wordpress/i18n"
+/*!******************************!*\
+  !*** external ["wp","i18n"] ***!
+  \******************************/
+(module) {
+
+module.exports = window["wp"]["i18n"];
+
+/***/ },
+
+/***/ "./src/components/banner/block.json"
+/*!******************************************!*\
+  !*** ./src/components/banner/block.json ***!
+  \******************************************/
+(module) {
+
+module.exports = /*#__PURE__*/JSON.parse('{"apiVersion":3,"name":"app/banner","title":"Banner","category":"advanced","icon":"format-image","description":"A custom banner block with banner and padding controls.","keywords":["banner","media"],"editorScript":"file:./index.js","editorStyle":"file:./editor.css","attributes":{"bannerUrl":{"type":"string","default":""},"bannerId":{"type":"number","default":0},"paddingLeft":{"type":"number","default":0},"paddingRight":{"type":"number","default":0},"paddingTop":{"type":"number","default":0},"paddingBottom":{"type":"number","default":0}},"supports":{"html":false,"align":["left","center","right"],"customClassName":true}}');
+
+/***/ }
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	const __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		const cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		const module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		if (!(moduleId in __webpack_modules__)) {
+/******/ 			delete __webpack_module_cache__[moduleId];
+/******/ 			const e = new Error("Cannot find module '" + moduleId + "'");
+/******/ 			e.code = 'MODULE_NOT_FOUND';
+/******/ 			throw e;
+/******/ 		}
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			const getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter/value functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			if(Array.isArray(definition)) {
+/******/ 				var i = 0;
+/******/ 				while(i < definition.length) {
+/******/ 					var key = definition[i++];
+/******/ 					var binding = definition[i++];
+/******/ 					if(!__webpack_require__.o(exports, key)) {
+/******/ 						if(binding === 0) {
+/******/ 							Object.defineProperty(exports, key, { enumerable: true, value: definition[i++] });
+/******/ 						} else {
+/******/ 							Object.defineProperty(exports, key, { enumerable: true, get: binding });
+/******/ 						}
+/******/ 					} else if(binding === 0) { i++; }
+/******/ 				}
+/******/ 			} else {
+/******/ 				for(var key in definition) {
+/******/ 					if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 						Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 					}
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.hasOwn(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+let __webpack_exports__ = {};
+// This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
+(() => {
+/*!****************************************!*\
+  !*** ./src/components/banner/index.js ***!
+  \****************************************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./block.json */ "./src/components/banner/block.json");
+/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./edit */ "./src/components/banner/edit.js");
+/* harmony import */ var _save__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./save */ "./src/components/banner/save.js");
+/* harmony import */ var _src_base_styles_index_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../../../../../../src/base/styles/index.scss */ "./src/base/styles/index.scss");
+
+
+
+
+
+(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__.registerBlockType)(_block_json__WEBPACK_IMPORTED_MODULE_1__.name, {
+  edit: _edit__WEBPACK_IMPORTED_MODULE_2__["default"],
+  save: _save__WEBPACK_IMPORTED_MODULE_3__["default"]
+});
+})();
+
+/******/ })()
+;
+//# sourceMappingURL=index.js.map

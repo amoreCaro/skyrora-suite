@@ -39,7 +39,7 @@ export default function Save({ attributes }) {
             {/* Logo/Image Section */}
             <div style={{ maxWidth: '114px', height: '60px', width: '100%' }}>
                 <svg width="1em" height="1em" className="icon icon-logo">
-                    <use xlinkHref="/wp-content/themes/skyrora-theme/dist/s/images/useful/svg/theme/symbol-defs.svg#icon-logo" />
+                    <use xlinkHref="/wp-content/plugins/skyrora-suite/assets/dist/images/symbol-defs.svg#icon-logo" />
                 </svg>
             </div>
 
