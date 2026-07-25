@@ -4,6 +4,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+require_once SK_PLUGIN_DIR . '/inc/email-template.php';
+
 const SK_MAILING_SETTINGS_OPTION = 'sk_mailing_settings';
 const SK_MAILING_CRON_HOOK       = 'sk_mailing_cron_tick';
 
@@ -404,21 +406,14 @@ function sk_render_settings_page() {
 								$template_id  = (int) wp_get_post_parent_id( $job_id );
 								$template     = $template_id ? get_post( $template_id ) : null;
 								$scheduled_at = (int) get_post_meta( $job_id, '_sk_scheduled_at', true );
-								$status       = (string) get_post_meta( $job_id, '_sk_job_status', true );
-								$status       = $status ?: 'queued';
+								$status       = sk_get_campaign_status( $job_id );
 								$sent         = (int) get_post_meta( $job_id, '_sk_sent_count', true );
 								$failed       = (int) get_post_meta( $job_id, '_sk_failed_count', true );
 								$send_errors  = get_post_meta( $job_id, '_sk_send_errors', true );
 								$send_errors  = is_array( $send_errors ) ? $send_errors : [];
 								$completed_at = (int) get_post_meta( $job_id, '_sk_completed_at', true );
-								$status_labels = [
-									'queued'           => __( 'Queued', 'skyrora-mailing' ),
-									'processing'       => __( 'Processing', 'skyrora-mailing' ),
-									'completed'        => __( 'Completed', 'skyrora-mailing' ),
-									'partially_failed' => __( 'Partially failed', 'skyrora-mailing' ),
-									'failed'           => __( 'Failed', 'skyrora-mailing' ),
-								];
-								$status_label = $status_labels[ $status ] ?? ucfirst( $status );
+								$status_labels = sk_get_campaign_statuses();
+								$status_label  = $status_labels[ $status ];
 								?>
 								<tr>
 									<td>
@@ -442,7 +437,7 @@ function sk_render_settings_page() {
 										<span class="sk-settings-status is-<?php echo esc_attr( $status ); ?>"><?php echo esc_html( $status_label ); ?></span>
 									</td>
 									<td>
-										<?php if ( in_array( $status, [ 'completed', 'partially_failed', 'failed' ], true ) ) : ?>
+										<?php if ( in_array( $status, [ 'sent', 'failed' ], true ) ) : ?>
 											<?php
 											echo esc_html(
 												sprintf(
@@ -482,8 +477,10 @@ function sk_render_settings_page() {
 													?>
 												</div>
 											<?php endif; ?>
-										<?php elseif ( 'processing' === $status ) : ?>
+										<?php elseif ( 'sending' === $status ) : ?>
 											<?php esc_html_e( 'Sending is in progress.', 'skyrora-mailing' ); ?>
+										<?php elseif ( 'paused' === $status ) : ?>
+											<?php esc_html_e( 'Sending was paused by an administrator.', 'skyrora-mailing' ); ?>
 										<?php else : ?>
 											<?php esc_html_e( 'No logs yet.', 'skyrora-mailing' ); ?>
 										<?php endif; ?>

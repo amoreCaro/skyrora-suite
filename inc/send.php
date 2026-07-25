@@ -414,7 +414,8 @@ function sk_schedule_mailing_job( $post_id, $subject, $html, $emails, $timestamp
 
 	update_post_meta( $job_id, '_sk_recipients', array_values( array_unique( $emails ) ) );
 	update_post_meta( $job_id, '_sk_scheduled_at', $timestamp );
-	update_post_meta( $job_id, '_sk_job_status', 'queued' );
+	update_post_meta( $job_id, '_sk_job_status', 'scheduled' );
+	update_post_meta( $job_id, '_sk_campaign_status', 'scheduled' );
 
 	$scheduled = wp_schedule_single_event( $timestamp, 'sk_send_scheduled_mailing', [ $job_id ] );
 	if ( is_wp_error( $scheduled ) || ! $scheduled ) {
@@ -422,6 +423,7 @@ function sk_schedule_mailing_job( $post_id, $subject, $html, $emails, $timestamp
 		return new WP_Error( 'cron_schedule_failed', __( 'Could not register the scheduled mailing.', 'skyrora-mailing' ) );
 	}
 
+	sk_set_campaign_status( $job_id, 'scheduled' );
 	return $job_id;
 }
 
@@ -432,13 +434,17 @@ function sk_schedule_mailing_job( $post_id, $subject, $html, $emails, $timestamp
  */
 function sk_process_scheduled_mailing( $job_id ) {
 	$job = get_post( $job_id );
-	if ( ! $job || 'subscription' !== $job->post_type || 'queued' !== get_post_meta( $job_id, '_sk_job_status', true ) ) {
+	$stored_status = (string) get_post_meta( $job_id, '_sk_job_status', true );
+	$status        = sk_normalize_campaign_status( $stored_status );
+
+	if ( ! $job || 'subscription' !== $job->post_type || 'scheduled' !== $status ) {
 		return;
 	}
 
-	if ( ! update_post_meta( $job_id, '_sk_job_status', 'processing', 'queued' ) ) {
+	if ( ! update_post_meta( $job_id, '_sk_job_status', 'sending', $stored_status ) ) {
 		return;
 	}
+	sk_set_campaign_status( $job_id, 'sending' );
 
 	$emails  = get_post_meta( $job_id, '_sk_recipients', true );
 	$emails  = is_array( $emails ) ? array_filter( array_map( 'sanitize_email', $emails ), 'is_email' ) : [];
@@ -448,7 +454,22 @@ function sk_process_scheduled_mailing( $job_id ) {
 	$errors  = [];
 
 	foreach ( $emails as $email ) {
-		$result = sk_send_mail_with_error( $email, $job->post_title, $job->post_content, $headers );
+		if ( 'paused' === sk_get_campaign_status( $job_id ) ) {
+			update_post_meta( $job_id, '_sk_sent_count', $sent );
+			update_post_meta( $job_id, '_sk_failed_count', $failed );
+			update_post_meta( $job_id, '_sk_send_errors', $errors );
+			return;
+		}
+
+		try {
+			$result = sk_send_mail_with_error( $email, $job->post_title, $job->post_content, $headers );
+		} catch ( Throwable $error ) {
+			$result = [
+				'sent'  => false,
+				'error' => $error->getMessage(),
+			];
+		}
+
 		if ( $result['sent'] ) {
 			$sent++;
 		} else {
@@ -463,12 +484,11 @@ function sk_process_scheduled_mailing( $job_id ) {
 	update_post_meta( $job_id, '_sk_sent_count', $sent );
 	update_post_meta( $job_id, '_sk_failed_count', $failed );
 	update_post_meta( $job_id, '_sk_send_errors', $errors );
+	if ( 'paused' === sk_get_campaign_status( $job_id ) ) {
+		return;
+	}
 	update_post_meta( $job_id, '_sk_completed_at', time() );
-	update_post_meta(
-		$job_id,
-		'_sk_job_status',
-		$failed > 0 ? ( $sent > 0 ? 'partially_failed' : 'failed' ) : 'completed'
-	);
+	sk_set_campaign_status( $job_id, ( $failed > 0 || ! $emails ) ? 'failed' : 'sent' );
 }
 add_action( 'sk_send_scheduled_mailing', 'sk_process_scheduled_mailing' );
 
@@ -488,8 +508,8 @@ function sk_process_due_mailing_jobs() {
 			'meta_query'     => [
 				[
 					'key'     => '_sk_job_status',
-					'value'   => 'queued',
-					'compare' => '=',
+					'value'   => [ 'scheduled', 'queued' ],
+					'compare' => 'IN',
 				],
 				[
 					'key'     => '_sk_scheduled_at',
@@ -614,9 +634,28 @@ function sk_ajax_send_mailing() {
 	$sent       = 0;
 	$failed     = 0;
 	$last_error = '';
+	$paused     = false;
+
+	if ( 'test' !== $mode ) {
+		sk_set_campaign_status( $post_id, 'not_sent_yet' );
+		sk_set_campaign_status( $post_id, 'sending' );
+	}
 
 	foreach ( $emails as $email ) {
-		$result = sk_send_mail_with_error( $email, $subject, $html, $headers );
+		if ( 'test' !== $mode && 'paused' === sk_get_campaign_status( $post_id ) ) {
+			$paused = true;
+			break;
+		}
+
+		try {
+			$result = sk_send_mail_with_error( $email, $subject, $html, $headers );
+		} catch ( Throwable $error ) {
+			$result = [
+				'sent'  => false,
+				'error' => $error->getMessage(),
+			];
+		}
+
 		if ( $result['sent'] ) {
 			$sent++;
 		} else {
@@ -625,12 +664,33 @@ function sk_ajax_send_mailing() {
 		}
 	}
 
+	if ( $paused ) {
+		wp_send_json_success(
+			[
+				'message' => sprintf(
+					/* translators: %d: number of emails sent before pausing */
+					__( 'Sending paused. Sent before pause: %d.', 'skyrora-mailing' ),
+					$sent
+				),
+				'sent'    => $sent,
+				'failed'  => $failed,
+			]
+		);
+	}
+
 	if ( $sent < 1 ) {
+		if ( 'test' !== $mode ) {
+			sk_set_campaign_status( $post_id, 'failed' );
+		}
 		wp_send_json_error(
 			[
 				'message' => $last_error ?: __( 'Failed to send email. Check mail settings.', 'skyrora-mailing' ),
 			]
 		);
+	}
+
+	if ( 'test' !== $mode ) {
+		sk_set_campaign_status( $post_id, $failed > 0 ? 'failed' : 'sent' );
 	}
 
 	wp_send_json_success(

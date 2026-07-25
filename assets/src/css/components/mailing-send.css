@@ -253,7 +253,8 @@ a.sk-mailing-steps__link:hover .sk-mailing-steps__label {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	width: 16px;
+	max-width: 16px;
+	width: 100%;
 	height: 16px;
 	margin-top: 1px;
 	border-radius: 50%;
