@@ -50,7 +50,8 @@
 	width: 16%;
 }
 
-.sk-settings-status {
+.sk-settings-status,
+.sk-campaign-status {
 	display: inline-block;
 	margin-right: 8px;
 	padding: 3px 8px;
@@ -60,24 +61,41 @@
 	font-weight: 600;
 }
 
-.sk-settings-status.is-active {
+.sk-settings-status.is-active,
+.sk-campaign-status.is-sent,
+.sk-settings-status.is-sent {
 	background: #edfaef;
 	color: #116329;
 }
 
-.sk-settings-status.is-completed {
-	background: #edfaef;
-	color: #116329;
-}
-
-.sk-settings-status.is-processing {
+.sk-settings-status.is-sending,
+.sk-campaign-status.is-sending {
 	background: #e7f5fe;
 	color: #075985;
 }
 
-.sk-settings-status.is-failed {
+.sk-settings-status.is-failed,
+.sk-campaign-status.is-failed {
 	background: #fcf0f1;
 	color: #8a2424;
+}
+
+.sk-settings-status.is-scheduled,
+.sk-campaign-status.is-scheduled {
+	background: #f0edff;
+	color: #4c1d95;
+}
+
+.sk-settings-status.is-not_sent_yet,
+.sk-campaign-status.is-not_sent_yet {
+	background: #fff8e5;
+	color: #7a4b00;
+}
+
+.sk-settings-status.is-paused,
+.sk-campaign-status.is-paused {
+	background: #f6f7f7;
+	color: #3c434a;
 }
 
 .sk-settings-command {

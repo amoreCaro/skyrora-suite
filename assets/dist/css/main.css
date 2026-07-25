@@ -546,6 +546,308 @@ body.edit-php.post-type-subscriber #posts-filter .button:focus {
 	}
 }
 
+/*!**************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./src/css/components/email-admin.css ***!
+  \**************************************************************************************/
+body.post-type-mailing {
+	--sk-line: #e6e8ec;
+	--sk-canvas: #f3f4f7;
+}
+
+body.edit-php.post-type-mailing #wpcontent {
+	background: var(--sk-canvas);
+}
+
+body.edit-php.post-type-mailing #wpwrap {
+	overflow-x: hidden;
+}
+
+body.edit-php.post-type-mailing #wpbody-content {
+	padding-bottom: 40px;
+}
+
+body.edit-php.post-type-mailing .wrap {
+	margin-top: 16px;
+}
+
+body.edit-php.post-type-mailing .subsubsub {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 0 20px;
+	float: none;
+	box-sizing: border-box;
+	width: 100%;
+	overflow: hidden;
+	margin: 12px 0 0;
+	padding: 16px 18px 9px;
+	border: 1px solid var(--sk-line);
+	border-bottom: 0;
+	border-radius: 10px 10px 0 0;
+	background: #fff;
+	font-size: 0;
+	box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+}
+
+body.edit-php.post-type-mailing .subsubsub li {
+	margin: 0;
+	font-size: 0;
+}
+
+body.edit-php.post-type-mailing .sk-email-tabs {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+body.edit-php.post-type-mailing .sk-email-tabs > ul {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 0 28px;
+	min-width: 0;
+	margin: 0;
+	white-space: normal;
+}
+
+body.edit-php.post-type-mailing .subsubsub a {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 7px 0 10px;
+	border-bottom: 2px solid transparent;
+	color: #303846;
+	font-size: 13px;
+	font-weight: 500;
+	line-height: 1.4;
+	text-decoration: none;
+	transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+body.edit-php.post-type-mailing .subsubsub a:hover,
+body.edit-php.post-type-mailing .subsubsub a:focus,
+body.edit-php.post-type-mailing .subsubsub a.current {
+	color: #3857e8;
+}
+
+body.edit-php.post-type-mailing .subsubsub a.current {
+	border-bottom-color: #3857e8;
+	font-weight: 650;
+}
+
+body.edit-php.post-type-mailing .subsubsub .count {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 18px;
+	height: 18px;
+	padding: 0 5px;
+	border-radius: 9px;
+	background: #e8ebf2;
+	color: #454b57;
+	font-size: 10px;
+	font-weight: 500;
+	line-height: 18px;
+}
+
+body.edit-php.post-type-mailing .sk-email-add-action {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+body.edit-php.post-type-mailing .sk-email-add-action .page-title-action {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	min-height: 34px;
+	margin: 0;
+	padding: 0 14px;
+	border-color: #3857e8;
+	border-radius: 6px;
+	background: #3857e8;
+	color: #fff;
+	font-weight: 600;
+	line-height: 32px;
+}
+
+body.edit-php.post-type-mailing .sk-email-add-action .page-title-action::before {
+	content: "+";
+	font-size: 20px;
+	font-weight: 400;
+	line-height: 1;
+}
+
+body.edit-php.post-type-mailing .sk-email-add-action .page-title-action:hover,
+body.edit-php.post-type-mailing .sk-email-add-action .page-title-action:focus {
+	border-color: #2946c7;
+	background: #2946c7;
+	color: #fff;
+}
+
+body.edit-php.post-type-mailing #posts-filter {
+	position: relative;
+	box-sizing: border-box;
+	padding: 0 18px 18px;
+	border: 1px solid var(--sk-line);
+	border-top: 0;
+	border-radius: 0 0 10px 10px;
+	background: #fff;
+	box-shadow: 0 12px 24px rgba(15, 23, 42, 0.05);
+}
+
+body.edit-php.post-type-mailing #posts-filter .search-box {
+	position: absolute;
+	top: 13px;
+	right: 18px;
+	margin: 0;
+}
+
+body.edit-php.post-type-mailing #posts-filter .tablenav.top {
+	clear: none;
+	min-height: 34px;
+	margin-top: 0;
+	padding: 13px 346px 12px 0;
+	border-top: 1px solid #eef0f4;
+}
+
+body.edit-php.post-type-mailing #posts-filter .wp-list-table {
+	overflow: hidden;
+	border-color: var(--sk-line);
+	border-radius: 7px;
+	box-shadow: none;
+}
+
+body.edit-php.post-type-mailing #posts-filter .wp-list-table thead th,
+body.edit-php.post-type-mailing #posts-filter .wp-list-table thead td,
+body.edit-php.post-type-mailing #posts-filter .wp-list-table tfoot th,
+body.edit-php.post-type-mailing #posts-filter .wp-list-table tfoot td {
+	padding-top: 11px;
+	padding-bottom: 11px;
+	border-color: #e9ecf2;
+	background: #f8f9fc;
+	color: #4b5563;
+	font-weight: 600;
+}
+
+body.edit-php.post-type-mailing #posts-filter .wp-list-table tbody tr {
+	transition: background-color 0.15s ease;
+}
+
+body.edit-php.post-type-mailing #posts-filter .wp-list-table tbody tr:hover {
+	background: #f7f9ff;
+}
+
+body.edit-php.post-type-mailing #posts-filter .wp-list-table tbody td,
+body.edit-php.post-type-mailing #posts-filter .wp-list-table tbody th {
+	padding-top: 13px;
+	padding-bottom: 13px;
+	border-bottom: 1px solid #eef0f4;
+	vertical-align: middle;
+}
+
+body.edit-php.post-type-mailing #posts-filter .column-title .row-title {
+	color: #2946c7;
+	font-weight: 600;
+}
+
+body.edit-php.post-type-mailing #posts-filter input[type="search"],
+body.edit-php.post-type-mailing #posts-filter select {
+	min-height: 34px;
+	border-color: #d7dce5;
+	border-radius: 6px;
+	box-shadow: none;
+}
+
+body.edit-php.post-type-mailing #posts-filter input[type="search"]:focus,
+body.edit-php.post-type-mailing #posts-filter select:focus {
+	border-color: #3857e8;
+	box-shadow: 0 0 0 1px #3857e8;
+}
+
+body.edit-php.post-type-mailing #posts-filter .button {
+	min-height: 34px;
+	border-color: #aeb8e8;
+	border-radius: 6px;
+	background: #fff;
+	color: #2946c7;
+}
+
+body.edit-php.post-type-mailing #posts-filter .button:hover,
+body.edit-php.post-type-mailing #posts-filter .button:focus {
+	border-color: #3857e8;
+	color: #3857e8;
+}
+
+body.edit-php.post-type-mailing .sk-campaign-status {
+	display: inline-flex;
+	align-items: center;
+	min-height: 22px;
+	padding: 0 9px;
+	border-radius: 11px;
+	font-size: 11px;
+	font-weight: 600;
+	line-height: 22px;
+}
+
+body.edit-php.post-type-mailing .sk-campaign-status.is-draft {
+	background: #eef1f6;
+	color: #596273;
+}
+
+body.edit-php.post-type-mailing .sk-campaign-status.is-scheduled,
+body.edit-php.post-type-mailing .sk-campaign-status.is-not_sent_yet {
+	background: #eaf0ff;
+	color: #2946c7;
+}
+
+body.edit-php.post-type-mailing .sk-campaign-status.is-sending {
+	background: #fff5dc;
+	color: #946200;
+}
+
+body.edit-php.post-type-mailing .sk-campaign-status.is-sent {
+	background: #e8f7ef;
+	color: #147a46;
+}
+
+body.edit-php.post-type-mailing .sk-campaign-status.is-paused {
+	background: #f2ecff;
+	color: #6941c6;
+}
+
+body.edit-php.post-type-mailing .sk-campaign-status.is-failed {
+	background: #fdecec;
+	color: #b42318;
+}
+
+@media (max-width: 850px) {
+	body.edit-php.post-type-mailing .subsubsub {
+		gap: 0 18px;
+	}
+
+	body.edit-php.post-type-mailing .sk-email-tabs > ul {
+		gap: 0 18px;
+	}
+
+	body.edit-php.post-type-mailing #posts-filter {
+		padding-right: 12px;
+		padding-left: 12px;
+	}
+
+	body.edit-php.post-type-mailing #posts-filter .search-box {
+		position: static;
+		float: none;
+		margin: 0;
+		padding: 12px 0 0;
+		text-align: left;
+	}
+
+	body.edit-php.post-type-mailing #posts-filter .tablenav.top {
+		padding-right: 0;
+	}
+}
+
 /*!*************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js!./src/css/components/list-admin.css ***!
   \*************************************************************************************/
@@ -1025,7 +1327,8 @@ a.sk-mailing-steps__link:hover .sk-mailing-steps__label {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	width: 16px;
+	max-width: 16px;
+	width: 100%;
 	height: 16px;
 	margin-top: 1px;
 	border-radius: 50%;
@@ -1706,7 +2009,8 @@ body.sk-mailing-title-actions-ready .editor-header__settings .editor-post-save-d
 	width: 16%;
 }
 
-.sk-settings-status {
+.sk-settings-status,
+.sk-campaign-status {
 	display: inline-block;
 	margin-right: 8px;
 	padding: 3px 8px;
@@ -1716,24 +2020,41 @@ body.sk-mailing-title-actions-ready .editor-header__settings .editor-post-save-d
 	font-weight: 600;
 }
 
-.sk-settings-status.is-active {
+.sk-settings-status.is-active,
+.sk-campaign-status.is-sent,
+.sk-settings-status.is-sent {
 	background: #edfaef;
 	color: #116329;
 }
 
-.sk-settings-status.is-completed {
-	background: #edfaef;
-	color: #116329;
-}
-
-.sk-settings-status.is-processing {
+.sk-settings-status.is-sending,
+.sk-campaign-status.is-sending {
 	background: #e7f5fe;
 	color: #075985;
 }
 
-.sk-settings-status.is-failed {
+.sk-settings-status.is-failed,
+.sk-campaign-status.is-failed {
 	background: #fcf0f1;
 	color: #8a2424;
+}
+
+.sk-settings-status.is-scheduled,
+.sk-campaign-status.is-scheduled {
+	background: #f0edff;
+	color: #4c1d95;
+}
+
+.sk-settings-status.is-not_sent_yet,
+.sk-campaign-status.is-not_sent_yet {
+	background: #fff8e5;
+	color: #7a4b00;
+}
+
+.sk-settings-status.is-paused,
+.sk-campaign-status.is-paused {
+	background: #f6f7f7;
+	color: #3c434a;
 }
 
 .sk-settings-command {
