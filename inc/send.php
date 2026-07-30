@@ -51,18 +51,18 @@ function sk_get_send_page_url( $post_id ) {
 }
 
 /**
- * Верхній stepper: Template → Design → Send.
+ * Верхній stepper: Template → Send.
  *
  * @param string $current 'template'|'design'|'send'.
  * @param int    $post_id Mailing post ID.
  */
 function sk_render_mailing_steps( $current, $post_id ) {
-	$post_id     = (int) $post_id;
+	$post_id       = (int) $post_id;
 	$templates_url = admin_url( 'edit.php?post_type=mailing' );
-	$edit_url    = $post_id ? get_edit_post_link( $post_id, 'raw' ) : '';
-	$send_url    = $post_id ? sk_get_send_page_url( $post_id ) : '';
+	$send_url      = $post_id ? sk_get_send_page_url( $post_id ) : '';
 
-	$order = [ 'template' => 1, 'design' => 2, 'send' => 3 ];
+	// Editor ('design') is still the Template step in the nav.
+	$order     = [ 'template' => 1, 'design' => 1, 'send' => 2 ];
 	$current_n = isset( $order[ $current ] ) ? $order[ $current ] : 1;
 
 	$steps = [
@@ -71,21 +71,13 @@ function sk_render_mailing_steps( $current, $post_id ) {
 			'label'  => __( 'Template', 'skyrora-mailing' ),
 			'number' => 1,
 			'done'   => $current_n > 1,
-			'active' => ( 'template' === $current ),
+			'active' => ( 'template' === $current || 'design' === $current ),
 			'url'    => $templates_url,
-		],
-		[
-			'key'    => 'design',
-			'label'  => __( 'Design', 'skyrora-mailing' ),
-			'number' => 2,
-			'done'   => $current_n > 2,
-			'active' => ( 'design' === $current ),
-			'url'    => $edit_url,
 		],
 		[
 			'key'    => 'send',
 			'label'  => __( 'Send', 'skyrora-mailing' ),
-			'number' => 3,
+			'number' => 2,
 			'done'   => false,
 			'active' => ( 'send' === $current ),
 			'url'    => $send_url,
@@ -100,12 +92,7 @@ function sk_render_mailing_steps( $current, $post_id ) {
 				<?php endif; ?>
 				<?php
 				// Назад можна йти на пройдені кроки (і завжди на список Templates).
-				$can_link = false;
-				if ( $step['url'] && ! $step['active'] ) {
-					if ( 'template' === $step['key'] || $step['done'] || ( 'design' === $step['key'] && $current_n >= 2 && $edit_url ) ) {
-						$can_link = true;
-					}
-				}
+				$can_link = $step['url'] && ! $step['active'] && ( 'template' === $step['key'] || $step['done'] );
 				?>
 				<li class="sk-mailing-steps__item<?php echo $step['active'] ? ' is-active' : ''; ?><?php echo $step['done'] ? ' is-done' : ''; ?>">
 					<?php if ( $can_link ) : ?>
@@ -375,7 +362,7 @@ function sk_render_send_page() {
 							<?php esc_html_e( 'Send test', 'skyrora-mailing' ); ?>
 						</button>
 						<a class="sk-send-page__draft-link" href="<?php echo esc_url( $edit_url ); ?>">
-							<?php esc_html_e( 'Go back to Design', 'skyrora-mailing' ); ?>
+							<?php esc_html_e( 'Go back to Template', 'skyrora-mailing' ); ?>
 						</a>
 						<div class="sk-send-page__response" id="sk_send_response" aria-live="polite"></div>
 					</section>
