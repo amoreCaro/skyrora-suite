@@ -147,7 +147,7 @@ function sk_post_types() {
         "capability_type" => "post",
         "map_meta_cap" => true,
         "hierarchical" => false,
-        "rewrite" => [ 'slug' => false, 'with_front' => false ],
+        "rewrite" => false,
         "query_var" => true,
         "supports" => [ "title", "editor" ],
     ];
@@ -159,6 +159,12 @@ function sk_post_types() {
     ];
     $mailing_args = array_merge($common_args, [
         "public" => false,
+        "publicly_queryable" => true,
+        "exclude_from_search" => true,
+        "rewrite" => [
+            "slug"       => "mailing",
+            "with_front" => false,
+        ],
         "label" => __( "Template", "skyrora-mailing" ),
         "labels" => $mailing_labels,
         "show_in_menu" => 'skyrora-mailing',
@@ -203,6 +209,29 @@ function sk_post_types() {
 
 add_action('init', 'sk_post_types');
 
+/**
+ * Flush rewrite rules once after CPT/rewrite changes (and on activation).
+ */
+function sk_maybe_flush_rewrite_rules() {
+	$version = '1.0.1';
+	if ( get_option( 'sk_rewrite_version' ) === $version ) {
+		return;
+	}
+
+	flush_rewrite_rules( false );
+	update_option( 'sk_rewrite_version', $version );
+}
+add_action( 'init', 'sk_maybe_flush_rewrite_rules', 99 );
+
+/**
+ * Register CPTs/taxonomies and flush permalinks on plugin activation.
+ */
+function sk_activate_plugin() {
+	sk_post_types();
+	sk_taxonomies();
+	flush_rewrite_rules();
+	update_option( 'sk_rewrite_version', '1.0.1' );
+}
 
 function sk_taxonomies() {
     // Таксономія List для підписників
@@ -260,8 +289,10 @@ function sk_allowed_blocks( $allowed_blocks, $block_editor_context ) {
 }
 
 add_action('template_redirect', function () {
-    if (is_singular('mailing')) {
-        include SK_PLUGIN_DIR . '/single-mailing.php';
-        exit;
+    if ( ! is_singular( 'mailing' ) ) {
+        return;
     }
+
+    include SK_PLUGIN_DIR . '/single-mailing.php';
+    exit;
 });

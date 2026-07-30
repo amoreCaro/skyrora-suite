@@ -274,6 +274,8 @@ add_action( SK_MAILING_CRON_HOOK, 'sk_run_mailing_cron_worker' );
  */
 function sk_deactivate_mailing_cron() {
 	wp_clear_scheduled_hook( SK_MAILING_CRON_HOOK );
+	flush_rewrite_rules();
+	delete_option( 'sk_rewrite_version' );
 }
 register_deactivation_hook( SK_PLUGIN, 'sk_deactivate_mailing_cron' );
 
