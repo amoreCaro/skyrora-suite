@@ -22,6 +22,13 @@ export function listAdmin() {
 
 		body.classList.add('sk-list-overview');
 
+		// ACF Extended injects an outlined "Add New" page-title-action; we use our own CTA.
+		document
+			.querySelectorAll(
+				'body.taxonomy-list .wrap > .page-title-action, body.taxonomy-list .acfe-bt-admin-button-add'
+			)
+			.forEach((button) => button.remove());
+
 		if (heading) {
 			const addButton = document.createElement('a');
 			const titleRow = document.createElement('div');
