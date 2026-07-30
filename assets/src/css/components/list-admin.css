@@ -63,6 +63,12 @@ body.taxonomy-list.sk-list-overview .wrap {
 	margin-top: 16px;
 }
 
+/* Hide ACF Extended's outlined Add New button; we render our own CTA. */
+body.taxonomy-list .wrap > .page-title-action,
+body.taxonomy-list .acfe-bt-admin-button-add {
+	display: none !important;
+}
+
 body.taxonomy-list.sk-list-overview #col-container {
 	margin-right: 0;
 }

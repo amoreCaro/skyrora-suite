@@ -20,6 +20,14 @@ function sk_register_add_list_page() {
 add_action( 'admin_menu', 'sk_register_add_list_page', 20 );
 
 /**
+ * Не показувати Add new list у підменю (remove_submenu_page ламає доступ до сторінки).
+ */
+function sk_hide_add_list_submenu_css() {
+	echo '<style>#toplevel_page_skyrora-mailing .wp-submenu a[href*="page=skyrora-mailing-add-list"]{display:none!important;}</style>';
+}
+add_action( 'admin_head', 'sk_hide_add_list_submenu_css' );
+
+/**
  * Окремий екран створення списку.
  */
 function sk_render_add_list_page() {

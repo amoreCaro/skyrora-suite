@@ -144,8 +144,6 @@ function sk_render_subscriber_form( $post ) {
 
 	$first_name = get_post_meta( $post->ID, 'sk_first_name', true );
 	$last_name  = get_post_meta( $post->ID, 'sk_last_name', true );
-	$status     = sk_get_subscriber_status( $post );
-	$statuses   = sk_get_subscriber_statuses();
 	?>
 	<div class="sk-subscriber__error" id="sk_email_error" role="alert"><?php esc_html_e( 'Please enter your email address', 'skyrora-mailing' ); ?></div>
 
@@ -160,16 +158,6 @@ function sk_render_subscriber_form( $post ) {
 					<div class="sk-subscriber__field">
 						<label class="sk-subscriber__field-label" for="sk_last_name"><?php esc_html_e( 'Last name', 'skyrora-mailing' ); ?></label>
 						<input class="sk-subscriber__input" type="text" id="sk_last_name" name="sk_last_name" value="<?php echo esc_attr( $last_name ); ?>" placeholder="<?php esc_attr_e( 'Last name', 'skyrora-mailing' ); ?>" autocomplete="family-name">
-					</div>
-					<div class="sk-subscriber__field">
-						<label class="sk-subscriber__field-label" for="sk_status"><?php esc_html_e( 'Status', 'skyrora-mailing' ); ?></label>
-						<select class="sk-subscriber__input sk-subscriber__select" id="sk_status" name="sk_status">
-							<?php foreach ( $statuses as $status_value => $status_label ) : ?>
-								<option value="<?php echo esc_attr( $status_value ); ?>" <?php selected( $status, $status_value ); ?>>
-									<?php echo esc_html( $status_label ); ?>
-								</option>
-							<?php endforeach; ?>
-						</select>
 					</div>
 				</div>
 			</section>
@@ -288,8 +276,6 @@ function sk_save_subscriber_meta( $post_id, $post ) {
 	$email      = sanitize_email( $email_raw );
 	$first_name = isset( $_POST['sk_first_name'] ) ? sanitize_text_field( wp_unslash( $_POST['sk_first_name'] ) ) : '';
 	$last_name  = isset( $_POST['sk_last_name'] ) ? sanitize_text_field( wp_unslash( $_POST['sk_last_name'] ) ) : '';
-	$status     = isset( $_POST['sk_status'] ) ? sanitize_key( wp_unslash( $_POST['sk_status'] ) ) : 'subscribed';
-	$status     = array_key_exists( $status, sk_get_subscriber_statuses() ) ? $status : 'subscribed';
 
 	if ( '' !== $email && sk_subscriber_email_exists( $email, $post_id ) ) {
 		set_transient( 'sk_subscriber_email_error_' . get_current_user_id(), __( 'This email already exists', 'skyrora-mailing' ), 45 );
@@ -300,14 +286,9 @@ function sk_save_subscriber_meta( $post_id, $post ) {
 	update_post_meta( $post_id, 'sk_first_name', $first_name );
 	update_post_meta( $post_id, 'sk_last_name', $last_name );
 
-	if ( 'trash' === $status ) {
-		remove_action( 'save_post_subscriber', 'sk_save_subscriber_meta', 10 );
-		wp_trash_post( $post_id );
-		add_action( 'save_post_subscriber', 'sk_save_subscriber_meta', 10, 2 );
-		return;
+	if ( ! metadata_exists( 'post', $post_id, 'sk_status' ) ) {
+		update_post_meta( $post_id, 'sk_status', 'subscribed' );
 	}
-
-	update_post_meta( $post_id, 'sk_status', $status );
 
 	// Нормалізуємо post_title до sanitize_email (якщо відрізняється від сирого вводу).
 	if ( $email && $email !== $post->post_title ) {
@@ -349,7 +330,6 @@ function sk_subscriber_columns( $columns ) {
 	$new['title']         = __( 'Email', 'skyrora-mailing' );
 	$new['sk_first_name'] = __( 'First Name', 'skyrora-mailing' );
 	$new['sk_last_name']  = __( 'Last Name', 'skyrora-mailing' );
-	$new['sk_status']     = __( 'Status', 'skyrora-mailing' );
 
 	if ( isset( $columns['taxonomy-list'] ) ) {
 		$new['taxonomy-list'] = $columns['taxonomy-list'];
@@ -383,15 +363,6 @@ function sk_subscriber_column_content( $column, $post_id ) {
 			break;
 		case 'sk_last_name':
 			echo esc_html( get_post_meta( $post_id, 'sk_last_name', true ) );
-			break;
-		case 'sk_status':
-			$status   = sk_get_subscriber_status( $post_id );
-			$statuses = sk_get_subscriber_statuses();
-			printf(
-				'<span class="sk-subscriber-status sk-subscriber-status--%1$s">%2$s</span>',
-				esc_attr( $status ),
-				esc_html( isset( $statuses[ $status ] ) ? $statuses[ $status ] : $status )
-			);
 			break;
 	}
 }
@@ -442,7 +413,7 @@ function sk_subscriber_status_views( $views ) {
 	$base_url       = admin_url( 'edit.php?post_type=subscriber' );
 	$all_count      = array_sum( $counts ) - $counts['trash'];
 	$custom_views   = [];
-	$all_current    = ! array_key_exists( $current_status, $statuses );
+	$all_current    = 'trash' !== $current_status;
 
 	$custom_views['all'] = sprintf(
 		'<a href="%1$s"%2$s>%3$s <span class="count">%4$s</span></a>',
@@ -452,16 +423,13 @@ function sk_subscriber_status_views( $views ) {
 		number_format_i18n( $all_count )
 	);
 
-	foreach ( $statuses as $status => $label ) {
-		$is_current              = $current_status === $status;
-		$custom_views[ $status ] = sprintf(
-			'<a href="%1$s"%2$s>%3$s <span class="count">%4$s</span></a>',
-			esc_url( add_query_arg( 'sk_status', $status, $base_url ) ),
-			$is_current ? ' class="current" aria-current="page"' : '',
-			esc_html( $label ),
-			number_format_i18n( $counts[ $status ] )
-		);
-	}
+	$custom_views['trash'] = sprintf(
+		'<a href="%1$s"%2$s>%3$s <span class="count">%4$s</span></a>',
+		esc_url( add_query_arg( 'sk_status', 'trash', $base_url ) ),
+		'trash' === $current_status ? ' class="current" aria-current="page"' : '',
+		esc_html( $statuses['trash'] ),
+		number_format_i18n( $counts['trash'] )
+	);
 
 	return $custom_views;
 }
