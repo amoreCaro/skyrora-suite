@@ -259,6 +259,10 @@ function sk_campaign_status_views( $views ) {
 	);
 
 	foreach ( $statuses as $status => $label ) {
+		if ( 'sending' === $status ) {
+			continue;
+		}
+
 		$custom_views[ $status ] = sprintf(
 			'<a href="%1$s"%2$s>%3$s <span class="count">%4$s</span></a>',
 			esc_url( add_query_arg( 'sk_campaign_status', $status, $base_url ) ),
