@@ -448,29 +448,47 @@ a.sk-mailing-steps__link:hover .sk-mailing-steps__label {
 	box-shadow: none;
 }
 
-/* ── Gutenberg title actions ── */
-.editor-visual-editor__post-title-wrapper,
-.edit-post-visual-editor__post-title-wrapper {
+/* ── Skyrora header actions ── */
+.sk-mailing-editor-steps .sk-mailing-title-actions {
 	display: flex;
 	align-items: center;
-	justify-content: center;
-	position: relative;
-}
-
-.editor-visual-editor__post-title-wrapper .sk-mailing-title-actions,
-.edit-post-visual-editor__post-title-wrapper .sk-mailing-title-actions {
-	display: flex;
-	align-items: center;
+	justify-content: flex-end;
 	gap: 8px;
-	position: absolute;
-	right: 0;
 	flex: 0 0 auto;
+	justify-self: end;
 }
 
-.sk-mailing-save-title-btn,
-.sk-mailing-next-header-btn {
-	min-width: 112px;
+.sk-mailing-title-actions .sk-mailing-preview-title-btn,
+.sk-mailing-title-actions .sk-mailing-save-title-btn,
+.sk-mailing-title-actions .sk-mailing-next-header-btn {
+	display: inline-flex;
+	align-items: center;
 	justify-content: center;
+	min-width: 112px;
+	min-height: 36px;
+	padding: 6px 16px;
+	border: 1px solid transparent;
+	border-radius: 2px;
+	font: 600 13px/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+	cursor: pointer;
+}
+
+.sk-mailing-title-actions button:disabled {
+	opacity: 0.65;
+	cursor: default;
+}
+
+.sk-mailing-preview-title-btn {
+	background: #fff !important;
+	border-color: #3858e9 !important;
+	color: #3858e9 !important;
+}
+
+.sk-mailing-preview-title-btn:hover,
+.sk-mailing-preview-title-btn:focus {
+	background: #f0f4ff !important;
+	border-color: #2b46c7 !important;
+	color: #2b46c7 !important;
 }
 
 .sk-mailing-save-title-btn {
@@ -508,21 +526,6 @@ body.sk-mailing-title-actions-ready .editor-header__settings .editor-post-save-d
 	display: none !important;
 }
 
-@media (max-width: 700px) {
-	.editor-visual-editor__post-title-wrapper,
-	.edit-post-visual-editor__post-title-wrapper {
-		flex-wrap: wrap;
-	}
-
-	.editor-visual-editor__post-title-wrapper .sk-mailing-title-actions,
-	.edit-post-visual-editor__post-title-wrapper .sk-mailing-title-actions {
-		position: static;
-		width: 100%;
-		margin-left: 0;
-		padding: 8px 0 0;
-	}
-}
-
 /* ── Design editor stepper ── */
 .sk-mailing-editor-steps {
 	--sk-accent: #3858e9;
@@ -539,13 +542,44 @@ body.sk-mailing-title-actions-ready .editor-header__settings .editor-post-save-d
 	border-bottom: 1px solid var(--sk-line);
 	padding: 0 48px;
 	min-height: 96px;
-	display: flex;
+	display: grid;
+	grid-template-columns: 1fr auto 1fr;
 	align-items: center;
-	justify-content: center;
+	gap: 24px;
+	box-sizing: border-box;
+}
+
+.sk-mailing-editor-steps .sk-mailing-topbar__brand {
+	justify-self: start;
+}
+
+.sk-mailing-editor-steps .sk-mailing-steps {
+	flex: 0 0 auto;
+	justify-self: center;
 }
 
 .interface-interface-skeleton__body .sk-mailing-editor-steps {
 	top: 0;
+}
+
+@media (max-width: 900px) {
+	.sk-mailing-editor-steps {
+		grid-template-columns: 1fr;
+		justify-items: center;
+		padding: 14px 16px;
+		gap: 12px;
+	}
+
+	.sk-mailing-editor-steps .sk-mailing-topbar__brand,
+	.sk-mailing-editor-steps .sk-mailing-steps,
+	.sk-mailing-editor-steps .sk-mailing-title-actions {
+		justify-self: center;
+	}
+
+	.sk-mailing-editor-steps .sk-mailing-title-actions {
+		flex-wrap: wrap;
+		justify-content: center;
+	}
 }
 
 /* ── Send to + multiselect ── */
