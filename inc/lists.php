@@ -12,7 +12,7 @@ function sk_register_add_list_page() {
 		'skyrora-mailing',
 		__( 'Add new list', 'skyrora-mailing' ),
 		__( 'Add new list', 'skyrora-mailing' ),
-		'manage_categories',
+		'manage_options',
 		'skyrora-mailing-add-list',
 		'sk_render_add_list_page'
 	);
@@ -28,10 +28,19 @@ function sk_hide_add_list_submenu_css() {
 add_action( 'admin_head', 'sk_hide_add_list_submenu_css' );
 
 /**
+ * Keep the hidden Add list screen accessible even if another plugin calls remove_submenu_page().
+ */
+function sk_ensure_add_list_page_registered() {
+	global $_registered_pages;
+	$_registered_pages['skyrora-mailing_page_skyrora-mailing-add-list'] = true;
+}
+add_action( 'admin_menu', 'sk_ensure_add_list_page_registered', 999 );
+
+/**
  * Окремий екран створення списку.
  */
 function sk_render_add_list_page() {
-	if ( ! current_user_can( 'manage_categories' ) ) {
+	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_die( esc_html__( 'You are not allowed to create lists.', 'skyrora-mailing' ) );
 	}
 
@@ -129,7 +138,7 @@ function sk_render_add_list_page() {
  * Створюємо list з окремого admin-екрана.
  */
 function sk_handle_create_list() {
-	if ( ! current_user_can( 'manage_categories' ) ) {
+	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_die( esc_html__( 'You are not allowed to create lists.', 'skyrora-mailing' ) );
 	}
 

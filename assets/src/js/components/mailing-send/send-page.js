@@ -18,6 +18,11 @@ export function sendPage() {
 
 	const listsMs = initListMultiselect(document.getElementById('sk_send_lists'));
 
+	const addListBtn = root.querySelector('.sk-send-to__empty-action');
+	if (addListBtn && skSendData.addListUrl) {
+		addListBtn.setAttribute('href', skSendData.addListUrl);
+	}
+
 	const getMode = () => root.getAttribute('data-mode') || 'test';
 
 	const updateSubmitLabel = () => {

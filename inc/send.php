@@ -167,6 +167,18 @@ function sk_render_send_page() {
 		[
 			'taxonomy'   => 'list',
 			'hide_empty' => false,
+			'meta_query' => [
+				'relation' => 'OR',
+				[
+					'key'     => '_sk_list_trashed',
+					'compare' => 'NOT EXISTS',
+				],
+				[
+					'key'     => '_sk_list_trashed',
+					'value'   => '1',
+					'compare' => '!=',
+				],
+			],
 		]
 	);
 	if ( is_wp_error( $lists ) ) {
@@ -243,50 +255,74 @@ function sk_render_send_page() {
 									<?php esc_html_e( 'Subscribers in multiple lists will only receive one email.', 'skyrora-mailing' ); ?>
 								</p>
 
-								<div
-									class="sk-multiselect"
-									id="sk_send_lists"
-									data-placeholder="<?php esc_attr_e( 'Search lists…', 'skyrora-mailing' ); ?>"
-								>
-									<div class="sk-multiselect__control" tabindex="0">
-										<div class="sk-multiselect__chips" id="sk_send_lists_chips"></div>
-										<input
-											type="text"
-											class="sk-multiselect__search"
-											id="sk_send_lists_search"
-											autocomplete="off"
-											aria-autocomplete="list"
-											aria-controls="sk_send_lists_dropdown"
-											aria-expanded="false"
-											placeholder="<?php esc_attr_e( 'Search lists…', 'skyrora-mailing' ); ?>"
+								<?php if ( empty( $lists ) ) : ?>
+									<?php
+									$add_list_url = add_query_arg(
+										'page',
+										'skyrora-mailing-add-list',
+										admin_url( 'admin.php' )
+									);
+									?>
+									<div class="sk-send-to__empty" role="status">
+										<p class="sk-send-to__empty-title">
+											<?php esc_html_e( 'No mailing lists yet', 'skyrora-mailing' ); ?>
+										</p>
+										<p class="sk-send-to__empty-text">
+											<?php esc_html_e( 'Create a list first, then choose who should receive this email.', 'skyrora-mailing' ); ?>
+										</p>
+										<a
+											class="button sk-send-to__empty-action"
+											href="<?php echo esc_url( $add_list_url ); ?>"
 										>
-										<span class="sk-multiselect__chevron" aria-hidden="true"></span>
+											<?php esc_html_e( 'Create a list', 'skyrora-mailing' ); ?>
+										</a>
 									</div>
-									<ul
-										class="sk-multiselect__dropdown"
-										id="sk_send_lists_dropdown"
-										role="listbox"
-										aria-multiselectable="true"
-										hidden
+								<?php else : ?>
+									<div
+										class="sk-multiselect"
+										id="sk_send_lists"
+										data-placeholder="<?php esc_attr_e( 'Search lists…', 'skyrora-mailing' ); ?>"
 									>
-										<?php foreach ( $lists as $term ) : ?>
-											<?php $count = count( sk_get_list_subscriber_ids( $term->term_id ) ); ?>
-											<li
-												class="sk-multiselect__option"
-												role="option"
-												aria-selected="false"
-												data-id="<?php echo esc_attr( (string) $term->term_id ); ?>"
-												data-name="<?php echo esc_attr( $term->name ); ?>"
-												data-count="<?php echo esc_attr( (string) $count ); ?>"
-												tabindex="-1"
+										<div class="sk-multiselect__control" tabindex="0">
+											<div class="sk-multiselect__chips" id="sk_send_lists_chips"></div>
+											<input
+												type="text"
+												class="sk-multiselect__search"
+												id="sk_send_lists_search"
+												autocomplete="off"
+												aria-autocomplete="list"
+												aria-controls="sk_send_lists_dropdown"
+												aria-expanded="false"
+												placeholder="<?php esc_attr_e( 'Search lists…', 'skyrora-mailing' ); ?>"
 											>
-												<span class="sk-multiselect__option-label"><?php echo esc_html( $term->name ); ?></span>
-												<span class="sk-multiselect__count"><?php echo esc_html( (string) $count ); ?></span>
-											</li>
-										<?php endforeach; ?>
-									</ul>
-									<div class="sk-multiselect__values" id="sk_send_lists_values" hidden></div>
-								</div>
+											<span class="sk-multiselect__chevron" aria-hidden="true"></span>
+										</div>
+										<ul
+											class="sk-multiselect__dropdown"
+											id="sk_send_lists_dropdown"
+											role="listbox"
+											aria-multiselectable="true"
+											hidden
+										>
+											<?php foreach ( $lists as $term ) : ?>
+												<?php $count = count( sk_get_list_subscriber_ids( $term->term_id ) ); ?>
+												<li
+													class="sk-multiselect__option"
+													role="option"
+													aria-selected="false"
+													data-id="<?php echo esc_attr( (string) $term->term_id ); ?>"
+													data-name="<?php echo esc_attr( $term->name ); ?>"
+													data-count="<?php echo esc_attr( (string) $count ); ?>"
+													tabindex="-1"
+												>
+													<span class="sk-multiselect__option-label"><?php echo esc_html( $term->name ); ?></span>
+													<span class="sk-multiselect__count"><?php echo esc_html( (string) $count ); ?></span>
+												</li>
+											<?php endforeach; ?>
+										</ul>
+										<div class="sk-multiselect__values" id="sk_send_lists_values" hidden></div>
+									</div>
+								<?php endif; ?>
 							</div>
 						</div>
 
@@ -383,7 +419,7 @@ function sk_render_send_page() {
  * @param int      $timestamp UTC Unix timestamp.
  * @return int|WP_Error
  */
-function sk_schedule_mailing_job( $post_id, $subject, $html, $emails, $timestamp ) {
+function sk_schedule_mailing_job( $post_id, $subject, $html, $emails, $timestamp, $mode = 'scheduled', $list_ids = [] ) {
 	$job_id = wp_insert_post(
 		[
 			'post_type'    => 'subscription',
@@ -399,10 +435,17 @@ function sk_schedule_mailing_job( $post_id, $subject, $html, $emails, $timestamp
 		return $job_id;
 	}
 
+	$mode     = sanitize_key( $mode );
+	$list_ids = is_array( $list_ids )
+		? array_values( array_unique( array_filter( array_map( 'absint', $list_ids ) ) ) )
+		: [];
+
 	update_post_meta( $job_id, '_sk_recipients', array_values( array_unique( $emails ) ) );
 	update_post_meta( $job_id, '_sk_scheduled_at', $timestamp );
 	update_post_meta( $job_id, '_sk_job_status', 'scheduled' );
 	update_post_meta( $job_id, '_sk_campaign_status', 'scheduled' );
+	update_post_meta( $job_id, '_sk_send_mode', $mode ? $mode : 'scheduled' );
+	update_post_meta( $job_id, '_sk_list_ids', $list_ids );
 
 	$scheduled = wp_schedule_single_event( $timestamp, 'sk_send_scheduled_mailing', [ $job_id ] );
 	if ( is_wp_error( $scheduled ) || ! $scheduled ) {
@@ -543,11 +586,11 @@ function sk_ajax_send_mailing() {
 		wp_send_json_error( [ 'message' => $html->get_error_message() ] );
 	}
 
-	$headers = [ 'Content-Type: text/html; charset=UTF-8' ];
-	$emails  = [];
+	$headers  = [ 'Content-Type: text/html; charset=UTF-8' ];
+	$emails   = [];
+	$list_ids = [];
 
 	if ( 'list' === $mode ) {
-		$list_ids = [];
 		if ( isset( $_POST['list_ids'] ) && is_array( $_POST['list_ids'] ) ) {
 			$list_ids = array_filter( array_map( 'absint', wp_unslash( $_POST['list_ids'] ) ) );
 		} elseif ( isset( $_POST['list_id'] ) ) {
@@ -561,6 +604,9 @@ function sk_ajax_send_mailing() {
 
 		foreach ( $list_ids as $list_id ) {
 			if ( ! term_exists( $list_id, 'list' ) ) {
+				wp_send_json_error( [ 'message' => __( 'Please select a valid list.', 'skyrora-mailing' ) ] );
+			}
+			if ( '1' === (string) get_term_meta( $list_id, '_sk_list_trashed', true ) ) {
 				wp_send_json_error( [ 'message' => __( 'Please select a valid list.', 'skyrora-mailing' ) ] );
 			}
 			foreach ( sk_get_list_subscriber_ids( $list_id ) as $subscriber_id ) {
@@ -601,7 +647,15 @@ function sk_ajax_send_mailing() {
 			wp_send_json_error( [ 'message' => __( 'Please select a valid future date and time.', 'skyrora-mailing' ) ] );
 		}
 
-		$job_id = sk_schedule_mailing_job( $post_id, $subject, $html, $emails, $datetime->getTimestamp() );
+		$job_id = sk_schedule_mailing_job(
+			$post_id,
+			$subject,
+			$html,
+			$emails,
+			$datetime->getTimestamp(),
+			'scheduled',
+			$list_ids
+		);
 		if ( is_wp_error( $job_id ) ) {
 			wp_send_json_error( [ 'message' => $job_id->get_error_message() ] );
 		}
@@ -620,6 +674,7 @@ function sk_ajax_send_mailing() {
 
 	$sent       = 0;
 	$failed     = 0;
+	$errors     = [];
 	$last_error = '';
 	$paused     = false;
 
@@ -648,7 +703,32 @@ function sk_ajax_send_mailing() {
 		} else {
 			$failed++;
 			$last_error = $result['error'];
+			$errors[]   = [
+				'email' => $email,
+				'error' => $result['error'],
+			];
 		}
+	}
+
+	$final_status = $paused ? 'paused' : ( $sent < 1 ? 'failed' : ( $failed > 0 ? 'failed' : 'sent' ) );
+
+	if ( function_exists( 'sk_log_mailing_request' ) ) {
+		sk_log_mailing_request(
+			[
+				'post_id'       => $post_id,
+				'subject'       => $subject,
+				'html'          => $html,
+				'emails'        => $emails,
+				'mode'          => $mode,
+				'status'        => $final_status,
+				'sent'          => $sent,
+				'failed'        => $failed,
+				'errors'        => $errors,
+				'list_ids'      => $list_ids,
+				'scheduled_at'  => time(),
+				'completed_at'  => $paused ? null : time(),
+			]
+		);
 	}
 
 	if ( $paused ) {
@@ -682,12 +762,7 @@ function sk_ajax_send_mailing() {
 
 	wp_send_json_success(
 		[
-			'message' => sprintf(
-				/* translators: 1: sent count, 2: failed count */
-				__( 'Sent: %1$d. Failed: %2$d.', 'skyrora-mailing' ),
-				$sent,
-				$failed
-			),
+			'message' => __( 'Successful', 'skyrora-mailing' ),
 			'sent'    => $sent,
 			'failed'  => $failed,
 		]
