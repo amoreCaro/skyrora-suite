@@ -2637,6 +2637,36 @@ body.sk-mailing-title-actions-ready .editor-header__settings .editor-post-save-d
 	color: var(--sk-muted);
 }
 
+.sk-send-to__empty {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 6px;
+	padding: 18px 16px;
+	border: 1px dashed var(--sk-line, #dcdcde);
+	border-radius: 6px;
+	background: #fafafa;
+}
+
+.sk-send-to__empty-title {
+	margin: 0;
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.35;
+	color: var(--sk-ink);
+}
+
+.sk-send-to__empty-text {
+	margin: 0 0 8px;
+	font-size: 13px;
+	line-height: 1.45;
+	color: var(--sk-muted);
+}
+
+.sk-send-to__empty-action {
+	margin: 0 !important;
+}
+
 .sk-multiselect {
 	position: relative;
 }
@@ -3069,6 +3099,49 @@ body.sk-mailing-title-actions-ready .editor-header__settings .editor-post-save-d
 	.sk-settings-card {
 		padding: 20px;
 	}
+}
+
+.sk-logs-page {
+	max-width: none;
+}
+
+.sk-logs-page > .description {
+	margin: 0 0 16px;
+}
+
+.sk-logs-table th,
+.sk-logs-table td {
+	vertical-align: middle;
+}
+
+.sk-logs-table th:nth-child(1) {
+	width: 16%;
+}
+
+.sk-logs-table th:nth-child(4),
+.sk-logs-table th:nth-child(5) {
+	width: 10%;
+}
+
+.sk-logs-table th:nth-child(6) {
+	width: 12%;
+}
+
+.sk-logs-detail h2 {
+	margin: 28px 0 10px;
+	font-size: 16px;
+}
+
+.sk-logs-recipients {
+	margin: 0;
+	padding-left: 1.25em;
+	max-height: 240px;
+	overflow: auto;
+}
+
+.sk-logs-errors th,
+.sk-logs-errors td {
+	vertical-align: top;
 }
 
 /*!********************************************************************!*\

@@ -179,10 +179,11 @@ function sk_enqueue_send_admin_assets( $hook ) {
 	$post_id = isset( $_GET['post_id'] ) ? absint( $_GET['post_id'] ) : 0;
 
 	wp_localize_script( 'sk-admin', 'skSendData', [
-		'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-		'nonce'   => wp_create_nonce( 'sk_send_mailing' ),
-		'postId'  => $post_id,
-		'i18n'    => [
+		'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
+		'nonce'      => wp_create_nonce( 'sk_send_mailing' ),
+		'postId'     => $post_id,
+		'addListUrl' => add_query_arg( 'page', 'skyrora-mailing-add-list', admin_url( 'admin.php' ) ),
+		'i18n'       => [
 			'send'        => __( 'Send', 'skyrora-mailing' ),
 			'sendTest'    => __( 'Send test', 'skyrora-mailing' ),
 			'schedule'    => __( 'Schedule', 'skyrora-mailing' ),

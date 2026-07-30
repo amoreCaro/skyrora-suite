@@ -28,6 +28,7 @@ include_once SK_PLUGIN_DIR .'/inc/subscribers.php';
 include_once SK_PLUGIN_DIR .'/inc/lists.php';
 include_once SK_PLUGIN_DIR .'/inc/page-html.php';
 include_once SK_PLUGIN_DIR .'/inc/send.php';
+include_once SK_PLUGIN_DIR .'/inc/logs.php';
 include_once SK_PLUGIN_DIR .'/inc/test-sending.php';
 include_once SK_PLUGIN_DIR .'/inc/spacebox-builder.php';
 

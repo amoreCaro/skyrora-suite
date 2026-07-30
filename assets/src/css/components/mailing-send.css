@@ -599,6 +599,36 @@ body.sk-mailing-title-actions-ready .editor-header__settings .editor-post-save-d
 	color: var(--sk-muted);
 }
 
+.sk-send-to__empty {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 6px;
+	padding: 18px 16px;
+	border: 1px dashed var(--sk-line, #dcdcde);
+	border-radius: 6px;
+	background: #fafafa;
+}
+
+.sk-send-to__empty-title {
+	margin: 0;
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.35;
+	color: var(--sk-ink);
+}
+
+.sk-send-to__empty-text {
+	margin: 0 0 8px;
+	font-size: 13px;
+	line-height: 1.45;
+	color: var(--sk-muted);
+}
+
+.sk-send-to__empty-action {
+	margin: 0 !important;
+}
+
 .sk-multiselect {
 	position: relative;
 }

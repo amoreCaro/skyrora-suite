@@ -48,6 +48,15 @@ function sk_utility_menus() {
 
     add_submenu_page(
         'skyrora-mailing',
+        __( 'Logs', 'skyrora-mailing' ),
+        __( 'Logs', 'skyrora-mailing' ),
+        'manage_options',
+        'skyrora-mailing-logs',
+        'sk_render_logs_page'
+    );
+
+    add_submenu_page(
+        'skyrora-mailing',
         __( 'Settings', 'skyrora-mailing' ),
         __( 'Settings', 'skyrora-mailing' ),
         'manage_options',

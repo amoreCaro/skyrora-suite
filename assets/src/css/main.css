@@ -3,6 +3,7 @@
 @import './components/list-admin.css';
 @import './components/mailing-send.css';
 @import './components/settings-admin.css';
+@import './components/logs-admin.css';
 
 body.sk-plugin-page {
     opacity: 0;
