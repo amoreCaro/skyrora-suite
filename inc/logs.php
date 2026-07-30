@@ -18,25 +18,6 @@ function sk_get_send_modes() {
 	];
 }
 
-/**
- * Persist a mailing send request as a subscription job (used by Logs).
- *
- * @param array{
- *   post_id:int,
- *   subject:string,
- *   html?:string,
- *   emails:string[],
- *   mode:string,
- *   status:string,
- *   sent?:int,
- *   failed?:int,
- *   errors?:array<int,array{email?:string,error?:string}>,
- *   list_ids?:int[],
- *   scheduled_at?:int,
- *   completed_at?:int|null
- * } $args Request data.
- * @return int|WP_Error Job post ID.
- */
 function sk_log_mailing_request( $args ) {
 	$post_id = isset( $args['post_id'] ) ? absint( $args['post_id'] ) : 0;
 	$subject = isset( $args['subject'] ) ? (string) $args['subject'] : '';

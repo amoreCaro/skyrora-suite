@@ -14,7 +14,7 @@ if ( !defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'SK_VERSION', '1.0.0' );
+define( 'SK_VERSION', '1.0.1' );
 define( 'SK_TEXT_DOMAIN', 'skyrora-mailing' );
 define( 'SK_PLUGIN', __FILE__ );
 define( 'SK_PLUGIN_BASENAME', plugin_basename( SK_PLUGIN ) );
@@ -37,13 +37,15 @@ if ( is_admin() ) {
 	include_once SK_PLUGIN_DIR . '/inc/admin-header.php';
 }
 
+register_activation_hook( SK_PLUGIN, 'sk_activate_plugin' );
 
 add_filter( 'the_content', function ( $content ) {
-    if ( is_singular( 'mailing' ) ) { ?>
-        <div id="wrapper" style="max-width: 100%; margin: 0px auto; background-color: rgb(24, 27, 36); padding: 10px 20px;">
-            <div class="container" style="max-width: 640px; width: 100%; background-color: #fff;  margin: 0 auto; min-height: 50vh; box-sizing: border-box; padding: 0px;">
-                <?php echo $content; ?>
-            </div>
-        </div>
-    <?php }
+	if ( ! is_singular( 'mailing' ) ) {
+		return $content;
+	}
+
+	return '<div id="wrapper" style="max-width: 100%; margin: 0px auto; background-color: rgb(24, 27, 36); padding: 10px 20px;">'
+		. '<div class="container" style="max-width: 640px; width: 100%; background-color: #fff; margin: 0 auto; min-height: 50vh; box-sizing: border-box; padding: 0px;">'
+		. $content
+		. '</div></div>';
 } );
