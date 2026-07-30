@@ -4,11 +4,12 @@
 // spacebox-builder plugin is also active (it declares the same functions).
 // Everything is wrapped in this guard so the function declarations become
 // conditional (bound at runtime) instead of being early-bound at compile time.
-if ( ! function_exists( 'theme_allowed_blocks' ) ) {
+// Named uniquely to avoid conflict with the theme's theme_allowed_blocks().
+if ( ! function_exists( 'skyrora_suite_allowed_blocks' ) ) {
 
-add_filter( 'allowed_block_types_all', 'theme_allowed_blocks', 10, 2 );
+add_filter( 'allowed_block_types_all', 'skyrora_suite_allowed_blocks', 10, 2 );
 
-function theme_allowed_blocks( $allowed_blocks, $block_editor_context ) {
+function skyrora_suite_allowed_blocks( $allowed_blocks, $block_editor_context ) {
     return array(
         'app/spacer',
         'core/columns',
@@ -581,4 +582,4 @@ function get_block_value($post_id, $block_name) {
     return null;
 }
 
-} // end guard: ! function_exists( 'theme_allowed_blocks' )
+} // end guard: ! function_exists( 'skyrora_suite_allowed_blocks' )

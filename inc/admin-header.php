@@ -49,6 +49,7 @@ function sk_render_plugin_admin_header() {
 		&& ! in_array(
 			$screen->id,
 			[
+				'skyrora-mailing_page_skyrora-mailing-add-list',
 				'skyrora-mailing_page_skyrora-mailing-statistics',
 				'skyrora-mailing_page_skyrora-mailing-settings',
 			],

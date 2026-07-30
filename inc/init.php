@@ -62,8 +62,9 @@ add_action( 'admin_menu', 'sk_utility_menus', 12 );
  */
 function sk_list_taxonomy_parent_file( $parent_file ) {
     global $taxonomy;
+    $page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
 
-    if ( 'list' === $taxonomy ) {
+    if ( 'list' === $taxonomy || 'skyrora-mailing-add-list' === $page ) {
         return 'skyrora-mailing';
     }
 
@@ -73,8 +74,9 @@ add_filter( 'parent_file', 'sk_list_taxonomy_parent_file' );
 
 function sk_list_taxonomy_submenu_file( $submenu_file ) {
     global $taxonomy;
+    $page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
 
-    if ( 'list' === $taxonomy ) {
+    if ( 'list' === $taxonomy || 'skyrora-mailing-add-list' === $page ) {
         return 'edit-tags.php?taxonomy=list&post_type=subscriber';
     }
 

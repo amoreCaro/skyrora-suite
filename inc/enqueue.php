@@ -26,6 +26,7 @@ function sk_is_plugin_admin_screen() {
 
 	return 'toplevel_page_skyrora-mailing' === $screen->id
 		|| 'toplevel_page_theme-settings' === $screen->id
+		|| 'skyrora-mailing_page_skyrora-mailing-add-list' === $screen->id
 		|| 0 === strpos( $screen->id, 'skyrora-mailing_page_' );
 }
 
@@ -142,17 +143,22 @@ function sk_enqueue_list_admin_assets( $hook ) {
 		return;
 	}
 
-	// JS picker лише на редагуванні терміна.
-	if ( 'term.php' !== $hook ) {
-		return;
-	}
-
 	$term_id = isset( $_GET['tag_ID'] ) ? absint( $_GET['tag_ID'] ) : 0;
+	$orderby = isset( $_GET['orderby'] ) ? sanitize_key( wp_unslash( $_GET['orderby'] ) ) : 'name';
+	$order   = isset( $_GET['order'] ) ? strtolower( sanitize_key( wp_unslash( $_GET['order'] ) ) ) : 'asc';
+	$per_page = isset( $_GET['sk_per_page'] ) ? absint( $_GET['sk_per_page'] ) : 10;
 
 	wp_localize_script( 'sk-admin', 'skListData', [
 		'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 		'nonce'   => wp_create_nonce( 'sk_list_subscribers' ),
 		'termId'  => $term_id,
+		'addUrl'  => admin_url( 'admin.php?page=skyrora-mailing-add-list' ),
+		'listUrl' => admin_url( 'edit-tags.php?taxonomy=list&post_type=subscriber' ),
+		'appearance' => [
+			'orderby' => in_array( $orderby, [ 'name', 'count', 'term_id' ], true ) ? $orderby : 'name',
+			'order'   => in_array( $order, [ 'asc', 'desc' ], true ) ? $order : 'asc',
+			'perPage' => in_array( $per_page, [ 10, 20, 50, 100 ], true ) ? $per_page : 10,
+		],
 	] );
 }
 

@@ -21,6 +21,911 @@ body.taxonomy-list .term-parent-wrap {
 	display: none !important;
 }
 
+body.taxonomy-list .sk-list-edit-back {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	margin: 0 8px 0 -7px;
+	border-radius: 4px;
+	color: #303641;
+	vertical-align: middle;
+	text-decoration: none;
+	transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+body.taxonomy-list .sk-list-edit-back:hover,
+body.taxonomy-list .sk-list-edit-back:focus {
+	background: #e8edff;
+	color: #3857e8;
+	box-shadow: none;
+	outline: none;
+}
+
+body.taxonomy-list .sk-list-edit-back .dashicons {
+	width: 22px;
+	height: 22px;
+	font-size: 22px;
+	line-height: 22px;
+}
+
+/* Lists overview: full-width table with the create form behind a header button. */
+body.taxonomy-list.sk-list-overview #wpcontent {
+	background: var(--sk-canvas);
+}
+
+body.taxonomy-list.sk-list-overview #wpbody-content {
+	padding-bottom: 40px;
+}
+
+body.taxonomy-list.sk-list-overview .wrap {
+	margin-top: 16px;
+}
+
+body.taxonomy-list.sk-list-overview #col-container {
+	margin-right: 0;
+}
+
+body.taxonomy-list.sk-list-overview #col-right {
+	float: none;
+	width: 100%;
+}
+
+body.taxonomy-list.sk-list-overview #col-right .col-wrap {
+	position: relative;
+	box-sizing: border-box;
+	padding: 18px;
+	border: 1px solid var(--sk-line);
+	border-radius: 10px;
+	background: #fff;
+	box-shadow: 0 12px 24px rgba(15, 23, 42, 0.05);
+}
+
+body.taxonomy-list.sk-list-overview #col-left {
+	display: none;
+	float: none;
+	width: 100%;
+	max-width: 560px;
+	margin: 0 0 28px;
+}
+
+body.taxonomy-list.sk-list-overview #col-left .col-wrap {
+	box-sizing: border-box;
+	padding: 24px;
+	border: 1px solid var(--sk-line);
+	border-radius: 10px;
+	background: #fff;
+	box-shadow: var(--sk-shadow);
+}
+
+.sk-list-title-row {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	margin: 0 0 28px;
+}
+
+.sk-list-title-row > h1 {
+	margin: 0;
+	padding: 0;
+	color: var(--sk-ink);
+	font-size: 24px;
+	font-weight: 650;
+	letter-spacing: -0.02em;
+}
+
+.sk-list-title-row .sk-list-add-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 7px 12px;
+	border: 1px solid #3857e8;
+	border-radius: 6px;
+	background: #3857e8;
+	color: #fff;
+	font-weight: 600;
+	line-height: 1.2;
+	text-decoration: none;
+}
+
+.sk-list-title-row .sk-list-add-toggle::before {
+	content: "+";
+	font-size: 18px;
+	line-height: 1;
+}
+
+.sk-list-title-row .sk-list-add-toggle:hover,
+.sk-list-title-row .sk-list-add-toggle:focus,
+.sk-list-title-row .sk-list-add-toggle:active {
+	top: auto;
+	border-radius: 6px;
+	border-color: #2946c7;
+	background: #2946c7;
+	color: #fff;
+	text-decoration: none;
+	box-shadow: none;
+}
+
+.sk-list-title-row .sk-list-add-toggle:focus-visible {
+	outline: 2px solid #2946c7;
+	outline-offset: 2px;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-status-tabs {
+	display: flex;
+	align-items: center;
+	gap: 28px;
+	float: none;
+	margin: -18px -18px 18px;
+	padding: 16px 18px 9px;
+	border-bottom: 1px solid var(--sk-line);
+	font-size: 0;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-status-tabs li {
+	margin: 0;
+	font-size: 0;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-status-tabs a {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 7px 0 10px;
+	border-bottom: 2px solid transparent;
+	color: #303846;
+	font-size: 13px;
+	font-weight: 500;
+	line-height: 1.4;
+	text-decoration: none;
+	transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-status-tabs a:hover,
+body.taxonomy-list.sk-list-overview .sk-list-status-tabs a:focus,
+body.taxonomy-list.sk-list-overview .sk-list-status-tabs a.current {
+	color: #3857e8;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-status-tabs a.current {
+	border-bottom-color: #3857e8;
+	font-weight: 650;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-status-tabs .count {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 18px;
+	height: 18px;
+	box-sizing: border-box;
+	padding: 0 5px;
+	border-radius: 9px;
+	background: #e8ebf2;
+	color: #454b57;
+	font-size: 10px;
+	font-weight: 500;
+	line-height: 18px;
+}
+
+body.taxonomy-list.sk-list-overview #col-right .search-form {
+	position: absolute;
+	z-index: 2;
+	top: 62px;
+	right: 18px;
+	margin: 0;
+}
+
+body.taxonomy-list.sk-list-overview #col-right .search-box {
+	margin: 0;
+}
+
+body.taxonomy-list.sk-list-overview #posts-filter .tablenav.top {
+	clear: none;
+	min-height: 34px;
+	height: auto;
+	margin: 0;
+	padding: 0 340px 14px 0;
+}
+
+body.taxonomy-list.sk-list-overview #posts-filter .wp-list-table {
+	border-color: var(--sk-line);
+	border-radius: 7px;
+	box-shadow: none;
+	overflow: visible;
+}
+
+body.taxonomy-list.sk-list-overview #posts-filter .wp-list-table thead th,
+body.taxonomy-list.sk-list-overview #posts-filter .wp-list-table thead td,
+body.taxonomy-list.sk-list-overview #posts-filter .wp-list-table tfoot th,
+body.taxonomy-list.sk-list-overview #posts-filter .wp-list-table tfoot td {
+	padding-top: 11px;
+	padding-bottom: 11px;
+	border-color: #e9ecf2;
+	background: #f8f9fc;
+	color: #4b5563;
+	font-weight: 600;
+}
+
+body.taxonomy-list.sk-list-overview #posts-filter .wp-list-table tbody tr {
+	transition: background-color 0.15s ease;
+}
+
+body.taxonomy-list.sk-list-overview #posts-filter .wp-list-table tbody tr:hover {
+	background: #f7f9ff;
+}
+
+body.taxonomy-list.sk-list-overview #posts-filter .wp-list-table tbody td,
+body.taxonomy-list.sk-list-overview #posts-filter .wp-list-table tbody th {
+	padding-top: 13px;
+	padding-bottom: 13px;
+	border-bottom: 1px solid #eef0f4;
+	vertical-align: middle;
+}
+
+body.taxonomy-list.sk-list-overview #posts-filter .column-name .row-title {
+	color: #2946c7;
+	font-weight: 600;
+}
+
+body.taxonomy-list.sk-list-overview #col-right input[type="search"],
+body.taxonomy-list.sk-list-overview #col-right select {
+	min-height: 34px;
+	border-color: #d7dce5;
+	border-radius: 6px;
+	box-shadow: none;
+}
+
+body.taxonomy-list.sk-list-overview #col-right input[type="search"]:focus,
+body.taxonomy-list.sk-list-overview #col-right select:focus {
+	border-color: #3857e8;
+	box-shadow: 0 0 0 1px #3857e8;
+}
+
+body.taxonomy-list.sk-list-overview #col-right .button {
+	min-height: 34px;
+	border-radius: 6px;
+	border-color: #aeb8e8;
+	background: #fff;
+	color: #2946c7;
+}
+
+body.taxonomy-list.sk-list-overview #col-right .button:hover,
+body.taxonomy-list.sk-list-overview #col-right .button:focus {
+	border-color: #3857e8;
+	color: #3857e8;
+}
+
+/* MailPoet-style list toolbar and appearance panel. */
+body.taxonomy-list.sk-list-overview #col-right .col-wrap {
+	padding: 0;
+	border-radius: 3px;
+	box-shadow: none;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-status-tabs {
+	margin: 0;
+	padding: 8px 10px 0;
+	background: #fff;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-toolbar {
+	position: relative;
+	z-index: 12;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	min-height: 50px;
+	padding: 0 9px;
+	border-bottom: 1px solid #e2e4e8;
+	background: #fff;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-toolbar__search {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+
+body.taxonomy-list.sk-list-overview #col-right .search-form {
+	position: static;
+	z-index: auto;
+	margin: 0;
+}
+
+body.taxonomy-list.sk-list-overview #col-right .search-box {
+	position: relative;
+	float: none;
+	margin: 0;
+}
+
+body.taxonomy-list.sk-list-overview #col-right .search-box::before {
+	content: "\f179";
+	position: absolute;
+	z-index: 1;
+	top: 7px;
+	left: 7px;
+	color: #646970;
+	font: normal 16px/1 dashicons;
+	pointer-events: none;
+}
+
+body.taxonomy-list.sk-list-overview #col-right .search-box input[type="search"] {
+	width: 116px;
+	min-height: 30px;
+	height: 30px;
+	padding: 0 8px 0 27px;
+	border-color: #aeb3bb;
+	border-radius: 2px;
+	font-size: 12px;
+	line-height: 28px;
+}
+
+body.taxonomy-list.sk-list-overview #col-right .search-box input[type="submit"] {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	border: 0;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-toolbar__filter,
+body.taxonomy-list.sk-list-overview .sk-list-appearance-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 30px;
+	height: 30px;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	border-radius: 3px;
+	background: transparent;
+	color: #53606d;
+	cursor: pointer;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-toolbar__filter:hover,
+body.taxonomy-list.sk-list-overview .sk-list-toolbar__filter:focus,
+body.taxonomy-list.sk-list-overview .sk-list-appearance-toggle:hover,
+body.taxonomy-list.sk-list-overview .sk-list-appearance-toggle:focus,
+body.taxonomy-list.sk-list-overview .sk-list-appearance-toggle[aria-expanded="true"] {
+	background: #f0f2f5;
+	color: #3857e8;
+	box-shadow: none;
+	outline: none;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-toolbar__filter .dashicons,
+body.taxonomy-list.sk-list-overview .sk-list-appearance-toggle .dashicons {
+	width: 17px;
+	height: 17px;
+	font-size: 17px;
+	line-height: 17px;
+}
+
+body.taxonomy-list.sk-list-overview #posts-filter .tablenav.top {
+	display: none;
+}
+
+body.taxonomy-list.sk-list-overview #posts-filter {
+	margin: 0;
+	overflow-x: auto;
+}
+
+body.taxonomy-list.sk-list-overview #posts-filter .wp-list-table {
+	margin: 0;
+	border: 0;
+	border-radius: 0;
+	table-layout: fixed;
+}
+
+body.taxonomy-list.sk-list-overview #posts-filter .wp-list-table tfoot {
+	display: none;
+}
+
+body.taxonomy-list.sk-list-overview #posts-filter .wp-list-table thead th,
+body.taxonomy-list.sk-list-overview #posts-filter .wp-list-table thead td,
+body.taxonomy-list.sk-list-overview #posts-filter .wp-list-table tfoot th,
+body.taxonomy-list.sk-list-overview #posts-filter .wp-list-table tfoot td {
+	padding-top: 9px;
+	padding-bottom: 9px;
+	background: #fff;
+	color: #242a31;
+	font-size: 10px;
+	font-weight: 700;
+	letter-spacing: 0.015em;
+	text-transform: uppercase;
+}
+
+body.taxonomy-list.sk-list-overview #posts-filter .wp-list-table tbody td,
+body.taxonomy-list.sk-list-overview #posts-filter .wp-list-table tbody th {
+	height: 50px;
+	box-sizing: border-box;
+	padding-top: 8px;
+	padding-bottom: 8px;
+	color: #303641;
+	font-size: 12px;
+}
+
+body.taxonomy-list.sk-list-overview #posts-filter[data-density="balanced"] .wp-list-table tbody td,
+body.taxonomy-list.sk-list-overview #posts-filter[data-density="balanced"] .wp-list-table tbody th {
+	height: 42px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+body.taxonomy-list.sk-list-overview #posts-filter[data-density="compact"] .wp-list-table tbody td,
+body.taxonomy-list.sk-list-overview #posts-filter[data-density="compact"] .wp-list-table tbody th {
+	height: 34px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+
+body.taxonomy-list.sk-list-overview #posts-filter .column-cb {
+	width: 34px;
+}
+
+body.taxonomy-list.sk-list-overview #posts-filter .column-name {
+	width: 20%;
+}
+
+body.taxonomy-list.sk-list-overview #posts-filter .column-description {
+	display: none;
+}
+
+body.taxonomy-list.sk-list-overview #posts-filter .column-sk_list_score {
+	width: 10%;
+}
+
+body.taxonomy-list.sk-list-overview #posts-filter .column-sk_subscribed,
+body.taxonomy-list.sk-list-overview #posts-filter .column-sk_unconfirmed,
+body.taxonomy-list.sk-list-overview #posts-filter .column-sk_unsubscribed,
+body.taxonomy-list.sk-list-overview #posts-filter .column-sk_inactive,
+body.taxonomy-list.sk-list-overview #posts-filter .column-sk_bounced {
+	width: 9%;
+}
+
+body.taxonomy-list.sk-list-overview #posts-filter .column-sk_created {
+	width: 13%;
+}
+
+body.taxonomy-list.sk-list-overview #posts-filter .column-name .row-title {
+	color: #303641;
+	font-size: 12px;
+	font-weight: 700;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-private {
+	color: #8a9099;
+	font-weight: 400;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-description-inline {
+	max-width: 240px;
+	margin-top: 3px;
+	overflow: hidden;
+	color: #7a818b;
+	font-size: 11px;
+	font-weight: 400;
+	line-height: 1.25;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-score {
+	display: inline-flex;
+	align-items: center;
+	padding: 1px 4px;
+	border-radius: 2px;
+	color: #fff;
+	font-size: 9px;
+	line-height: 1.4;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-score--unknown {
+	background: #9da1a6;
+}
+
+body.taxonomy-list.sk-list-overview .column-sk_created time {
+	color: #5e6670;
+	font-size: 10px;
+	line-height: 1.2;
+}
+
+body.taxonomy-list.sk-list-overview .column-sk_created time span,
+body.taxonomy-list.sk-list-overview .sk-list-created-empty {
+	color: #8a9099;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-column-hidden {
+	display: none !important;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance {
+	position: absolute;
+	z-index: 100;
+	top: 46px;
+	right: 4px;
+	width: 320px;
+	box-sizing: border-box;
+	overflow: hidden;
+	border: 1px solid #e1e5eb;
+	border-radius: 12px;
+	background: #fff;
+	box-shadow:
+		0 18px 48px rgba(31, 35, 41, 0.16),
+		0 3px 10px rgba(31, 35, 41, 0.08);
+	color: #303641;
+	text-align: left;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance::before {
+	content: "";
+	position: absolute;
+	top: -6px;
+	right: 15px;
+	width: 10px;
+	height: 10px;
+	border: 1px solid #e1e5eb;
+	border-right: 0;
+	border-bottom: 0;
+	background: #fff;
+	transform: rotate(45deg);
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance[hidden] {
+	display: none;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance__title {
+	padding: 18px 20px 15px;
+	border-bottom: 1px solid #edf0f3;
+	font-size: 16px;
+	font-weight: 700;
+	line-height: 1.3;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance__section {
+	padding: 15px 20px 0;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance__section + .sk-list-appearance__section {
+	padding-top: 16px;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance__section:last-child {
+	padding-bottom: 20px;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance__label {
+	margin-bottom: 8px;
+	color: #69717d;
+	font-size: 10px;
+	font-weight: 700;
+	letter-spacing: 0.075em;
+	line-height: 1.4;
+	text-transform: uppercase;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance__sort {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 80px;
+	gap: 8px;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance select {
+	width: 100%;
+	min-height: 38px;
+	height: 38px;
+	margin: 0;
+	padding: 0 34px 0 12px;
+	border: 1px solid #d8dde5;
+	border-radius: 7px;
+	background-color: #fff;
+	color: #303641;
+	font-size: 12px;
+	line-height: 36px;
+	box-shadow: none;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance select:hover {
+	border-color: #aeb7c4;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance select:focus {
+	border-color: #3857e8;
+	box-shadow: 0 0 0 2px rgba(56, 87, 232, 0.14);
+	outline: none;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance__order,
+body.taxonomy-list.sk-list-overview .sk-list-appearance__segments {
+	display: flex;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance button {
+	min-height: 36px;
+	margin: 0;
+	padding: 0 10px;
+	border: 1px solid #d8dde5;
+	border-radius: 0;
+	background: #fff;
+	color: #59616d;
+	font-size: 11px;
+	font-weight: 500;
+	line-height: 1;
+	cursor: pointer;
+	transition:
+		background-color 120ms ease,
+		border-color 120ms ease,
+		color 120ms ease;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance button + button {
+	border-left: 0;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance button:first-child {
+	border-radius: 7px 0 0 7px;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance button:last-child {
+	border-radius: 0 7px 7px 0;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance button:hover,
+body.taxonomy-list.sk-list-overview .sk-list-appearance button:focus {
+	position: relative;
+	z-index: 1;
+	border-color: #aeb7c4;
+	background: #f5f7fa;
+	color: #303641;
+	box-shadow: none;
+	outline: none;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance button:focus-visible {
+	box-shadow: inset 0 0 0 2px rgba(56, 87, 232, 0.28);
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance button.is-active {
+	position: relative;
+	z-index: 1;
+	border-color: #3857e8;
+	background: #eef1ff;
+	color: #2846d4;
+	font-weight: 600;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance__order button {
+	flex: 1;
+	min-height: 38px;
+	font-size: 17px;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance__segments button {
+	flex: 1;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance__density button {
+	padding-right: 4px;
+	padding-left: 4px;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance__properties {
+	overflow: hidden;
+	border: 1px solid #e1e5eb;
+	border-radius: 8px;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance__properties label {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	min-height: 38px;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 8px 11px;
+	border-bottom: 1px solid #edf0f3;
+	font-size: 11px;
+	line-height: 1.3;
+	cursor: pointer;
+	transition: background-color 120ms ease;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance__properties label:last-child {
+	border-bottom: 0;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance__properties label:hover {
+	background: #f7f8fa;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance__properties input {
+	width: 16px;
+	height: 16px;
+	margin: 0;
+	border-color: #b8c0cb;
+	border-radius: 4px;
+	accent-color: #3857e8;
+	box-shadow: none;
+}
+
+body.taxonomy-list.sk-list-overview .sk-list-appearance__properties input:focus {
+	border-color: #3857e8;
+	box-shadow: 0 0 0 2px rgba(56, 87, 232, 0.16);
+	outline: none;
+}
+
+body.taxonomy-list.sk-list-overview #posts-filter .tablenav.bottom {
+	min-height: 38px;
+	height: auto;
+	margin: 0;
+	padding: 8px;
+	border-top: 1px solid #e2e4e8;
+}
+
+/* Separate "Add new list" screen. */
+.sk-add-list-page {
+	box-sizing: border-box;
+	max-width: 1120px;
+	margin: 0 auto;
+	padding: 28px 24px 48px;
+}
+
+.sk-add-list-page__heading {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 28px;
+}
+
+.sk-add-list-page__heading h1 {
+	margin: 0;
+	padding: 0;
+	color: #20242c;
+	font-size: 18px;
+	font-weight: 500;
+	line-height: 1.25;
+}
+
+.sk-add-list-page__back {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	margin-left: -7px;
+	border-radius: 4px;
+	color: #303641;
+	text-decoration: none;
+	transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.sk-add-list-page__back:hover,
+.sk-add-list-page__back:focus {
+	background: #e8edff;
+	color: #3857e8;
+	box-shadow: none;
+	outline: none;
+	text-decoration: none;
+}
+
+.sk-add-list-page__back .dashicons {
+	display: block;
+	width: 22px;
+	height: 22px;
+	font-size: 22px;
+	line-height: 22px;
+}
+
+.sk-add-list-page .notice {
+	margin: 0 0 20px;
+}
+
+.sk-add-list-form__grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 28px 16px;
+}
+
+.sk-add-list-form__field {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+.sk-add-list-form__field > label:first-child {
+	margin-bottom: 3px;
+	color: #20242c;
+	font-size: 13px;
+	font-weight: 600;
+}
+
+.sk-add-list-form__field .description {
+	min-height: 34px;
+	margin: 0 0 9px;
+	color: #4f5663;
+	font-size: 12px;
+	font-style: normal;
+	line-height: 1.35;
+}
+
+.sk-add-list-form__field input[type="text"],
+.sk-add-list-form__field textarea,
+.sk-add-list-form__field select {
+	box-sizing: border-box;
+	width: 100%;
+	max-width: none;
+	border-color: #c9cdd5;
+	border-radius: 4px;
+	box-shadow: none;
+}
+
+.sk-add-list-form__field input[type="text"],
+.sk-add-list-form__field select {
+	min-height: 36px;
+}
+
+.sk-add-list-form__field textarea {
+	min-height: 158px;
+	resize: vertical;
+}
+
+.sk-add-list-form__field input:focus,
+.sk-add-list-form__field textarea:focus,
+.sk-add-list-form__field select:focus {
+	border-color: #3857e8;
+	box-shadow: 0 0 0 1px #3857e8;
+}
+
+.sk-add-list-form__field .sk-add-list-form__checkbox {
+	display: inline-flex;
+	align-items: flex-start;
+	gap: 7px;
+	margin-top: 8px;
+	color: #303641;
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 1.4;
+}
+
+.sk-add-list-form__checkbox input {
+	margin: 0;
+}
+
+.sk-add-list-form__create {
+	min-height: auto;
+	padding: 0 8px;
+	font-size: 11px;
+	line-height: 24px;
+}
+
+.sk-add-list-form__actions {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-top: 24px;
+}
+
+.sk-add-list-form__actions .submit {
+	margin: 0;
+	padding: 0;
+}
+
+.sk-add-list-form__actions .button-primary {
+	min-height: 36px;
+	padding: 0 18px;
+	border-color: #3857e8;
+	border-radius: 4px;
+	background: #3857e8;
+}
+
 .sk-list-subscribers {
 	max-width: 560px;
 }
@@ -211,7 +1116,60 @@ body.taxonomy-list .term-parent-wrap {
 }
 
 @media (max-width: 782px) {
+	.sk-list-title-row {
+		align-items: flex-start;
+		flex-direction: column;
+		gap: 12px;
+	}
+
+	body.taxonomy-list.sk-list-overview #col-right .col-wrap {
+		padding: 0;
+	}
+
+	body.taxonomy-list.sk-list-overview #col-right .search-form {
+		position: static;
+		margin: 0;
+	}
+
+	body.taxonomy-list.sk-list-overview .sk-list-status-tabs {
+		margin: 0;
+		padding-right: 12px;
+		padding-left: 12px;
+	}
+
+	body.taxonomy-list.sk-list-overview #col-right .search-box {
+		float: none;
+		text-align: left;
+	}
+
+	body.taxonomy-list.sk-list-overview #posts-filter .tablenav.top {
+		padding-right: 0;
+	}
+
+	body.taxonomy-list.sk-list-overview .sk-list-appearance {
+		position: fixed;
+		top: 110px;
+		right: 12px;
+		left: 12px;
+		width: auto;
+		max-height: calc(100vh - 130px);
+		overflow-y: auto;
+	}
+
+	body.taxonomy-list.sk-list-overview #posts-filter .wp-list-table {
+		min-width: 920px;
+	}
+
 	.sk-list-subscribers {
 		max-width: 100%;
+	}
+
+	.sk-add-list-page {
+		padding-right: 12px;
+		padding-left: 12px;
+	}
+
+	.sk-add-list-form__grid {
+		grid-template-columns: 1fr;
 	}
 }

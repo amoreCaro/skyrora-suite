@@ -39,7 +39,7 @@ if ( is_admin() ) {
 
 add_filter( 'the_content', function ( $content ) {
     if ( is_singular( 'mailing' ) ) { ?>
-        <div id="wrapper" style="max-width: 100%; margin: 0px auto; background-color: rgb(24, 27, 36); padding: 0px 20px;">
+        <div id="wrapper" style="max-width: 100%; margin: 0px auto; background-color: rgb(24, 27, 36); padding: 10px 20px;">
             <div class="container" style="max-width: 640px; width: 100%; background-color: #fff;  margin: 0 auto; min-height: 50vh; box-sizing: border-box; padding: 0px;">
                 <?php echo $content; ?>
             </div>
