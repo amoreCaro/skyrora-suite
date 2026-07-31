@@ -42,7 +42,7 @@ function sk_get_mailing_settings() {
 }
 
 /**
- * Register the settings form.
+ * Register the settings option (sanitize on update).
  */
 function sk_register_mailing_settings() {
 	register_setting(
@@ -56,6 +56,33 @@ function sk_register_mailing_settings() {
 	);
 }
 add_action( 'admin_init', 'sk_register_mailing_settings' );
+
+/**
+ * Persist settings from the Settings admin form.
+ */
+function sk_handle_save_mailing_settings() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( esc_html__( 'You do not have permission to perform this action.', 'skyrora-mailing' ) );
+	}
+
+	check_admin_referer( 'sk_save_mailing_settings' );
+
+	$input = isset( $_POST[ SK_MAILING_SETTINGS_OPTION ] )
+		? wp_unslash( $_POST[ SK_MAILING_SETTINGS_OPTION ] )
+		: [];
+
+	update_option( SK_MAILING_SETTINGS_OPTION, is_array( $input ) ? $input : [] );
+
+	wp_safe_redirect(
+		add_query_arg(
+			'settings-updated',
+			'true',
+			admin_url( 'admin.php?page=skyrora-mailing-settings' )
+		)
+	);
+	exit;
+}
+add_action( 'admin_post_sk_save_mailing_settings', 'sk_handle_save_mailing_settings' );
 
 /**
  * Validate settings submitted by an administrator.
@@ -309,14 +336,20 @@ function sk_render_settings_page() {
 	<div class="wrap sk-settings-page">
 		<h1><?php esc_html_e( 'Settings', 'skyrora-mailing' ); ?></h1>
 		<?php settings_errors(); ?>
+		<?php if ( isset( $_GET['settings-updated'] ) ) : ?>
+			<div class="notice notice-success is-dismissible">
+				<p><?php esc_html_e( 'Settings saved.', 'skyrora-mailing' ); ?></p>
+			</div>
+		<?php endif; ?>
 		<?php if ( is_array( $smtp_test ) && isset( $smtp_test['message'] ) ) : ?>
 			<div class="notice <?php echo ! empty( $smtp_test['success'] ) ? 'notice-success' : 'notice-error'; ?> is-dismissible">
 				<p><?php echo esc_html( $smtp_test['message'] ); ?></p>
 			</div>
 		<?php endif; ?>
 
-		<form method="post" action="options.php">
-			<?php settings_fields( 'sk_mailing_settings_group' ); ?>
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+			<input type="hidden" name="action" value="sk_save_mailing_settings">
+			<?php wp_nonce_field( 'sk_save_mailing_settings' ); ?>
 
 			<section class="sk-settings-card">
 				<h2><?php esc_html_e( 'SMTP settings', 'skyrora-mailing' ); ?></h2>
@@ -371,7 +404,8 @@ function sk_render_settings_page() {
 						<td><input class="regular-text" type="text" id="sk_from_name" name="<?php echo esc_attr( SK_MAILING_SETTINGS_OPTION ); ?>[from_name]" value="<?php echo esc_attr( $settings['from_name'] ); ?>"></td>
 					</tr>
 				</table>
-				<p>
+				<p class="sk-settings-actions">
+					<?php submit_button( __( 'Save settings', 'skyrora-mailing' ), 'primary', 'submit', false ); ?>
 					<a class="button" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=sk_test_smtp' ), 'sk_test_smtp' ) ); ?>">
 						<?php esc_html_e( 'Send SMTP test', 'skyrora-mailing' ); ?>
 					</a>
