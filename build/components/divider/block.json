@@ -2,7 +2,7 @@
   "apiVersion": 3,
   "title": "Divider",
   "name": "app/divider",
-  "category": "design",
+  "category": "skyrora",
   "icon": "minus",
   "keywords": [
     "divider",

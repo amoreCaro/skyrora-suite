@@ -2,7 +2,7 @@
   "apiVersion": 3,
   "name": "app/paragraph",
   "title": "Paragraph",
-  "category": "advanced",
+  "category": "skyrora",
   "icon": "editor-paragraph",
   "description": "Paragraph block with customizable styles.",
   "supports": {

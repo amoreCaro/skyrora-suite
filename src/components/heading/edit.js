@@ -63,7 +63,7 @@ const HeadingEdit = ({ attributes, setAttributes }) => {
 			paddingBottom: `${paddingBottom}px`,
 			paddingLeft: `${paddingLeft}px`,
 			paddingRight: `${paddingRight}px`,
-			margin: '0px',
+			margin: 0,
 			boxSizing: 'border-box',
 			width: '100%',
 			maxWidth: '100%',
@@ -210,6 +210,9 @@ const HeadingEdit = ({ attributes, setAttributes }) => {
 
 				{/* Inline style override for TabPanel tab buttons */}
 				<style>{`
+					.custom-heading {
+						margin: 0 !important;
+					}
 					.my-tab-panel .components-tab-panel__tabs {
 						display: flex !important;
 						width: 100% !important;

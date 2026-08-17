@@ -113,7 +113,7 @@ module.exports = window["wp"]["i18n"];
   \***************************************************/
 (module) {
 
-module.exports = /*#__PURE__*/JSON.parse('{"apiVersion":3,"title":"Padding Section","name":"app/padding-section","category":"advanced","icon":"star-filled","keywords":["image","media"],"editorScript":"file:./index.js","editorStyle":"file:./editor.css","attributes":{"paddingLeft":{"type":"number","default":"3rem"},"paddingRigth":{"type":"number","default":"3rem"}},"supports":{"html":false,"align":["left","center","right"],"customClassName":true}}');
+module.exports = /*#__PURE__*/JSON.parse('{"apiVersion":3,"title":"Padding Section","name":"app/padding-section","category":"skyrora","icon":"star-filled","keywords":["image","media"],"editorScript":"file:./index.js","editorStyle":"file:./editor.css","attributes":{"paddingLeft":{"type":"number","default":"3rem"},"paddingRigth":{"type":"number","default":"3rem"}},"supports":{"html":false,"align":["left","center","right"],"customClassName":true}}');
 
 /***/ }
 

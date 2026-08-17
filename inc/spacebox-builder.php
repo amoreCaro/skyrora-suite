@@ -7,9 +7,14 @@
 // Named uniquely to avoid conflict with the theme's theme_allowed_blocks().
 if ( ! function_exists( 'skyrora_suite_allowed_blocks' ) ) {
 
-add_filter( 'allowed_block_types_all', 'skyrora_suite_allowed_blocks', 10, 2 );
+// Priority 30: runs after the theme's skyrora_theme_allowed_blocks (20).
+add_filter( 'allowed_block_types_all', 'skyrora_suite_allowed_blocks', 30, 2 );
 
 function skyrora_suite_allowed_blocks( $allowed_blocks, $block_editor_context ) {
+    if ( ! isset( $block_editor_context->post ) || $block_editor_context->post->post_type !== 'mailing' ) {
+        return $allowed_blocks;
+    }
+
     return array(
         'app/spacer',
         'core/columns',
@@ -25,6 +30,54 @@ function skyrora_suite_allowed_blocks( $allowed_blocks, $block_editor_context ) 
         'app/footer',
         'app/padding-section',
     );
+}
+
+/**
+ * Keep only the Skyrora category in the mailing block inserter.
+ */
+add_filter( 'block_categories_all', 'skyrora_suite_block_categories', 100, 2 );
+
+function skyrora_suite_block_categories( $categories, $editor_context ) {
+    if ( ! isset( $editor_context->post ) || $editor_context->post->post_type !== 'mailing' ) {
+        return $categories;
+    }
+
+    return array(
+        array(
+            'slug'  => 'skyrora',
+            'title' => 'Skyrora',
+            'icon'  => null,
+        ),
+    );
+}
+
+/**
+ * Force suite blocks into the Skyrora category (covers built JS metadata too).
+ */
+add_filter( 'block_type_metadata', 'skyrora_suite_block_metadata_category' );
+
+function skyrora_suite_block_metadata_category( $metadata ) {
+    if ( ! empty( $metadata['name'] ) && strpos( $metadata['name'], 'app/' ) === 0 ) {
+        $metadata['category'] = 'skyrora';
+    }
+
+    return $metadata;
+}
+
+/**
+ * Move core blocks used in mailing into Skyrora.
+ */
+add_action( 'init', 'skyrora_suite_reassign_core_block_categories', 20 );
+
+function skyrora_suite_reassign_core_block_categories() {
+    $registry = WP_Block_Type_Registry::get_instance();
+
+    foreach ( array( 'core/paragraph', 'core/columns' ) as $name ) {
+        $block = $registry->get_registered( $name );
+        if ( $block ) {
+            $block->category = 'skyrora';
+        }
+    }
 }
 
 function register_custom_blocks() {
@@ -62,17 +115,20 @@ add_filter('upload_mimes', 'allow_svg_uploads');
 
 function moneyline_enqueue_block_editor_assets() {
 
-    wp_enqueue_style(
-        'theme-global',
-        plugin_dir_url( __FILE__ ) . '../src/base/css/global/admin.css',
-        array(),
-        filemtime( plugin_dir_path( __FILE__ ) . '../src/base/css/global/admin.css' ),
-        'all'
-    );
-
     $data = get_current_screen();
 
-    if ($data->post_type === 'page') {
+    // Email-canvas styles (max-width, dark background) only for mailing templates.
+    if ( $data && $data->post_type === 'mailing' ) {
+        wp_enqueue_style(
+            'theme-global',
+            plugin_dir_url( __FILE__ ) . '../src/base/css/global/admin.css',
+            array(),
+            filemtime( plugin_dir_path( __FILE__ ) . '../src/base/css/global/admin.css' ),
+            'all'
+        );
+    }
+
+    if ( $data && $data->post_type === 'page' ) {
 
         $mode = get_option('my_theme_dark_mode', 'light');
 

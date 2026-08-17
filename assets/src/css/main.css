@@ -5,6 +5,10 @@
 @import './components/settings-admin.css';
 @import './components/logs-admin.css';
 
+body.sk-plugin-page #wpwrap {
+    overflow: hidden;
+}
+
 body.sk-plugin-page {
     opacity: 0;
     transition: opacity 300ms ease;

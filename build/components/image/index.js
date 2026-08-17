@@ -334,7 +334,7 @@ module.exports = window["wp"]["i18n"];
   \*****************************************/
 (module) {
 
-module.exports = /*#__PURE__*/JSON.parse('{"apiVersion":3,"name":"app/image","title":"Image","category":"advanced","icon":"format-image","description":"A custom image block with padding control.","keywords":["image","media"],"editorScript":"file:./index.js","editorStyle":"file:./editor.css","attributes":{"imageUrl":{"type":"string","default":""},"imageId":{"type":"number","default":0},"paddingLeft":{"type":"number","default":48},"paddingRight":{"type":"number","default":48},"paddingTop":{"type":"number","default":24},"paddingBottom":{"type":"number","default":24}},"supports":{"html":false,"align":["left","center","right"],"customClassName":true}}');
+module.exports = /*#__PURE__*/JSON.parse('{"apiVersion":3,"name":"app/image","title":"Image","category":"skyrora","icon":"format-image","description":"A custom image block with padding control.","keywords":["image","media"],"editorScript":"file:./index.js","editorStyle":"file:./editor.css","attributes":{"imageUrl":{"type":"string","default":""},"imageId":{"type":"number","default":0},"paddingLeft":{"type":"number","default":48},"paddingRight":{"type":"number","default":48},"paddingTop":{"type":"number","default":24},"paddingBottom":{"type":"number","default":24}},"supports":{"html":false,"align":["left","center","right"],"customClassName":true}}');
 
 /***/ }
 

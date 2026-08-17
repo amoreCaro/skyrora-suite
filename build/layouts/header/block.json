@@ -2,7 +2,7 @@
   "apiVersion": 3,
   "title": "Header",
   "name": "app/header",
-  "category": "advanced",
+  "category": "skyrora",
   "icon": "table-row-before",
   "keywords": [
     "layouts"

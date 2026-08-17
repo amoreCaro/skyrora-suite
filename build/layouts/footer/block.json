@@ -2,7 +2,7 @@
   "apiVersion": 3,
   "name": "app/footer",
   "title": "Footer",
-  "category": "advanced",
+  "category": "skyrora",
   "icon": "table-row-after",
   "description": "Footer block with customizable columns and copyright.",
   "supports": {

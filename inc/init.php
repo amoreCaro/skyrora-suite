@@ -267,27 +267,6 @@ add_action('init', 'sk_taxonomies');
 
 
 
-add_filter( 'allowed_block_types_all', 'sk_allowed_blocks', 10, 2 );
-
-function sk_allowed_blocks( $allowed_blocks, $block_editor_context ) {
-
-    if (isset($block_editor_context->post) && $block_editor_context->post->post_type === 'mailing') {
-    
-        return array(
-            'skyrora/hero',
-            'skyrora/text',
-            'skyrora/image',
-            'skyrora/button',
-            'skyrora/header',
-            'skyrora/footer',
-            'skyrora/cards'
-        );
-    } else {
-        return $allowed_blocks;
-    }
-    
-}
-
 add_action('template_redirect', function () {
     if ( ! is_singular( 'mailing' ) ) {
         return;

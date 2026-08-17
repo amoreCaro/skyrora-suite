@@ -2,7 +2,7 @@
   "apiVersion": 3,
   "name": "app/heading",
   "title": "Heading",
-  "category": "advanced",
+  "category": "skyrora",
   "icon": "heading",
   "description": "Heading block with customizable styles.",
   "supports": {

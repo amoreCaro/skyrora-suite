@@ -51,8 +51,7 @@ html :where(.editor-styles-wrapper) {
   width: 100%;
   max-width: 645px !important;
   min-width: 0;
-  margin-left: auto !important;
-  margin-right: auto !important;
+  margin: 0 auto !important;
   clip-path: none !important;
   transform: none !important;
 }

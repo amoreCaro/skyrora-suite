@@ -83,7 +83,7 @@ const HeadingEdit = ({
       paddingBottom: `${paddingBottom}px`,
       paddingLeft: `${paddingLeft}px`,
       paddingRight: `${paddingRight}px`,
-      margin: '0px',
+      margin: 0,
       boxSizing: 'border-box',
       width: '100%',
       maxWidth: '100%'
@@ -244,6 +244,9 @@ const HeadingEdit = ({
     }
     return null;
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("style", null, `
+					.custom-heading {
+						margin: 0 !important;
+					}
 					.my-tab-panel .components-tab-panel__tabs {
 						display: flex !important;
 						width: 100% !important;
@@ -328,6 +331,9 @@ const save = ({
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("style", {
     dangerouslySetInnerHTML: {
       __html: `
+      .wp-heading {
+        margin: 0 !important;
+      }
       @media (max-width: 768px) {
         .wp-heading {
           padding-left: 12px !important;
@@ -354,7 +360,7 @@ const save = ({
       paddingBottom: `${paddingBottom}px`,
       paddingLeft: `${paddingLeft}px`,
       paddingRight: `${paddingRight}px`,
-      margin: "0px",
+      margin: 0,
       boxSizing: "border-box",
       width: "100%",
       maxWidth: "100%"
@@ -433,7 +439,7 @@ module.exports = window["wp"]["i18n"];
   \*******************************************/
 (module) {
 
-module.exports = /*#__PURE__*/JSON.parse('{"apiVersion":3,"name":"app/heading","title":"Heading","category":"advanced","icon":"heading","description":"Heading block with customizable styles.","supports":{"html":false},"attributes":{"content":{"type":"string","default":"Enter your heading"},"level":{"type":"number","default":2},"textAlign":{"type":"string","default":"left"},"color":{"type":"string","default":"#1A1A1A"},"fontWeight":{"type":"string","default":"700"},"fontSize":{"type":"string","default":"1.625rem"},"lineHeight":{"type":"string","default":"1.2"},"fontFamily":{"type":"string","default":"Bai Jamjuree, sans-serif"},"textTransform":{"type":"string","default":"uppercase"},"paddingLeft":{"type":"number","default":48},"paddingRight":{"type":"number","default":48},"paddingTop":{"type":"number","default":0},"paddingBottom":{"type":"number","default":24}},"editorScript":"file:./index.js","editorStyle":"file:./editor.css","style":"file:./style.css"}');
+module.exports = /*#__PURE__*/JSON.parse('{"apiVersion":3,"name":"app/heading","title":"Heading","category":"skyrora","icon":"heading","description":"Heading block with customizable styles.","supports":{"html":false},"attributes":{"content":{"type":"string","default":"Enter your heading"},"level":{"type":"number","default":2},"textAlign":{"type":"string","default":"left"},"color":{"type":"string","default":"#1A1A1A"},"fontWeight":{"type":"string","default":"700"},"fontSize":{"type":"string","default":"1.625rem"},"lineHeight":{"type":"string","default":"1.2"},"fontFamily":{"type":"string","default":"Bai Jamjuree, sans-serif"},"textTransform":{"type":"string","default":"uppercase"},"paddingLeft":{"type":"number","default":48},"paddingRight":{"type":"number","default":48},"paddingTop":{"type":"number","default":0},"paddingBottom":{"type":"number","default":24}},"editorScript":"file:./index.js","editorStyle":"file:./editor.css","style":"file:./style.css"}');
 
 /***/ }
 

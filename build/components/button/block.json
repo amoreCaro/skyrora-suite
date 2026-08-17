@@ -2,7 +2,7 @@
   "apiVersion": 3,
   "name": "app/button",
   "title": "Button",
-  "category": "design",
+  "category": "skyrora",
   "icon": "button",
   "description": "A customizable button block with flexible styles.",
   "supports": {

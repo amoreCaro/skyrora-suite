@@ -315,7 +315,7 @@ module.exports = window["wp"]["i18n"];
   \******************************************/
 (module) {
 
-module.exports = /*#__PURE__*/JSON.parse('{"apiVersion":3,"name":"app/banner","title":"Banner","category":"advanced","icon":"format-image","description":"A custom banner block with banner and padding controls.","keywords":["banner","media"],"editorScript":"file:./index.js","editorStyle":"file:./editor.css","attributes":{"bannerUrl":{"type":"string","default":""},"bannerId":{"type":"number","default":0},"paddingLeft":{"type":"number","default":0},"paddingRight":{"type":"number","default":0},"paddingTop":{"type":"number","default":0},"paddingBottom":{"type":"number","default":0}},"supports":{"html":false,"align":["left","center","right"],"customClassName":true}}');
+module.exports = /*#__PURE__*/JSON.parse('{"apiVersion":3,"name":"app/banner","title":"Banner","category":"skyrora","icon":"format-image","description":"A custom banner block with banner and padding controls.","keywords":["banner","media"],"editorScript":"file:./index.js","editorStyle":"file:./editor.css","attributes":{"bannerUrl":{"type":"string","default":""},"bannerId":{"type":"number","default":0},"paddingLeft":{"type":"number","default":0},"paddingRight":{"type":"number","default":0},"paddingTop":{"type":"number","default":0},"paddingBottom":{"type":"number","default":0}},"supports":{"html":false,"align":["left","center","right"],"customClassName":true}}');
 
 /***/ }
 

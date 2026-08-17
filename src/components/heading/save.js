@@ -33,6 +33,9 @@ const save = ({ attributes }) => {
     <>
       <style dangerouslySetInnerHTML={{
         __html: `
+      .wp-heading {
+        margin: 0 !important;
+      }
       @media (max-width: 768px) {
         .wp-heading {
           padding-left: 12px !important;
@@ -59,7 +62,7 @@ const save = ({ attributes }) => {
             paddingBottom: `${paddingBottom}px`,
             paddingLeft: `${paddingLeft}px`,
             paddingRight: `${paddingRight}px`,
-            margin: "0px",
+            margin: 0,
             boxSizing: "border-box",
             width: "100%",
             maxWidth: "100%",

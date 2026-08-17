@@ -45,89 +45,98 @@ function sk_render_add_list_page() {
 	}
 
 	$error     = isset( $_GET['sk_list_error'] ) ? sanitize_key( wp_unslash( $_GET['sk_list_error'] ) ) : '';
-	$templates = get_posts( [
-		'post_type'      => 'mailing',
-		'post_status'    => [ 'publish', 'draft', 'pending', 'private', 'future' ],
-		'posts_per_page' => -1,
-		'orderby'        => 'title',
-		'order'          => 'ASC',
-	] );
-	$pages = get_pages( [
-		'sort_column' => 'post_title',
-		'sort_order'  => 'ASC',
-	] );
+	$lists_url = admin_url( 'edit-tags.php?taxonomy=list&post_type=subscriber' );
 	?>
 	<div class="wrap sk-add-list-page">
-		<div class="sk-add-list-page__heading">
-			<a class="sk-add-list-page__back" href="<?php echo esc_url( admin_url( 'edit-tags.php?taxonomy=list&post_type=subscriber' ) ); ?>" aria-label="<?php esc_attr_e( 'Back to lists', 'skyrora-mailing' ); ?>">
-				<span class="dashicons dashicons-arrow-left-alt2" aria-hidden="true"></span>
-			</a>
-			<h1><?php esc_html_e( 'Add new list', 'skyrora-mailing' ); ?></h1>
-		</div>
+		<header class="sk-add-list-page__header">
+			<div class="sk-add-list-page__heading">
+				<a class="sk-add-list-page__back" href="<?php echo esc_url( $lists_url ); ?>" aria-label="<?php esc_attr_e( 'Back to lists', 'skyrora-mailing' ); ?>">
+					<span class="dashicons dashicons-arrow-left-alt2" aria-hidden="true"></span>
+				</a>
+				<div class="sk-add-list-page__title-wrap">
+					<h1><?php esc_html_e( 'Add new list', 'skyrora-mailing' ); ?></h1>
+					<p class="sk-add-list-page__subtitle">
+						<?php esc_html_e( 'Create a new mailing list and add subscribers to it.', 'skyrora-mailing' ); ?>
+					</p>
+				</div>
+			</div>
+		</header>
 
 		<?php if ( 'missing_name' === $error ) : ?>
-			<div class="notice notice-error inline"><p><?php esc_html_e( 'Please enter a public list name.', 'skyrora-mailing' ); ?></p></div>
+			<div class="notice notice-error"><p><?php esc_html_e( 'Please enter a public list name.', 'skyrora-mailing' ); ?></p></div>
 		<?php elseif ( 'create_failed' === $error ) : ?>
-			<div class="notice notice-error inline"><p><?php esc_html_e( 'The list could not be created. Please try again.', 'skyrora-mailing' ); ?></p></div>
+			<div class="notice notice-error"><p><?php esc_html_e( 'The list could not be created. Please try again.', 'skyrora-mailing' ); ?></p></div>
 		<?php endif; ?>
 
-		<form class="sk-add-list-form" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post">
+		<form class="sk-add-list-form" id="sk-add-list-form" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post">
 			<input type="hidden" name="action" value="sk_create_list">
 			<?php wp_nonce_field( 'sk_create_list', 'sk_create_list_nonce' ); ?>
 
-			<div class="sk-add-list-form__grid">
-				<div class="sk-add-list-form__field">
-					<label for="sk_public_list_name"><?php esc_html_e( 'Public list name', 'skyrora-mailing' ); ?></label>
-					<p class="description"><?php esc_html_e( 'Subscribers may see this name when managing their subscriptions.', 'skyrora-mailing' ); ?></p>
-					<input type="text" id="sk_public_list_name" name="sk_public_list_name" required>
+			<div class="sk-add-list-layout">
+				<div class="sk-add-list-layout__main">
+					<section class="sk-add-list-card">
+						<label class="sk-add-list-card__label" for="sk_public_list_name">
+							<?php esc_html_e( 'List name', 'skyrora-mailing' ); ?>
+							<span class="sk-add-list-card__required" aria-hidden="true">*</span>
+						</label>
+						<input
+							type="text"
+							name="sk_public_list_name"
+							id="sk_public_list_name"
+							class="sk-add-list-form__name"
+							value=""
+							required
+							placeholder="<?php esc_attr_e( 'Enter list name...', 'skyrora-mailing' ); ?>"
+							autocomplete="off"
+						>
+						<p class="sk-add-list-card__help">
+							<?php esc_html_e( 'Choose a clear and descriptive name for your list.', 'skyrora-mailing' ); ?>
+						</p>
+					</section>
+
+					<section class="sk-add-list-card sk-add-list-card--subscribers">
+						<div class="sk-add-list-card__intro">
+							<h2><?php esc_html_e( 'Add subscribers', 'skyrora-mailing' ); ?></h2>
+							<p><?php esc_html_e( 'Search and add subscribers to this list. You can search by email or name.', 'skyrora-mailing' ); ?></p>
+						</div>
+
+						<?php sk_render_list_subscribers_picker( [], false ); ?>
+
+					</section>
 				</div>
 
-				<div class="sk-add-list-form__field">
-					<label><?php esc_html_e( 'List visibility', 'skyrora-mailing' ); ?></label>
-					<label class="sk-add-list-form__checkbox" for="sk_list_visible">
-						<input type="checkbox" id="sk_list_visible" name="sk_list_visible" value="1" checked>
-						<?php esc_html_e( 'Show this list on the “Manage Subscription” page', 'skyrora-mailing' ); ?>
-					</label>
-				</div>
+				<aside class="sk-add-list-layout__aside">
+					<section class="sk-add-list-card sk-add-list-summary">
+						<h2><?php esc_html_e( 'List summary', 'skyrora-mailing' ); ?></h2>
+						<dl class="sk-add-list-summary__list">
+							<div>
+								<dt><?php esc_html_e( 'List name', 'skyrora-mailing' ); ?></dt>
+								<dd id="sk-add-list-summary-name" class="is-muted"><?php esc_html_e( 'Not set', 'skyrora-mailing' ); ?></dd>
+							</div>
+							<div>
+								<dt><?php esc_html_e( 'Subscribers', 'skyrora-mailing' ); ?></dt>
+								<dd id="sk-add-list-summary-count">0</dd>
+							</div>
+							<div>
+								<dt><?php esc_html_e( 'Created', 'skyrora-mailing' ); ?></dt>
+								<dd class="is-muted"><?php esc_html_e( 'Will be created after saving', 'skyrora-mailing' ); ?></dd>
+							</div>
+						</dl>
+					</section>
 
-				<div class="sk-add-list-form__field">
-					<label for="sk_public_description"><?php esc_html_e( 'Public description', 'skyrora-mailing' ); ?></label>
-					<p class="description"><?php esc_html_e( 'Appears below the list name on the Manage Subscription page.', 'skyrora-mailing' ); ?></p>
-					<textarea id="sk_public_description" name="sk_public_description" rows="8"></textarea>
-				</div>
-
-				<div class="sk-add-list-form__field">
-					<label for="sk_internal_description"><?php esc_html_e( 'Description', 'skyrora-mailing' ); ?></label>
-					<p class="description"><?php esc_html_e( 'Use this description for your own notes and integrations.', 'skyrora-mailing' ); ?></p>
-					<textarea id="sk_internal_description" name="sk_internal_description" rows="8"></textarea>
-				</div>
-
-				<div class="sk-add-list-form__field">
-					<label for="sk_confirmation_email"><?php esc_html_e( 'Confirmation email', 'skyrora-mailing' ); ?></label>
-					<p class="description"><?php esc_html_e( 'Choose a custom confirmation email for subscribers joining this list. If not set, the global default is used.', 'skyrora-mailing' ); ?></p>
-					<select id="sk_confirmation_email" name="sk_confirmation_email">
-						<option value="0"><?php esc_html_e( 'Use global default', 'skyrora-mailing' ); ?></option>
-						<?php foreach ( $templates as $template ) : ?>
-							<option value="<?php echo esc_attr( $template->ID ); ?>"><?php echo esc_html( $template->post_title ); ?></option>
-						<?php endforeach; ?>
-					</select>
-				</div>
-
-				<div class="sk-add-list-form__field">
-					<label for="sk_confirmation_page"><?php esc_html_e( 'Confirmation page', 'skyrora-mailing' ); ?></label>
-					<p class="description"><?php esc_html_e( 'Choose a custom confirmation page for subscribers joining this list. If not set, the global default is used.', 'skyrora-mailing' ); ?></p>
-					<select id="sk_confirmation_page" name="sk_confirmation_page">
-						<option value="0"><?php esc_html_e( 'Use global default', 'skyrora-mailing' ); ?></option>
-						<?php foreach ( $pages as $page ) : ?>
-							<option value="<?php echo esc_attr( $page->ID ); ?>"><?php echo esc_html( $page->post_title ); ?></option>
-						<?php endforeach; ?>
-					</select>
-				</div>
-			</div>
-
-			<div class="sk-add-list-form__actions">
-				<a class="button sk-add-list-form__create" href="<?php echo esc_url( admin_url( 'post-new.php?post_type=mailing' ) ); ?>"><?php esc_html_e( 'Create new', 'skyrora-mailing' ); ?></a>
-				<?php submit_button( __( 'Save', 'skyrora-mailing' ), 'primary', 'submit', false ); ?>
+					<section class="sk-add-list-card sk-add-list-actions">
+						<h2><?php esc_html_e( 'Actions', 'skyrora-mailing' ); ?></h2>
+						<div class="sk-add-list-actions__row">
+							<a class="sk-add-list-actions__cancel" href="<?php echo esc_url( $lists_url ); ?>">
+								<?php esc_html_e( 'Cancel', 'skyrora-mailing' ); ?>
+							</a>
+							<button type="submit" class="sk-add-list-actions__save">
+								<span class="dashicons dashicons-saved" aria-hidden="true"></span>
+								<?php esc_html_e( 'Save list', 'skyrora-mailing' ); ?>
+							</button>
+						</div>
+					</section>
+				</aside>
 			</div>
 		</form>
 	</div>
@@ -150,10 +159,7 @@ function sk_handle_create_list() {
 		exit;
 	}
 
-	$public_description = isset( $_POST['sk_public_description'] ) ? sanitize_textarea_field( wp_unslash( $_POST['sk_public_description'] ) ) : '';
-	$result = wp_insert_term( $name, 'list', [
-		'description' => $public_description,
-	] );
+	$result = wp_insert_term( $name, 'list' );
 
 	if ( is_wp_error( $result ) ) {
 		wp_safe_redirect( add_query_arg( 'sk_list_error', 'create_failed', admin_url( 'admin.php?page=skyrora-mailing-add-list' ) ) );
@@ -161,17 +167,13 @@ function sk_handle_create_list() {
 	}
 
 	$term_id = (int) $result['term_id'];
-	update_term_meta( $term_id, '_sk_list_visible', isset( $_POST['sk_list_visible'] ) ? '1' : '0' );
+	update_term_meta( $term_id, '_sk_list_visible', '1' );
 	update_term_meta( $term_id, '_sk_list_created_at', current_time( 'mysql' ) );
-	update_term_meta(
-		$term_id,
-		'_sk_list_internal_description',
-		isset( $_POST['sk_internal_description'] ) ? sanitize_textarea_field( wp_unslash( $_POST['sk_internal_description'] ) ) : ''
-	);
-	update_term_meta( $term_id, '_sk_list_confirmation_email', isset( $_POST['sk_confirmation_email'] ) ? absint( $_POST['sk_confirmation_email'] ) : 0 );
-	update_term_meta( $term_id, '_sk_list_confirmation_page', isset( $_POST['sk_confirmation_page'] ) ? absint( $_POST['sk_confirmation_page'] ) : 0 );
 
-	wp_safe_redirect( admin_url( 'term.php?taxonomy=list&tag_ID=' . $term_id . '&post_type=subscriber' ) );
+	$subscriber_ids = isset( $_POST['sk_list_subscribers'] ) ? (array) wp_unslash( $_POST['sk_list_subscribers'] ) : [];
+	sk_sync_list_subscribers( $term_id, $subscriber_ids );
+
+	wp_safe_redirect( admin_url( 'edit-tags.php?taxonomy=list&post_type=subscriber' ) );
 	exit;
 }
 add_action( 'admin_post_sk_create_list', 'sk_handle_create_list' );
@@ -221,6 +223,60 @@ function sk_format_subscriber_option( $post ) {
 }
 
 /**
+ * UI вибору підписників для list.
+ *
+ * @param array<int,array{id:int,email:string,name:string}> $selected Selected subscribers.
+ * @param string|false                                      $hint     Helper text under search, or false to hide.
+ */
+function sk_render_list_subscribers_picker( $selected = [], $hint = '' ) {
+	$selected = is_array( $selected ) ? $selected : [];
+	if ( false !== $hint && '' === $hint ) {
+		$hint = __( 'Search and add subscribers to this list. Changes apply when you update the list.', 'skyrora-mailing' );
+	}
+	$count = count( $selected );
+	?>
+	<div
+		class="sk-list-subscribers"
+		id="sk-list-subscribers"
+		data-selected="<?php echo esc_attr( wp_json_encode( array_values( $selected ) ) ); ?>"
+	>
+		<div class="sk-list-subscribers__search-wrap">
+			<span class="sk-list-subscribers__search-icon dashicons dashicons-search" aria-hidden="true"></span>
+			<input
+				type="search"
+				class="sk-list-subscribers__search"
+				id="sk_list_subscriber_search"
+				placeholder="<?php esc_attr_e( 'Search by email or name...', 'skyrora-mailing' ); ?>"
+				autocomplete="off"
+			>
+			<ul class="sk-list-subscribers__results" id="sk_list_subscriber_results" hidden></ul>
+		</div>
+
+		<?php if ( false !== $hint && '' !== $hint ) : ?>
+			<p class="sk-list-subscribers__hint description">
+				<?php echo esc_html( $hint ); ?>
+			</p>
+		<?php endif; ?>
+
+		<div class="sk-list-subscribers__selected-head">
+			<span class="sk-list-subscribers__selected-title"><?php esc_html_e( 'Selected subscribers', 'skyrora-mailing' ); ?></span>
+			<span class="sk-list-subscribers__badge" id="sk_list_subscriber_count" aria-live="polite">
+				<?php echo esc_html( (string) $count ); ?>
+			</span>
+		</div>
+
+		<ul class="sk-list-subscribers__selected" id="sk_list_subscriber_selected"></ul>
+
+		<div class="sk-list-subscribers__inputs" id="sk_list_subscriber_inputs">
+			<?php foreach ( $selected as $item ) : ?>
+				<input type="hidden" name="sk_list_subscribers[]" value="<?php echo esc_attr( $item['id'] ); ?>">
+			<?php endforeach; ?>
+		</div>
+	</div>
+	<?php
+}
+
+/**
  * Поле «Subscribers» на екрані редагування list.
  *
  * @param WP_Term $term Term.
@@ -232,10 +288,8 @@ function sk_list_edit_form_fields( $term ) {
 
 	wp_nonce_field( 'sk_save_list_subscribers', 'sk_list_subscribers_nonce' );
 
-	$selected_ids = sk_get_list_subscriber_ids( $term->term_id );
-	$selected     = [];
-
-	foreach ( $selected_ids as $post_id ) {
+	$selected = [];
+	foreach ( sk_get_list_subscriber_ids( $term->term_id ) as $post_id ) {
 		$item = sk_format_subscriber_option( $post_id );
 		if ( $item ) {
 			$selected[] = $item;
@@ -247,46 +301,7 @@ function sk_list_edit_form_fields( $term ) {
 			<label for="sk_list_subscriber_search"><?php esc_html_e( 'Subscribers', 'skyrora-mailing' ); ?></label>
 		</th>
 		<td>
-			<div
-				class="sk-list-subscribers"
-				id="sk-list-subscribers"
-				data-selected="<?php echo esc_attr( wp_json_encode( $selected ) ); ?>"
-			>
-				<div class="sk-list-subscribers__search-wrap">
-					<input
-						type="search"
-						class="sk-list-subscribers__search"
-						id="sk_list_subscriber_search"
-						placeholder="<?php esc_attr_e( 'Search by email or name…', 'skyrora-mailing' ); ?>"
-						autocomplete="off"
-					>
-					<ul class="sk-list-subscribers__results" id="sk_list_subscriber_results" hidden></ul>
-				</div>
-
-				<p class="sk-list-subscribers__hint description">
-					<?php esc_html_e( 'Search and add subscribers to this list. Changes apply when you update the list.', 'skyrora-mailing' ); ?>
-				</p>
-
-				<div class="sk-list-subscribers__selected-head">
-					<span class="sk-list-subscribers__count" id="sk_list_subscriber_count">
-						<?php
-						printf(
-							/* translators: %d: number of selected subscribers */
-							esc_html( _n( '%d subscriber', '%d subscribers', count( $selected ), 'skyrora-mailing' ) ),
-							count( $selected )
-						);
-						?>
-					</span>
-				</div>
-
-				<ul class="sk-list-subscribers__selected" id="sk_list_subscriber_selected"></ul>
-
-				<div class="sk-list-subscribers__inputs" id="sk_list_subscriber_inputs">
-					<?php foreach ( $selected as $item ) : ?>
-						<input type="hidden" name="sk_list_subscribers[]" value="<?php echo esc_attr( $item['id'] ); ?>">
-					<?php endforeach; ?>
-				</div>
-			</div>
+			<?php sk_render_list_subscribers_picker( $selected ); ?>
 		</td>
 	</tr>
 	<?php

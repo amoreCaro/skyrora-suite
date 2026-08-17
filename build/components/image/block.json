@@ -2,7 +2,7 @@
   "apiVersion": 3,
   "name": "app/image",
   "title": "Image",
-  "category": "advanced",
+  "category": "skyrora",
   "icon": "format-image",
   "description": "A custom image block with padding control.",
   "keywords": [

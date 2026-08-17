@@ -127,25 +127,30 @@ function sk_enqueue_subscriber_admin_assets( $hook ) {
 }
 
 /**
- * Асети екранів list (edit-tags.php + term.php).
+ * Асети екранів list (edit-tags.php + term.php + Add new list).
  */
 function sk_enqueue_list_admin_assets( $hook ) {
-	if ( 'term.php' !== $hook && 'edit-tags.php' !== $hook ) {
+	$is_add_list = ( 'skyrora-mailing_page_skyrora-mailing-add-list' === $hook );
+	$is_taxonomy = ( 'term.php' === $hook || 'edit-tags.php' === $hook );
+
+	if ( ! $is_add_list && ! $is_taxonomy ) {
 		return;
 	}
 
-	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
-	if ( ! $screen || 'list' !== $screen->taxonomy ) {
-		return;
+	if ( $is_taxonomy ) {
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( ! $screen || 'list' !== $screen->taxonomy ) {
+			return;
+		}
 	}
 
 	if ( ! sk_enqueue_admin_bundle() ) {
 		return;
 	}
 
-	$term_id = isset( $_GET['tag_ID'] ) ? absint( $_GET['tag_ID'] ) : 0;
-	$orderby = isset( $_GET['orderby'] ) ? sanitize_key( wp_unslash( $_GET['orderby'] ) ) : 'name';
-	$order   = isset( $_GET['order'] ) ? strtolower( sanitize_key( wp_unslash( $_GET['order'] ) ) ) : 'asc';
+	$term_id  = isset( $_GET['tag_ID'] ) ? absint( $_GET['tag_ID'] ) : 0;
+	$orderby  = isset( $_GET['orderby'] ) ? sanitize_key( wp_unslash( $_GET['orderby'] ) ) : 'name';
+	$order    = isset( $_GET['order'] ) ? strtolower( sanitize_key( wp_unslash( $_GET['order'] ) ) ) : 'asc';
 	$per_page = isset( $_GET['sk_per_page'] ) ? absint( $_GET['sk_per_page'] ) : 10;
 
 	wp_localize_script( 'sk-admin', 'skListData', [
@@ -179,18 +184,28 @@ function sk_enqueue_send_admin_assets( $hook ) {
 	$post_id = isset( $_GET['post_id'] ) ? absint( $_GET['post_id'] ) : 0;
 
 	wp_localize_script( 'sk-admin', 'skSendData', [
-		'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
-		'nonce'      => wp_create_nonce( 'sk_send_mailing' ),
-		'postId'     => $post_id,
-		'addListUrl' => add_query_arg( 'page', 'skyrora-mailing-add-list', admin_url( 'admin.php' ) ),
-		'i18n'       => [
-			'send'        => __( 'Send', 'skyrora-mailing' ),
-			'sendTest'    => __( 'Send test', 'skyrora-mailing' ),
-			'schedule'    => __( 'Schedule', 'skyrora-mailing' ),
-			'sending'     => __( 'Sending…', 'skyrora-mailing' ),
-			'needSubject' => __( 'Please enter a subject.', 'skyrora-mailing' ),
-			'needList'    => __( 'Please select at least one list.', 'skyrora-mailing' ),
-			'failed'      => __( 'Something went wrong. Please try again.', 'skyrora-mailing' ),
+		'ajaxUrl'       => admin_url( 'admin-ajax.php' ),
+		'nonce'         => wp_create_nonce( 'sk_send_mailing' ),
+		'searchNonce'   => wp_create_nonce( 'sk_list_subscribers' ),
+		'postId'        => $post_id,
+		'addListUrl'    => add_query_arg( 'page', 'skyrora-mailing-add-list', admin_url( 'admin.php' ) ),
+		'i18n'          => [
+			'send'             => __( 'Send email', 'skyrora-mailing' ),
+			'sendTest'         => __( 'Send test', 'skyrora-mailing' ),
+			'schedule'         => __( 'Schedule email', 'skyrora-mailing' ),
+			'sending'          => __( 'Sending…', 'skyrora-mailing' ),
+			'needSubject'      => __( 'Please enter a subject.', 'skyrora-mailing' ),
+			'needList'         => __( 'Please select a mailing list.', 'skyrora-mailing' ),
+			'needSubscribers'  => __( 'Please select at least one subscriber.', 'skyrora-mailing' ),
+			'needEmails'       => __( 'Please enter at least one valid email address.', 'skyrora-mailing' ),
+			'needTestEmail'    => __( 'Please enter a valid email address.', 'skyrora-mailing' ),
+			'notSelected'      => __( 'Not selected', 'skyrora-mailing' ),
+			'notScheduled'     => __( 'Not scheduled', 'skyrora-mailing' ),
+			'subscribersCount' => __( '%d subscribers', 'skyrora-mailing' ),
+			'customEmails'     => __( '%d email addresses', 'skyrora-mailing' ),
+			'noResults'        => __( 'No subscribers found.', 'skyrora-mailing' ),
+			'noneSelected'     => __( 'No subscribers selected yet.', 'skyrora-mailing' ),
+			'failed'           => __( 'Something went wrong. Please try again.', 'skyrora-mailing' ),
 		],
 	] );
 }

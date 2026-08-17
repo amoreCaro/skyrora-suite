@@ -2,7 +2,7 @@
   "apiVersion": 3,
   "name": "app/banner",
   "title": "Banner",
-  "category": "advanced",
+  "category": "skyrora",
   "icon": "format-image",
   "description": "A custom banner block with banner and padding controls.",
   "keywords": [

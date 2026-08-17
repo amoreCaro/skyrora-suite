@@ -321,7 +321,10 @@ export function listAdmin() {
 	const editHeading =
 		root?.closest('.wrap')?.querySelector('h1') ||
 		(root ? document.querySelector('.wrap h1') : null);
-	if (editHeading && !document.querySelector('.sk-list-edit-back')) {
+	const hasBackLink = document.querySelector(
+		'.sk-list-edit-back, .sk-add-list-page__back'
+	);
+	if (editHeading && !hasBackLink) {
 		const backLink = document.createElement('a');
 		backLink.className = 'sk-list-edit-back';
 		backLink.href =
@@ -340,6 +343,9 @@ export function listAdmin() {
 	const selectedEl = root.querySelector('#sk_list_subscriber_selected');
 	const inputsEl = root.querySelector('#sk_list_subscriber_inputs');
 	const countEl = root.querySelector('#sk_list_subscriber_count');
+	const summaryNameEl = document.querySelector('#sk-add-list-summary-name');
+	const summaryCountEl = document.querySelector('#sk-add-list-summary-count');
+	const listNameInput = document.querySelector('#sk_public_list_name');
 	const data = window.skListData || {};
 
 	let selected = [];
@@ -362,11 +368,21 @@ export function listAdmin() {
 		return div.innerHTML;
 	};
 
+	const updateSummaryName = () => {
+		if (!summaryNameEl || !listNameInput) return;
+		const value = listNameInput.value.trim();
+		summaryNameEl.textContent = value || 'Not set';
+		summaryNameEl.classList.toggle('is-muted', !value);
+	};
+
 	const updateCount = () => {
-		if (!countEl) return;
 		const n = selected.length;
-		countEl.textContent =
-			n === 1 ? '1 subscriber' : `${n} subscribers`;
+		if (countEl) {
+			countEl.textContent = String(n);
+		}
+		if (summaryCountEl) {
+			summaryCountEl.textContent = String(n);
+		}
 	};
 
 	const syncHiddenInputs = () => {
@@ -388,7 +404,13 @@ export function listAdmin() {
 		if (!selected.length) {
 			const empty = document.createElement('li');
 			empty.className = 'sk-list-subscribers__empty';
-			empty.textContent = 'No subscribers selected yet.';
+			empty.innerHTML = `
+				<span class="sk-list-subscribers__empty-icon">
+					<span class="dashicons dashicons-groups" aria-hidden="true"></span>
+				</span>
+				<p class="sk-list-subscribers__empty-title">No subscribers added yet.</p>
+				<p class="sk-list-subscribers__empty-text">Search for subscribers above to add them to this list.</p>
+			`;
 			selectedEl.appendChild(empty);
 			updateCount();
 			syncHiddenInputs();
@@ -434,6 +456,11 @@ export function listAdmin() {
 		updateCount();
 		syncHiddenInputs();
 	};
+
+	if (listNameInput) {
+		listNameInput.addEventListener('input', updateSummaryName);
+		updateSummaryName();
+	}
 
 	const hideResults = () => {
 		if (!resultsEl) return;

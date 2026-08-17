@@ -2,7 +2,7 @@
   "apiVersion": 3,
   "name": "app/spacer",
   "title": "Spacer",
-  "category": "advanced",
+  "category": "skyrora",
   "icon": "image-flip-vertical",
   "description": "Customizable spacer block for vertical spacing.",
   "supports": {
